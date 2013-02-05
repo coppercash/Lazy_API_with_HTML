@@ -1,0 +1,8 @@
+//
+// Prefix header for all source files of the 'Lazy_API_with_HTML' target in the 'Lazy_API_with_HTML' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+    #import "CDMemAssist.h"
+#endif

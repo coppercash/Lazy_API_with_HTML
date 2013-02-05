@@ -1,0 +1,8 @@
+//
+// Prefix header for all source files of the 'Lazy_API_with_HTML_LogicTests' target in the 'Lazy_API_with_HTML_LogicTests' project
+//
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+#endif

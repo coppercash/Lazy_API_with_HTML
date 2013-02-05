@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SchemeUserState</key>
+	<dict>
+		<key>Hpple.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>7</integer>
+		</dict>
+		<key>Lazy_API_with_HTML.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>0</integer>
+		</dict>
+		<key>Lazy_API_with_HTML_LogicTests.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>BE28BDF016BFBD76008434C1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>BED8CFF416BFAE5A001D819C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>BEDD18C916BF976F009825E8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>BEDD18DA16BF976F009825E8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
+</dict>
+</plist>
