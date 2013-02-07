@@ -7,7 +7,12 @@
 		<key>Hpple.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>7</integer>
+			<integer>2</integer>
+		</dict>
+		<key>LAHDemo.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
 		</dict>
 		<key>Lazy_API_with_HTML.xcscheme</key>
 		<dict>
@@ -23,6 +28,11 @@
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>BE28BDF016BFBD76008434C1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>BE71B25B16C1F9D4005AD9D7</key>
 		<dict>
 			<key>primary</key>
 			<true/>
