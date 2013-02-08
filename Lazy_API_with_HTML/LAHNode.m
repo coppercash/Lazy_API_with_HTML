@@ -61,7 +61,7 @@
 
 #pragma mark - Recursive
 - (LAHGreffier*)recursiveGreffier{
-    return _father.recursiveContainer;
+    return _father.recursiveGreffier;
 }
 
 - (id)recursiveContainer{
@@ -69,6 +69,14 @@
 }
 
 - (void)handleElement:(id<LAHHTMLElement>)element atIndex:(NSUInteger)index{}
+
+- (void)saveStateForKey:(id)key{
+    [_father saveStateForKey:key];
+}
+
+- (void)restoreStateForKey:(id)key{
+    [_father restoreStateForKey:key];
+}
 
 - (void)releaseChild:(LAHNode*)child{
     [_children removeObject:child];

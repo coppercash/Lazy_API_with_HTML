@@ -29,7 +29,7 @@
         _theFetching = [[NSMutableArray alloc] init];
         
         self.rootContainer = rootContainer;
-        self.propertyGetter = ^(id<LAHHTMLElement> element){
+        self.property = ^(id<LAHHTMLElement> element){
             return path;
         };
     }
@@ -44,7 +44,7 @@
         _theFetching = [[NSMutableArray alloc] init];
         
         self.rootContainer = rootContainer;
-        self.propertyGetter = ^(id<LAHHTMLElement> element){
+        self.property = ^(id<LAHHTMLElement> element){
             return path;
         };
     }
@@ -75,20 +75,20 @@
 
 #pragma mark - Recursive
 - (void)handleElement:(id<LAHHTMLElement>)element atIndex:(NSUInteger)index{
-    if (_propertyGetter == nil) return;
-    NSString *info = _propertyGetter(element);
+    if (_property == nil) return;
+    NSString *info = _property(element);
     
     if (_dataSource && [_dataSource respondsToSelector:@selector(downloader:needFileAtPath:)]) {
         id key = [_dataSource downloader:self needFileAtPath:info];
-        [self setDownloader:self forKey:key];
+        [self saveDownloader:self forKey:key];
     }
 }
 
 - (id)recursiveContainer{
-    return nil;
+    return _rootContainer;
 }
 
-- (LAHGreffier*)greffier{
+- (LAHGreffier*)recursiveGreffier{
     return self;
 }
 
@@ -107,6 +107,7 @@
 
 
 #pragma mark - Queue
+/*
 - (void)setDownloader:(LAHDownloader*)downloader forKey:(id)key{
     [_theDownloading setObject:downloader forKey:key];
 }
@@ -114,7 +115,25 @@
 - (LAHDownloader*)downloaderForKey:(id)key{
     LAHDownloader *downloader = [_theDownloading objectForKey:key];
     [_theDownloading removeObjectForKey:key];
+    [downloader restoreStateForKey:key];
     return downloader;
+}*/
+
+- (void)saveDownloader:(LAHDownloader*)downloader forKey:(id)key{
+    [_theDownloading setObject:downloader forKey:key];
+    [downloader saveStateForKey:key];
+}
+
+- (void)awakeDownloaderForKey:(id)key withElement:(id<LAHHTMLElement>)element{
+    LAHDownloader *downloader = [_theDownloading objectForKey:key];
+    [_theDownloading removeObjectForKey:key];
+    
+    [self addFetcher:self];
+
+    [downloader restoreStateForKey:key];
+    [downloader fetchWithRoot:element];
+    
+    [self removeFetcher:self];
 }
 
 - (void)addFetcher:(LAHDownloader*)fetcher{
@@ -123,7 +142,7 @@
 
 - (void)removeFetcher:(LAHDownloader*)fetcher{
     [_theFetching removeObject:fetcher];
-    if (_theFetching.count == 0) {
+    if (_theFetching.count + _theDownloading.count == 0) {
         [_delegate downloader:fetcher didFetch:_rootContainer.container];
     }
 }

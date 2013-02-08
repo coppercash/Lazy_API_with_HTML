@@ -13,6 +13,7 @@
     id _container;
     NSString *_key;
     NSUInteger _index;
+    NSMutableDictionary *_states;
 }
 @property(nonatomic, assign)Class containerClass;
 @property(nonatomic, readonly)id container;

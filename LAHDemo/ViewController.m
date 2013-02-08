@@ -41,7 +41,7 @@
 }
 
 - (LAHDownloader*)multiple{
-    LAHFetcher *f0 = [[LAHFetcher alloc] initWithKey:@"names" propertyGetter:^NSString *(id<LAHHTMLElement> element) {
+    LAHFetcher *f0 = [[LAHFetcher alloc] initWithKey:@"names" property:^NSString *(id<LAHHTMLElement> element) {
         return element.text;
     }];
     f0.tagName = @"a";
@@ -58,7 +58,7 @@
     r2.attributes = @{@"id":@"list"};
 
     LAHDownloader* d0 = [[LAHDownloader alloc] initWithChildren:r2, nil];
-    d0.propertyGetter = ^NSString *(id<LAHHTMLElement> element) {
+    d0.property = ^NSString *(id<LAHHTMLElement> element) {
         return @"/index.html";
     };
     
@@ -66,27 +66,40 @@
 }
 
 - (LAHGreffier*)multiples{
-    LAHFetcher *type = [[LAHFetcher alloc] initWithKey:@"type" propertyGetter:^NSString *(id<LAHHTMLElement> element) {
+    LAHFetcher *type = [[LAHFetcher alloc] initWithKey:@"type" property:^NSString *(id<LAHHTMLElement> element) {
         return element.text;
     }];
     type.tagName = @"font";
     
-    LAHFetcher *typeLink = [[LAHFetcher alloc] initWithKey:@"typeLink" propertyGetter:^NSString *(id<LAHHTMLElement> element) {
+    LAHFetcher *typeLink = [[LAHFetcher alloc] initWithKey:@"typeLink" property:^NSString *(id<LAHHTMLElement> element) {
         return [element.attributes objectForKey:@"href"];
     } children:type, nil];
     typeLink.tagName = @"a";[typeLink setIndex:0];
     
-    LAHFetcher *name = [[LAHFetcher alloc] initWithKey:@"name" propertyGetter:^NSString *(id<LAHHTMLElement> element) {
+    LAHFetcher *name = [[LAHFetcher alloc] initWithKey:@"name" property:^NSString *(id<LAHHTMLElement> element) {
         return element.text;
     }];
     name.tagName = @"a"; [name setIndex:2];
     
-    LAHFetcher *link = [[LAHFetcher alloc] initWithKey:@"link" propertyGetter:^NSString *(id<LAHHTMLElement> element) {
+    LAHFetcher *link = [[LAHFetcher alloc] initWithKey:@"link" property:^NSString *(id<LAHHTMLElement> element) {
         return [element.attributes objectForKey:@"href"];
     }];
     link.tagName = @"a"; [link setIndex:2];
 
-    LAHContainer *item = [[LAHDictionary alloc] initWithChildren:name, link, typeLink, type, nil];
+    LAHFetcher *imgSrc = [[LAHFetcher alloc] initWithKey:@"imgSrc" property:^NSString *(id<LAHHTMLElement> element) {
+        return [element.attributes objectForKey:@"src"];
+    }];
+    imgSrc.tagName = @"img";
+
+    LAHRecognizer *div = [[LAHRecognizer alloc] initWithChildren:imgSrc, nil];
+    div.tagName = @"div"; div.attributes = @{@"class":@"contentImage"};
+
+    LAHDownloader *imgDown = [[LAHDownloader alloc] initWithProperty:^NSString *(id<LAHHTMLElement> element) {
+        return [element.attributes objectForKey:@"href"];
+    } children:div, nil];
+    imgDown.tagName = @"a"; [imgDown setIndex:2];
+    
+    LAHContainer *item = [[LAHDictionary alloc] initWithChildren:name, link, typeLink, type, imgDown, nil];
     item.tagName = @"li"; item.range = NSMakeRange(0, 7);
     
     LAHContainer *array = [[LAHArray alloc] initWithChildren:item, nil];

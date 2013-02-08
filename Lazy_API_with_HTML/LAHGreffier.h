@@ -27,8 +27,12 @@
 - (id)initWithPath:(NSString*)path rootContainer:(LAHContainer*)rootContainer firstChild:(LAHNode*)firstChild variadicChildren:(va_list)children;
 - (id)initWithPath:(NSString*)path rootContainer:(LAHContainer*)rootContainer children:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
 
-- (void)setDownloader:(LAHDownloader*)downloader forKey:(id)key;
-- (LAHDownloader*)downloaderForKey:(id)key;
+//- (void)setDownloader:(LAHDownloader*)downloader forKey:(id)key;
+//- (LAHDownloader*)downloaderForKey:(id)key;
+
+- (void)saveDownloader:(LAHDownloader*)downloader forKey:(id)key;
+- (void)awakeDownloaderForKey:(id)key withElement:(id<LAHHTMLElement>)element;
+
 - (void)addFetcher:(LAHDownloader*)fetcher;
 - (void)removeFetcher:(LAHDownloader*)fetcher;
 @end

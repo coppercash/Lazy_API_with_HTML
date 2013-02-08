@@ -22,5 +22,7 @@
 - (void)handleElement:(id<LAHHTMLElement>)element atIndex:(NSUInteger)index;
 - (LAHGreffier*)recursiveGreffier;
 - (id)recursiveContainer;
+- (void)saveStateForKey:(id)key;
+- (void)restoreStateForKey:(id)key;
 - (void)releaseChild:(LAHNode*)child;
 @end

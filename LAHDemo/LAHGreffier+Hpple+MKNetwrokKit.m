@@ -66,8 +66,10 @@
         TFHppleElement<LAHHTMLElement> *root = (TFHppleElement<LAHHTMLElement>*)[doc peekAtSearchWithXPathQuery:@"/html/body"];
         [doc release];
 
-        LAHDownloader *downloader = [_greffier downloaderForKey:op];
-        [downloader continueHandlingElement:root];
+        //LAHDownloader *downloader = [_greffier downloaderForKey:op];
+        //[downloader continueHandlingElement:root];
+        
+        [_greffier awakeDownloaderForKey:op withElement:root];
         
         [_trees removeObject:downloader];
     } errorHandler:nil];

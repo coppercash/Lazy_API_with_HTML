@@ -11,6 +11,22 @@
 
 @implementation LAHDownloader
 #pragma mark - Life Cycle
+- (id)initWithProperty:(LAHPropertyGetter)property firstChild:(LAHNode*)firstChild variadicChildren:(va_list)children{
+    self = [super initWithFirstChild:firstChild variadicChildren:children];
+    if (self) {
+        self.property = property;
+    }
+    return self;
+}
+
+- (id)initWithProperty:(LAHPropertyGetter)property children:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION{
+    va_list children;
+    va_start(children, firstChild);
+    self = [self initWithProperty:property firstChild:firstChild variadicChildren:children];
+    va_end(children);
+    return self;
+}
+
 - (void)dealloc{
     [super dealloc];
 }
@@ -18,21 +34,26 @@
 #pragma mark - Recursive
 - (void)handleElement:(id<LAHHTMLElement>)element atIndex:(NSUInteger)index{
     if (![self isElementMatched:element atIndex:index]) return;
-    if (_propertyGetter == nil) return;
-    NSString *info = _propertyGetter(element);
+    DLogElement(element)
+    DLogFetcher(self)
     
-    id<LAHDataSource> dataSource = self.greffier.dataSource;
+    if (_property == nil) return;
+    NSString *info = _property(element);
+    
+    id<LAHDataSource> dataSource = self.recursiveGreffier.dataSource;
     if (dataSource && [dataSource respondsToSelector:@selector(downloader:needFileAtPath:)]) {
         id key = [dataSource downloader:self needFileAtPath:info];
-        [self.greffier setDownloader:self forKey:key];
+        [self.greffier saveDownloader:self forKey:key];
+        //[self.greffier setDownloader:self forKey:key];
+        //[self saveStateForKey:key];
     }
 }
-
+/*
 - (void)continueHandlingElement:(id<LAHHTMLElement>)element{
     [self.greffier addFetcher:self];
     [self fetchWithRoot:element];
     [self.greffier removeFetcher:self];
-}
+}*/
 
 - (void)fetchWithRoot:(id<LAHHTMLElement>)element{
     NSArray *fakeChildren = [[NSArray alloc] initWithArray:_children];

@@ -10,6 +10,21 @@
 
 @implementation LAHContainer
 @synthesize container = _container, key = _key;
+- (id)initWithFirstChild:(LAHNode *)firstChild variadicChildren:(va_list)children{
+    self = [super initWithFirstChild:firstChild variadicChildren:children];
+    if (self) {
+        _states = [[NSMutableDictionary alloc] init];
+    }
+    return self;
+}
+
+- (void)dealloc{
+    [_states release]; _states = nil;
+    [_container release]; _container = nil;
+
+    [super dealloc];
+}
+
 - (void)handleElement:(id<LAHHTMLElement>)element atIndex:(NSUInteger)index{
     _index = index;
     [super handleElement:element atIndex:index];
@@ -17,7 +32,7 @@
 
 - (id)recursiveContainer{
     id fatherContainer = _father.recursiveContainer;
-    if (fatherContainer == nil) {
+    if (fatherContainer == self) {  //is root container
         if (_container == nil) _container = [[_containerClass alloc] init];
         return _container;
         
@@ -45,9 +60,24 @@
     return fatherContainer;
 }
 
-- (void)dealloc{
-    [_container release]; _container = nil;
-    [super dealloc];
+- (void)saveStateForKey:(id)key{
+    id fatherContainer = _father.recursiveContainer;
+    if ([fatherContainer isKindOfClass:[NSMutableArray class]]) {
+        NSNumber *index = [[NSNumber alloc] initWithUnsignedInteger:_index];
+        [_states setObject:index forKey:key];
+        [index release];
+    }
+    [super saveStateForKey:key];
+}
+
+- (void)restoreStateForKey:(id)key{
+    id fatherContainer = _father.recursiveContainer;
+    if ([fatherContainer isKindOfClass:[NSMutableArray class]]) {
+        NSNumber *index = [_states objectForKey:key];
+        [_states removeObjectForKey:key];
+        _index = index.unsignedIntegerValue;
+    }
+    [super restoreStateForKey:key];
 }
 
 @end
@@ -60,6 +90,7 @@
     }
     return self;
 }
+
 @end
 
 @implementation LAHArray : LAHContainer
@@ -70,4 +101,5 @@
     }
     return self;
 }
+
 @end
