@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-@class LAHGreffier_Hpple_MKNetwrokKit;
+@class LAH51voa;
 @interface ViewController : UIViewController{
-    LAHGreffier_Hpple_MKNetwrokKit *_lah;
+    LAH51voa *_lah;
 }
 
 @end

@@ -7,7 +7,7 @@
 //
 
 #import "LAHDownloader.h"
-#import "LAHGreffier.h"
+#import "LAHOperation.h"
 
 @implementation LAHDownloader
 #pragma mark - Life Cycle
@@ -40,20 +40,12 @@
     if (_property == nil) return;
     NSString *info = _property(element);
     
-    id<LAHDataSource> dataSource = self.recursiveGreffier.dataSource;
-    if (dataSource && [dataSource respondsToSelector:@selector(downloader:needFileAtPath:)]) {
-        id key = [dataSource downloader:self needFileAtPath:info];
+    id<LAHDelegate> delegate = self.recursiveGreffier.delegate;
+    if (delegate && [delegate respondsToSelector:@selector(downloader:needFileAtPath:)]) {
+        id key = [delegate downloader:self needFileAtPath:info];
         [self.greffier saveDownloader:self forKey:key];
-        //[self.greffier setDownloader:self forKey:key];
-        //[self saveStateForKey:key];
     }
 }
-/*
-- (void)continueHandlingElement:(id<LAHHTMLElement>)element{
-    [self.greffier addFetcher:self];
-    [self fetchWithRoot:element];
-    [self.greffier removeFetcher:self];
-}*/
 
 - (void)fetchWithRoot:(id<LAHHTMLElement>)element{
     NSArray *fakeChildren = [[NSArray alloc] initWithArray:_children];
@@ -66,7 +58,7 @@
     }
 }
 
-- (LAHGreffier*)recursiveGreffier{
+- (LAHOperation*)recursiveGreffier{
     if (_greffier == nil) _greffier = _father.recursiveGreffier;
     return _greffier;
 }

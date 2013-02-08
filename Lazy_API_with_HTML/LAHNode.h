@@ -7,12 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-@class LAHGreffier;
+@class LAHOperation;
 @protocol LAHHTMLElement, LAHDownloaderDataSource, LAHDownloaderDelegate;
 @interface LAHNode : NSObject {
     LAHNode *_father;
     NSMutableArray *_children;
-    //NSMutableArray *_garbageBin;
 }
 @property(nonatomic, assign)LAHNode *father;
 @property(nonatomic, retain)NSMutableArray *children;
@@ -20,7 +19,7 @@
 - (id)initWithChildren:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
 #pragma mark - Recursive
 - (void)handleElement:(id<LAHHTMLElement>)element atIndex:(NSUInteger)index;
-- (LAHGreffier*)recursiveGreffier;
+- (LAHOperation*)recursiveGreffier;
 - (id)recursiveContainer;
 - (void)saveStateForKey:(id)key;
 - (void)restoreStateForKey:(id)key;

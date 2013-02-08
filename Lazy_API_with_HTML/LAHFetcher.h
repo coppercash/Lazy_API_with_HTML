@@ -8,15 +8,15 @@
 
 #import "LAHProtocols.h"
 #import "LAHRecognizer.h"
-@class LAHGreffier;
+@class LAHOperation;
 @interface LAHFetcher : LAHRecognizer {
     NSString *_key;
     LAHPropertyGetter _property;
-    LAHGreffier *_greffier;
+    LAHOperation *_greffier;
 }
 @property(nonatomic, copy)NSString *key;
 @property(nonatomic, copy)LAHPropertyGetter property;
-@property(nonatomic, assign)LAHGreffier *greffier;
+@property(nonatomic, assign)LAHOperation *greffier;
 - (id)initWithKey:(NSString*)key property:(LAHPropertyGetter)property;
 - (id)initWithKey:(NSString*)key property:(LAHPropertyGetter)property firstChild:(LAHNode*)firstChild variadicChildren:(va_list)children;
 - (id)initWithKey:(NSString*)key property:(LAHPropertyGetter)property children:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;

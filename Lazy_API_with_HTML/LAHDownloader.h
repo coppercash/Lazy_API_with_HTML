@@ -11,5 +11,4 @@
 - (id)initWithProperty:(LAHPropertyGetter)property firstChild:(LAHNode*)firstChild variadicChildren:(va_list)children;
 - (id)initWithProperty:(LAHPropertyGetter)property children:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
 - (void)fetchWithRoot:(id<LAHHTMLElement>)element;
-//- (void)continueHandlingElement:(id<LAHHTMLElement>)element;
 @end

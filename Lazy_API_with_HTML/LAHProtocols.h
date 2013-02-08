@@ -13,9 +13,15 @@
 - (NSArray*)children;
 @end
 
+@class LAHOperation, LAHDownloader;
 typedef NSString*(^LAHPropertyGetter)(id<LAHHTMLElement> element);
+typedef void(^LAHCompletion)(LAHOperation *operation);
 
-#define DEBUG_MODE
+@protocol LAHDelegate <NSObject>
+- (id)downloader:(LAHDownloader*)downloader needFileAtPath:(NSString*)path;
+- (void)downloader:(LAHOperation*)operation didFetch:(id)info;
+@end
+//#define DEBUG_MODE
 #ifdef DEBUG_MODE
 
 #define DLogElement(x) NSLog(@"\n%@\t%@\n%@", (x).tagName, (x).text, (x).attributes);
