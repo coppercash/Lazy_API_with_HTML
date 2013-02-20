@@ -10,57 +10,67 @@
 #import "LAHOperation.h"
 
 @implementation LAHDownloader
+@synthesize linker = _linker;
 #pragma mark - Life Cycle
-- (id)initWithProperty:(LAHPropertyGetter)property firstChild:(LAHNode*)firstChild variadicChildren:(va_list)children{
+- (id)initWithLinker:(LAHPropertyFetcher)linker firstChild:(LAHNode*)firstChild variadicChildren:(va_list)children{
     self = [super initWithFirstChild:firstChild variadicChildren:children];
     if (self) {
-        self.property = property;
+        self.linker = linker;
     }
     return self;
 }
 
-- (id)initWithProperty:(LAHPropertyGetter)property children:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION{
+- (id)initWithLinker:(LAHPropertyFetcher)linker children:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION{
     va_list children;
     va_start(children, firstChild);
-    self = [self initWithProperty:property firstChild:firstChild variadicChildren:children];
+    self = [self initWithLinker:linker firstChild:firstChild variadicChildren:children];
     va_end(children);
     return self;
 }
 
 - (void)dealloc{
+    [_linker release]; _linker = nil;
     [super dealloc];
 }
 
-#pragma mark - Recursive
-- (void)handleElement:(id<LAHHTMLElement>)element atIndex:(NSUInteger)index{
-    if (![self isElementMatched:element atIndex:index]) return;
-    DLogElement(element)
-    DLogFetcher(self)
-    
-    if (_property == nil) return;
-    NSString *info = _property(element);
+#pragma mark - Seek
+- (void)download:(id<LAHHTMLElement>)element{
+    if (_linker == nil) return;
+    NSString *link = _linker(element);
     
     id<LAHDelegate> delegate = self.recursiveGreffier.delegate;
     if (delegate && [delegate respondsToSelector:@selector(downloader:needFileAtPath:)]) {
-        id key = [delegate downloader:self needFileAtPath:info];
-        [self.greffier saveDownloader:self forKey:key];
+        id key = [delegate downloader:self needFileAtPath:link];
+        [self.recursiveGreffier saveDownloader:self forKey:key];
     }
 }
 
-- (void)fetchWithRoot:(id<LAHHTMLElement>)element{
-    NSArray *fakeChildren = [[NSArray alloc] initWithArray:_children];
-    for (LAHNode* node in fakeChildren) {
-        [node handleElement:element atIndex:0];
+- (void)seekWithRoot:(id<LAHHTMLElement>)element{
+    for (LAHRecognizer* node in _children) {
+        node.numberOfMatched = 0;
+        [node handleElement:element];
     }
-    [fakeChildren release];
+    
     for (id<LAHHTMLElement> e in element.children) {
-        [self fetchWithRoot:e];
+        [self seekWithRoot:e];
     }
+}
+
+#pragma mark - State
+- (void)saveStateForKey:(id)key{
+    LAHRecognizer *father = (LAHRecognizer*)_father;
+    [father saveStateForKey:key];
+}
+
+- (void)restoreStateForKey:(id)key{
+    LAHRecognizer *father = (LAHRecognizer*)_father;
+    [father restoreStateForKey:key];
 }
 
 - (LAHOperation*)recursiveGreffier{
-    if (_greffier == nil) _greffier = _father.recursiveGreffier;
-    return _greffier;
+    LAHRecognizer *father = (LAHRecognizer*)_father;
+    LAHOperation* greffier = father.recursiveGreffier;
+    return greffier;
 }
 
 @end

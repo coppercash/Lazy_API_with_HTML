@@ -13,6 +13,8 @@
 		</dict>
 		<key>LAHDemo.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<true/>
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>
@@ -23,11 +25,15 @@
 		</dict>
 		<key>Lazy_API_with_HTML.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<true/>
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
 		<key>Lazy_API_with_HTML_LogicTests.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<false/>
 			<key>orderHint</key>
 			<integer>3</integer>
 		</dict>

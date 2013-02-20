@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "LAHOperation.h"
 #import "LAH51voa.h"
+#import "LAHVoaNews.h"
 
 @interface ViewController ()
 
@@ -20,15 +21,24 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    _lah = [[LAH51voa alloc] initWithHostName:@"www.51voa.com"];
-
-    LAHOperation *homePage = [_lah homePage];
+    
+    _51voa = [[LAH51voa alloc] init];
+    
+    LAHOperation *homePage = [_51voa homePage];
     [homePage addCompletion:^(LAHOperation *operation) {
-        NSLog(@"%@", operation.container);
+        NSLog(@"\n51voa\n%@", operation.container);
     }];
     [homePage start];
+     
     
-    [_lah performSelector:@selector(release) withObject:nil afterDelay:7.0];
+    _voaNews = [[LAHVoaNews alloc] init];
+    
+    LAHOperation *voaHome = [_voaNews homePage];
+    [voaHome addCompletion:^(LAHOperation *operation) {
+        NSLog(@"\nvoanews\n%@", operation.container);
+    }];
+    [voaHome start];
+     
 }
 
 - (void)didReceiveMemoryWarning

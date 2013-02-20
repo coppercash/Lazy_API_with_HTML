@@ -12,14 +12,6 @@
 @implementation LAHNode
 @synthesize father = _father, children = _children;
 #pragma mark - Life Cycle
-- (id)init{
-    self = [super init];
-    if (self) {
-        _children = [[NSMutableArray alloc] init];
-    }
-    return self;
-}
-
 - (id)initWithFirstChild:(LAHNode*)firstChild variadicChildren:(va_list)children{
     self = [super init];
     if (self) {
@@ -36,11 +28,8 @@
 }
 
 - (id)initWithChildren:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION{
-    va_list children;
-    va_start(children, firstChild);
-
+    va_list children; va_start(children, firstChild);
     self = [self initWithFirstChild:firstChild variadicChildren:children];
-
     va_end(children);
     return self;
 }
@@ -64,10 +53,6 @@
     return _father.recursiveGreffier;
 }
 
-- (id)recursiveContainer{
-    return _father.recursiveContainer;
-}
-
 - (void)handleElement:(id<LAHHTMLElement>)element atIndex:(NSUInteger)index{
     NSArray *fakeChildren = [[NSArray alloc] initWithArray:_children];
     for (LAHNode *node in fakeChildren) {
@@ -78,14 +63,6 @@
         }
     }
     [fakeChildren release];
-}
-
-- (void)saveStateForKey:(id)key{
-    [_father saveStateForKey:key];
-}
-
-- (void)restoreStateForKey:(id)key{
-    [_father restoreStateForKey:key];
 }
 
 - (void)releaseChild:(LAHNode*)child{

@@ -8,7 +8,7 @@
 
 #import "LAHOperation.h"
 #import "LAHDownloader.h"
-#import "LAHContainer.h"
+#import "LAHConstruct.h"
 
 @implementation LAHOperation
 @synthesize delegate = _delegate;
@@ -16,28 +16,28 @@
     self = [super init];
     if (self) {
         _theDownloading = [[NSMutableDictionary alloc] init];
-        _theFetching = [[NSMutableArray alloc] init];
+        _theSeeking = [[NSMutableArray alloc] init];
         _completions = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
-- (id)initWithPath:(NSString*)path rootContainer:(LAHContainer*)rootContainer firstChild:(LAHNode*)firstChild variadicChildren:(va_list)children{
+- (id)initWithPath:(NSString*)path rootContainer:(LAHConstruct*)rootContainer firstChild:(LAHRecognizer*)firstChild variadicChildren:(va_list)children{
     self = [super initWithFirstChild:firstChild variadicChildren:children];
     if (self) {
         _theDownloading = [[NSMutableDictionary alloc] init];
-        _theFetching = [[NSMutableArray alloc] init];
+        _theSeeking = [[NSMutableArray alloc] init];
         _completions = [[NSMutableArray alloc] init];
 
         _rootContainer = [rootContainer retain];
-        self.property = ^(id<LAHHTMLElement> element){
+        self.linker = ^(id<LAHHTMLElement> element){
             return path;
         };
     }
     return self;
 }
 
-- (id)initWithPath:(NSString*)path rootContainer:(LAHContainer*)rootContainer children:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION{
+- (id)initWithPath:(NSString*)path rootContainer:(LAHConstruct*)rootContainer children:(LAHRecognizer*)firstChild, ... NS_REQUIRES_NIL_TERMINATION{
     va_list children;
     va_start(children, firstChild);
     
@@ -49,7 +49,7 @@
 
 - (void)dealloc{
     [_theDownloading release]; _theDownloading = nil;
-    [_theFetching release]; _theFetching = nil;
+    [_theSeeking release]; _theSeeking = nil;
     [_completions release]; _completions = nil;
     
     [_rootContainer release]; _rootContainer = nil;
@@ -60,20 +60,6 @@
 }
 
 #pragma mark - Recursive
-- (void)handleElement:(id<LAHHTMLElement>)element atIndex:(NSUInteger)index{
-    if (_property == nil) return;
-    NSString *info = _property(element);
-    
-    if (_delegate && [_delegate respondsToSelector:@selector(downloader:needFileAtPath:)]) {
-        id key = [_delegate downloader:self needFileAtPath:info];
-        [self saveDownloader:self forKey:key];
-    }
-}
-
-- (id)recursiveContainer{
-    return _rootContainer;
-}
-
 - (LAHOperation*)recursiveGreffier{
     return self;
 }
@@ -87,22 +73,22 @@
 - (void)awakeDownloaderForKey:(id)key withElement:(id<LAHHTMLElement>)element{
     LAHDownloader *downloader = [_theDownloading objectForKey:key];
     
-    [self addFetcher:self];
+    [self addSeeker:downloader];
 
     [downloader restoreStateForKey:key];
-    [downloader fetchWithRoot:element];
+    [downloader seekWithRoot:element];
     
     [_theDownloading removeObjectForKey:key];
-    [self removeFetcher:self];
+    [self removeSeeker:downloader];
 }
 
-- (void)addFetcher:(LAHDownloader*)fetcher{
-    [_theFetching addObject:fetcher];
+- (void)addSeeker:(LAHDownloader*)fetcher{
+    [_theSeeking addObject:fetcher];
 }
 
-- (void)removeFetcher:(LAHDownloader*)fetcher{
-    [_theFetching removeObject:fetcher];
-    if (_theFetching.count + _theDownloading.count == 0) {
+- (void)removeSeeker:(LAHDownloader*)fetcher{
+    [_theSeeking removeObject:fetcher];
+    if (_theSeeking.count + _theDownloading.count == 0) {
         for (LAHCompletion completion in _completions) {
             completion(self);
         }
@@ -110,15 +96,16 @@
     }
 }
 
-#pragma make - Event
+#pragma mark - Event
 - (void)start{
-    [self handleElement:nil atIndex:0];
+    [self download:nil];
 }
 
 - (void)addCompletion:(LAHCompletion)completion{
     [_completions addObject:completion];
 }
 
+#pragma mark - Getter
 - (id)container{
     return _rootContainer.container;
 }

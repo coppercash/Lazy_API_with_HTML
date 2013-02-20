@@ -10,6 +10,7 @@
 #import "LAHOperation.h"
 @implementation LAHManager
 
+#pragma mark - Life Cycle
 - (id)init{
     self = [super init];
     if (self) {
@@ -23,7 +24,8 @@
     [super dealloc];
 }
 
-- (LAHOperation*)operationWithPath:(NSString*)path rootContainer:(LAHContainer*)rootContainer firstChild:(LAHNode*)firstChild variadicChildren:(va_list)children{
+#pragma mark - Operation
+- (LAHOperation*)operationWithPath:(NSString*)path rootContainer:(LAHConstruct*)rootContainer firstChild:(LAHRecognizer*)firstChild variadicChildren:(va_list)children{
     LAHOperation *operation = [[LAHOperation alloc] initWithPath:path rootContainer:rootContainer firstChild:firstChild variadicChildren:children];
     [_operations addObject:operation];
     operation.delegate = self;
@@ -32,7 +34,7 @@
     return operation;
 }
 
-- (LAHOperation*)operationWithPath:(NSString*)path rootContainer:(LAHContainer*)rootContainer children:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION{
+- (LAHOperation*)operationWithPath:(NSString*)path rootContainer:(LAHConstruct*)rootContainer children:(LAHRecognizer*)firstChild, ... NS_REQUIRES_NIL_TERMINATION{
     va_list children;
     va_start(children, firstChild);
     LAHOperation *operaton = [self operationWithPath:path rootContainer:rootContainer firstChild:firstChild variadicChildren:children];

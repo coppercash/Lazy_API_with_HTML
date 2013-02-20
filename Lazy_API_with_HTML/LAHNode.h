@@ -17,11 +17,5 @@
 @property(nonatomic, retain)NSMutableArray *children;
 - (id)initWithFirstChild:(LAHNode*)firstChild variadicChildren:(va_list)children;
 - (id)initWithChildren:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
-#pragma mark - Recursive
-- (void)handleElement:(id<LAHHTMLElement>)element atIndex:(NSUInteger)index;
-- (LAHOperation*)recursiveGreffier;
-- (id)recursiveContainer;
-- (void)saveStateForKey:(id)key;
-- (void)restoreStateForKey:(id)key;
 - (void)releaseChild:(LAHNode*)child;
 @end

@@ -6,13 +6,12 @@
 //  Copyright (c) 2013 Coder Dreamer. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "LAHOperation.h"
-@class LAHOperation, LAHContainer, LAHNode;
+@class LAHOperation, LAHConstruct, LAHRecognizer;
 @interface LAHManager : NSObject <LAHDelegate>{
     NSMutableArray* _operations;
 }
-- (LAHOperation*)operationWithPath:(NSString*)path rootContainer:(LAHContainer*)rootContainer firstChild:(LAHNode*)firstChild variadicChildren:(va_list)children;
-- (LAHOperation*)operationWithPath:(NSString*)path rootContainer:(LAHContainer*)rootContainer children:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
+- (LAHOperation*)operationWithPath:(NSString*)path rootContainer:(LAHConstruct*)rootContainer firstChild:(LAHRecognizer*)firstChild variadicChildren:(va_list)children;
+- (LAHOperation*)operationWithPath:(NSString*)path rootContainer:(LAHConstruct*)rootContainer children:(LAHRecognizer*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
 
 @end

@@ -7,22 +7,54 @@
 //
 
 #import "LAHRecognizer.h"
+#import "LAHConstruct.h"
+#import "LAHDownloader.h"
 #import "LAHProtocols.h"
 
 @implementation LAHRecognizer
+@synthesize tagName = _tagName, text = _text, attributes = _attributes, isTextNode = _isTextNode, rule = _rule;
+@synthesize range = _range;
+@synthesize numberOfMatched = _numberOfMatched;
+@synthesize fetchers = _fetchers, downloaders = _downloaders;
+
 #pragma mark - Life Cycle
 - (id)init{
     self = [super init];
     if (self) {
+        self.isTextNode = NO;
         self.range = NSMakeRange(0, NSUIntegerMax);
+        _states = [[NSMutableDictionary alloc] init];
     }
+    return self;
+}
+
+- (id)initWithFirstFetcher:(LAHFetcher *)firstFetcher variadicFetchers:(va_list)fetchers{
+    self = [self init];
+    if (self) {
+        NSMutableArray *collector = [[NSMutableArray alloc] initWithObjects:firstFetcher, nil];
+        LAHFetcher *fetcher;
+        while ((fetcher = va_arg(fetchers, LAHFetcher*)) != nil) {
+            [collector addObject:fetcher];
+        }
+        _fetchers = [[NSArray alloc] initWithArray:collector];
+        [collector release];
+    }
+    return self;
+}
+
+- (id)initWithFetchers:(LAHFetcher *)firstFetcher, ... NS_REQUIRES_NIL_TERMINATION{
+    va_list fetchers; va_start(fetchers, firstFetcher);
+    self = [self initWithFirstFetcher:firstFetcher variadicFetchers:fetchers];
+    va_end(fetchers);
     return self;
 }
 
 - (id)initWithFirstChild:(LAHNode*)firstChild variadicChildren:(va_list)children{
     self = [super initWithFirstChild:firstChild variadicChildren:children];
     if (self) {
+        self.isTextNode = NO;
         self.range = NSMakeRange(0, NSUIntegerMax);
+        _states = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -32,6 +64,11 @@
     [_text release]; _text = nil;
     [_attributes release]; _attributes = nil;
 
+    [_states release]; _states = nil;
+    
+    [_fetchers release]; _fetchers = nil;
+    [_downloaders release]; _downloaders = nil;
+    
     [super dealloc];
 }
 
@@ -40,11 +77,46 @@
     _range = NSMakeRange(index, 1);
 }
 
-#pragma mark - Recursive
-- (BOOL)isElementMatched:(id<LAHHTMLElement>)element atIndex:(NSUInteger)index{
-    if (index < _range.location || _range.location + _range.length <= index) {
-        return NO;
+- (void)setDownloaders:(NSArray *)downloaders{
+    [_downloaders release];
+    _downloaders = [downloaders retain];
+    
+    for (LAHDownloader *d in _downloaders) {
+        d.father = self;
     }
+}
+
+#pragma mark - Recursive
+- (BOOL)handleElement:(id<LAHHTMLElement>)element{
+    //Step 0, check matching.
+    if (![self isElementMatched:element]) return NO;
+    _numberOfMatched ++;
+    if (!NSLocationInRange(_numberOfMatched - 1, _range)) return NO;
+
+    DLogElement(element);
+
+    //Step 1, fetch linked properties.
+    for (LAHFetcher *f in _fetchers) {
+        [f fetchProperty:element];
+    }
+    
+    for (LAHRecognizer *node in _children) {
+        node.numberOfMatched = 0;
+        for (id<LAHHTMLElement> e in element.children) {
+            //if ([node handleElement:e]) node.indexOfElements ++;
+            [node handleElement:e];
+        }
+    }
+
+    //Step 3, download with the property.
+    for (LAHDownloader *d in _downloaders) {
+        [d download:element];
+    }
+    
+    return YES;
+}
+
+- (BOOL)isElementMatched:(id<LAHHTMLElement>)element{
     if (_tagName != nil) {
         NSString *tagName = element.tagName;
         if (![_tagName isEqualToString:tagName]) return NO;
@@ -60,22 +132,39 @@
             if (eAV == nil || ![rAV isEqualToString:eAV]) return NO;
         }
     }
+    if (_isTextNode != element.isTextNode) {
+        return NO;
+    }
+    if (_rule != nil) {
+        if (!_rule(element)) return NO;
+    }
+
     return YES;
 }
 
-- (void)handleElement:(id<LAHHTMLElement>)element atIndex:(NSUInteger)index{
-    if (![self isElementMatched:element atIndex:index]) return;
-    DLogElement(element)
+- (LAHOperation*)recursiveGreffier{
+    LAHRecognizer *father = (LAHRecognizer *)_father;
+    return father.recursiveGreffier;
+}
+
+#pragma mark - State
+- (void)saveStateForKey:(id)key{
+    NSNumber *count = [[NSNumber alloc] initWithUnsignedInteger:_numberOfMatched];
+    [_states setObject:count forKey:key]; 
     
-    NSArray *fakeChildren = [[NSArray alloc] initWithArray:_children];
-    for (LAHNode *node in fakeChildren) {
-        NSUInteger index = 0;
-        for (id<LAHHTMLElement> e in element.children) {
-            [node handleElement:e atIndex:index];
-            index++;
-        }
-    }
-    [fakeChildren release];
+    LAHRecognizer *father = (LAHRecognizer *)_father;
+    [father saveStateForKey:key];
+    
+    [count release];
+}
+
+- (void)restoreStateForKey:(id)key{
+    NSNumber *count = [_states objectForKey:key];
+    _numberOfMatched = [count unsignedIntegerValue];
+    [_states removeObjectForKey:key];
+    
+    LAHRecognizer *father = (LAHRecognizer *)_father;
+    [father restoreStateForKey:key];
 }
 
 @end

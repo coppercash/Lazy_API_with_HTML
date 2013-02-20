@@ -6,33 +6,31 @@
 //  Copyright (c) 2013 Coder Dreamer. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "LAHDownloader.h"
 @protocol LAHDataSource, LAHDelegate;
-@class LAHContainer;
+@class LAHConstruct;
 @interface LAHOperation : LAHDownloader {
     NSMutableDictionary *_theDownloading;
-    NSMutableArray *_theFetching;
+    NSMutableArray *_theSeeking;
 
-    LAHContainer *_rootContainer;
+    LAHConstruct *_rootContainer;
     
     id<LAHDelegate> _delegate;
     NSMutableArray *_completions;
 }
-//@property(nonatomic, retain)LAHContainer *rootContainer;
 @property(nonatomic, assign)id<LAHDelegate> delegate;
+@property(nonatomic, readonly)id container;
 
-- (id)initWithPath:(NSString*)path rootContainer:(LAHContainer*)rootContainer firstChild:(LAHNode*)firstChild variadicChildren:(va_list)children;
-- (id)initWithPath:(NSString*)path rootContainer:(LAHContainer*)rootContainer children:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
+- (id)initWithPath:(NSString*)path rootContainer:(LAHConstruct*)rootContainer firstChild:(LAHRecognizer*)firstChild variadicChildren:(va_list)children;
+- (id)initWithPath:(NSString*)path rootContainer:(LAHConstruct*)rootContainer children:(LAHRecognizer*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
+
+- (void)start;
+- (void)addCompletion:(LAHCompletion)completion;
 
 - (void)saveDownloader:(LAHDownloader*)downloader forKey:(id)key;
 - (void)awakeDownloaderForKey:(id)key withElement:(id<LAHHTMLElement>)element;
 
-- (void)addFetcher:(LAHDownloader*)fetcher;
-- (void)removeFetcher:(LAHDownloader*)fetcher;
-
-- (void)start;
-- (void)addCompletion:(LAHCompletion)completion;
-- (id)container;
+- (void)addSeeker:(LAHDownloader*)fetcher;
+- (void)removeSeeker:(LAHDownloader*)fetcher;
 @end
 

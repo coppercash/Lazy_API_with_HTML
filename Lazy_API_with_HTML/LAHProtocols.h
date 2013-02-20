@@ -6,21 +6,26 @@
 //  Copyright (c) 2013 Coder Dreamer. All rights reserved.
 //
 
+
 @protocol LAHHTMLElement <NSObject>
 - (NSString*)tagName;
 - (NSString*)text;
 - (NSDictionary*)attributes;
 - (NSArray*)children;
+- (BOOL)isTextNode;
 @end
+#define LAHEle id<LAHHTMLElement>
 
 @class LAHOperation, LAHDownloader;
-typedef NSString*(^LAHPropertyGetter)(id<LAHHTMLElement> element);
+typedef NSString*(^LAHPropertyFetcher)(id<LAHHTMLElement> element);
+typedef BOOL(^LAHRule)(id<LAHHTMLElement> element);
 typedef void(^LAHCompletion)(LAHOperation *operation);
 
 @protocol LAHDelegate <NSObject>
 - (id)downloader:(LAHDownloader*)downloader needFileAtPath:(NSString*)path;
 - (void)downloader:(LAHOperation*)operation didFetch:(id)info;
 @end
+
 //#define DEBUG_MODE
 #ifdef DEBUG_MODE
 
