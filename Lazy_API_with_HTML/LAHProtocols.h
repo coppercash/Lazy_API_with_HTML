@@ -20,6 +20,7 @@
 typedef NSString*(^LAHPropertyFetcher)(id<LAHHTMLElement> element);
 typedef BOOL(^LAHRule)(id<LAHHTMLElement> element);
 typedef void(^LAHCompletion)(LAHOperation *operation);
+typedef void(^LAHCorrector)(LAHOperation *operation, NSError* error);
 
 @protocol LAHDelegate <NSObject>
 - (id)downloader:(LAHDownloader*)downloader needFileAtPath:(NSString*)path;

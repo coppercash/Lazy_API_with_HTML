@@ -31,13 +31,17 @@
 
 - (id)downloader:(LAHDownloader*)downloader needFileAtPath:(NSString*)path{
     MKNetworkOperation *op = [[_engine operationWithPath:path] autorelease];
+    
+    LAHOperation *operation = downloader.recursiveOperation;
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
         NSData *rd = [completedOperation responseData];
         TFHpple * doc = [[TFHpple alloc] initWithHTMLData:rd];
         TFHppleElement<LAHHTMLElement> *root = (TFHppleElement<LAHHTMLElement>*)[doc peekAtSearchWithXPathQuery:@"/html/body"];
         [doc release];
-        [downloader.recursiveGreffier awakeDownloaderForKey:op withElement:root];
-    } errorHandler:nil];
+        [operation awakeDownloaderForKey:op withElement:root];
+    } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
+        [operation handleError:error];
+    }];
     [_engine enqueueOperation:op];
     
     return op;

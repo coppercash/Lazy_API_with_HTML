@@ -38,10 +38,11 @@
     if (_linker == nil) return;
     NSString *link = _linker(element);
     
-    id<LAHDelegate> delegate = self.recursiveGreffier.delegate;
+    LAHOperation *operation = self.recursiveOperation;
+    id<LAHDelegate> delegate = operation.delegate;
     if (delegate && [delegate respondsToSelector:@selector(downloader:needFileAtPath:)]) {
         id key = [delegate downloader:self needFileAtPath:link];
-        [self.recursiveGreffier saveDownloader:self forKey:key];
+        [operation saveDownloader:self forKey:key];
     }
 }
 
@@ -67,7 +68,7 @@
     [father restoreStateForKey:key];
 }
 
-- (LAHOperation*)recursiveGreffier{
+- (LAHOperation*)recursiveOperation{
     LAHRecognizer *father = (LAHRecognizer*)_father;
     LAHOperation* greffier = father.recursiveGreffier;
     return greffier;

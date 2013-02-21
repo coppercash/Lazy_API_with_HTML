@@ -10,14 +10,25 @@
 #import "LAHDownloader.h"
 #import "LAHConstruct.h"
 
+@interface LAHOperation ()
+@property(nonatomic, retain)LAHConstruct *rootContainer;
+@property(nonatomic, retain)NSMutableDictionary *theDownloading;
+@property(nonatomic, retain)NSMutableArray *theSeeking;
+@property(nonatomic, retain)NSMutableArray *completions;
+@property(nonatomic, retain)NSMutableArray *correctors;
+@end
+
 @implementation LAHOperation
+@synthesize rootContainer = _rootContainer;
+@synthesize theDownloading = _theDownloading, theSeeking = _theSeeking, completions = _completions, correctors = _correctors;
 @synthesize delegate = _delegate;
 - (id)init{
     self = [super init];
     if (self) {
-        _theDownloading = [[NSMutableDictionary alloc] init];
-        _theSeeking = [[NSMutableArray alloc] init];
-        _completions = [[NSMutableArray alloc] init];
+        [self.theDownloading = [[NSMutableDictionary alloc] init] release];
+        [self.theSeeking = [[NSMutableArray alloc] init] release];
+        [self.completions = [[NSMutableArray alloc] init] release];
+        [self.correctors = [[NSMutableArray alloc] init] release];
     }
     return self;
 }
@@ -25,11 +36,12 @@
 - (id)initWithPath:(NSString*)path rootContainer:(LAHConstruct*)rootContainer firstChild:(LAHRecognizer*)firstChild variadicChildren:(va_list)children{
     self = [super initWithFirstChild:firstChild variadicChildren:children];
     if (self) {
-        _theDownloading = [[NSMutableDictionary alloc] init];
-        _theSeeking = [[NSMutableArray alloc] init];
-        _completions = [[NSMutableArray alloc] init];
+        [self.theDownloading = [[NSMutableDictionary alloc] init] release];
+        [self.theSeeking = [[NSMutableArray alloc] init] release];
+        [self.completions = [[NSMutableArray alloc] init] release];
+        [self.correctors = [[NSMutableArray alloc] init] release];
 
-        _rootContainer = [rootContainer retain];
+        self.rootContainer = rootContainer;
         self.linker = ^(id<LAHHTMLElement> element){
             return path;
         };
@@ -48,19 +60,20 @@
 }
 
 - (void)dealloc{
-    [_theDownloading release]; _theDownloading = nil;
-    [_theSeeking release]; _theSeeking = nil;
-    [_completions release]; _completions = nil;
-    
-    [_rootContainer release]; _rootContainer = nil;
+    self.theDownloading = nil;
+    self.theSeeking = nil;
+    self.completions = nil;
+    self.correctors = nil;
 
-    _delegate = nil;
+    self.rootContainer = nil;
+    
+    self.delegate = nil;
     
     [super dealloc];
 }
 
 #pragma mark - Recursive
-- (LAHOperation*)recursiveGreffier{
+- (LAHOperation*)recursiveOperation{
     return self;
 }
 
@@ -102,7 +115,19 @@
 }
 
 - (void)addCompletion:(LAHCompletion)completion{
+    if (completion == nil) return;
     [_completions addObject:completion];
+}
+
+- (void)addCorrector:(LAHCorrector)corrector{
+    if (corrector == nil) return;
+    [_correctors addObject:corrector];
+}
+
+- (void)handleError:(NSError*)error{
+    for (LAHCorrector c in _correctors) {
+        c(self, error);
+    }
 }
 
 #pragma mark - Getter

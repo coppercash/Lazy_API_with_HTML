@@ -10,4 +10,8 @@
 #import "LAHOperation.h"
 #import "LAHDownloader.h"
 #import "LAHRecognizer.h"
+
 #import "LAHConstruct.h"
+#import "LAHArray.h"
+#import "LAHDictionary.h"
+#import "LAHFetcher.h"

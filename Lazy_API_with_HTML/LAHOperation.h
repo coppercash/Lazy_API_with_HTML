@@ -17,6 +17,7 @@
     
     id<LAHDelegate> _delegate;
     NSMutableArray *_completions;
+    NSMutableArray *_correctors;
 }
 @property(nonatomic, assign)id<LAHDelegate> delegate;
 @property(nonatomic, readonly)id container;
@@ -26,6 +27,8 @@
 
 - (void)start;
 - (void)addCompletion:(LAHCompletion)completion;
+- (void)addCorrector:(LAHCorrector)corrector;
+- (void)handleError:(NSError*)error;
 
 - (void)saveDownloader:(LAHDownloader*)downloader forKey:(id)key;
 - (void)awakeDownloaderForKey:(id)key withElement:(id<LAHHTMLElement>)element;

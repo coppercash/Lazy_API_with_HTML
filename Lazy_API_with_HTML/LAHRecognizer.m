@@ -8,6 +8,7 @@
 
 #import "LAHRecognizer.h"
 #import "LAHConstruct.h"
+#import "LAHFetcher.h"
 #import "LAHDownloader.h"
 #import "LAHProtocols.h"
 

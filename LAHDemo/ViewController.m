@@ -38,7 +38,15 @@
         NSLog(@"\nvoanews\n%@", operation.container);
     }];
     [voaHome start];
-     
+    
+    
+    [self performSelector:@selector(clean) withObject:nil afterDelay:10.0f];
+}
+
+- (void)clean{
+    [_51voa release];
+    [_voaNews release];
+    NSLog(@"Finish cleaning.");
 }
 
 - (void)didReceiveMemoryWarning

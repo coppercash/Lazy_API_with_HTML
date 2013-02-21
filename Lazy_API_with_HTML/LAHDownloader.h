@@ -17,7 +17,7 @@
 
 - (void)saveStateForKey:(id)key;
 - (void)restoreStateForKey:(id)key;
-- (LAHOperation*)recursiveGreffier;
+- (LAHOperation*)recursiveOperation;
 
 - (void)download:(id<LAHHTMLElement>)element;
 - (void)seekWithRoot:(id<LAHHTMLElement>)element;

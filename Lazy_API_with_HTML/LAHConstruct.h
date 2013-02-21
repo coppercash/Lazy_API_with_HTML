@@ -36,26 +36,11 @@ typedef enum {
 
 @end
 
-@interface LAHDictionary : LAHConstruct {
-    NSMutableDictionary *_dictionary;
-}
-@property(nonatomic, readonly)NSMutableDictionary *dictionary;
-@end
-
+/*
 @interface LAHArray : LAHConstruct {
     NSMutableArray *_array;
 }
-@property(nonatomic, readonly)NSMutableArray *array;
-@end
+//@property(nonatomic, readonly)NSMutableArray *array;
+//- (NSMutableArray*)array;
+@end*/
 
-#import "LAHProtocols.h"
-@interface LAHFetcher : LAHConstruct <NSCopying> {
-    LAHPropertyFetcher _fetcher;
-    NSString* _property;
-}
-@property(nonatomic, copy)LAHPropertyFetcher fetcher;
-@property(nonatomic, readonly)NSString *property;
-- (id)initWithKey:(NSString*)key fetcher:(LAHPropertyFetcher)fetcher;
-- (id)initWithFetcher:(LAHPropertyFetcher)property;
-- (void)fetchProperty:(id<LAHHTMLElement>)element;
-@end
