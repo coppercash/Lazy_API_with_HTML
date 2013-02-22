@@ -21,13 +21,13 @@
         LAHEle span = [element.children objectAtIndex:1];
         return span.text;
         return nil;
-    }], *name1 = [name0 copy], *name2 = [name0 copy];
+    }];
     LAHFetcher *link0 = [[LAHFetcher alloc] initWithKey:@"link" fetcher:^NSString *(id<LAHHTMLElement> element) {
         return [element.attributes objectForKey:@"href"];
-    }], *link1 = [link0 copy], *link2 = [link0 copy];
+    }];
     LAHFetcher *imgSrc0 = [[LAHFetcher alloc] initWithKey:@"imgSrc" fetcher:^NSString *(id<LAHHTMLElement> element) {
         return [element.attributes objectForKey:@"src"];
-    }], *imgSrc1 = [imgSrc0 copy];
+    }];
     LAHFetcher *imgSrc2 = [[LAHFetcher alloc] initWithFetcher:^NSString *(id<LAHHTMLElement> element) {
         NSString *style = [element.attributes objectForKey:@"style"];
         NSRange sR = [style rangeOfString:@"url("];
@@ -36,13 +36,9 @@
         return [style substringWithRange:r];
     }];
     
-    LAHArray *arr0 = [[LAHArray alloc] initWithKey:@"imgSrc" children:imgSrc0, nil];
-    LAHArray *arr1 = [[LAHArray alloc] initWithKey:@"imgSrc" children:imgSrc1, nil];
-    LAHArray *arr2 = [[LAHArray alloc] initWithKey:@"imgSrc" children:imgSrc2, nil];
+    LAHArray *arr0 = [[LAHArray alloc] initWithKey:@"imgSrc" children:imgSrc0, imgSrc2, nil];
     LAHDictionary *dic0 = [[LAHDictionary alloc] initWithChildren:name0, link0, arr0, nil];
-    LAHDictionary *dic1 = [[LAHDictionary alloc] initWithChildren:name1, link1, arr1, nil];
-    LAHDictionary *dic2 = [[LAHDictionary alloc] initWithChildren:name2, link2, arr2, nil];
-    LAHArray *items = [[LAHArray alloc] initWithChildren:dic0, dic1, dic2, nil];
+    LAHArray *items = [[LAHArray alloc] initWithChildren:dic0, nil];
     
 
     LAHRecognizer *aNL0 = [[LAHRecognizer alloc] init]; aNL0.fetchers = @[name0, link0];
@@ -57,10 +53,11 @@
     LAHRecognizer *aI0 = [[LAHRecognizer alloc] initWithChildren:img0, nil];
     aI0.tagName = @"a"; aI0.attributes = @{@"id":@"ctl00_ctl00_cpAB_cp1_widgetDeskSection_ctl02_ctl02_ctl00_ImageHyperlink1"};
     
-    LAHRecognizer *div0 = [[LAHRecognizer alloc] initWithChildren:h3, aI0, nil];
-    div0.tagName = @"div"; div0.attributes = @{@"class":@"columnInner"};
+    LAHRecognizer *div0 = [[LAHRecognizer alloc] initWithChildren:h3, aI0, nil];;
+    div0.tagName = @"div"; div0.attributes = @{@"class":@"columnInner"}; div0.range = NSMakeRange(0, 1);
     
-    LAHRecognizer *img1 = [[LAHRecognizer alloc] init]; img1.fetchers = @[imgSrc1];
+    
+    LAHRecognizer *img1 = [[LAHRecognizer alloc] init]; img1.fetchers = @[imgSrc0];
     img1.tagName = @"img"; img1.attributes = @{@"class":@"photo"};
     img1.rule = ^BOOL(id<LAHHTMLElement> element){
         NSString *alt = [element.attributes objectForKey:@"alt"];
@@ -72,7 +69,7 @@
         return [element.attributes objectForKey:@"href"];
     } children:img1, nil];
     
-    LAHRecognizer *aNL1 = [[LAHRecognizer alloc] init]; aNL1.fetchers = @[name1, link1];
+    LAHRecognizer *aNL1 = [[LAHRecognizer alloc] init]; aNL1.fetchers = @[name0, link0];
     aNL1.tagName = @"a"; aNL1.downloaders = @[d1];
 
     LAHRecognizer *h4_1 = [[LAHRecognizer alloc] initWithChildren:aNL1, nil];
@@ -85,7 +82,7 @@
     divContent.tagName = @"div"; divContent.attributes = @{@"class":@"content_column2_widgethalf secondcolumn"};
 
     
-    LAHRecognizer *aNL2 = [[LAHRecognizer alloc] init]; aNL2.fetchers = @[name2, link2];
+    LAHRecognizer *aNL2 = [[LAHRecognizer alloc] init]; aNL2.fetchers = @[name0, link0];
     aNL2.tagName = @"a";
     
     LAHRecognizer *h4_2 = [[LAHRecognizer alloc] initWithChildren:aNL2, nil];
@@ -101,7 +98,7 @@
     div2.tagName = @"div";
 
     LAHRecognizer *div2I = [[LAHRecognizer alloc] initWithChildren:div2, nil];
-    div2I.tagName = @"div";
+    div2I.tagName = @"div"; div2I.range = NSMakeRange(0, 5);
     
     LAHRecognizer *divBox = [[LAHRecognizer alloc] initWithChildren:div2I, nil];
     divBox.tagName = @"div";
@@ -112,14 +109,13 @@
     LAHRecognizer *ul = [[LAHRecognizer alloc] initWithChildren:li, nil];
     ul.tagName = @"ul"; ul.attributes = @{@"class":@"overview"};
     
-    dic0.indexSource = div0;
-    dic1.indexSource = h4_1;
-    dic2.indexSource = div2I;
+    
+    dic0.indexes = @[div0, h4_1, div2I];
     
     LAHOperation *op = [self operationWithPath:@"" rootContainer:items children:div0 ,divContent, ul, nil];
     
     
-    [name0 release]; [name1 release]; [name2 release]; [link0 release]; [link1 release]; [link2 release];[imgSrc0 release]; [imgSrc1 release]; [imgSrc2 release]; [arr0 release]; [arr1 release]; [arr2 release]; [dic0 release]; [dic1 release]; [dic2 release]; [items release];
+    [name0 release]; [link0 release]; [imgSrc0 release]; [imgSrc2 release]; [arr0 release];[dic0 release]; [items release];
     
     [aNL0 release]; [h3 release]; [img0 release]; [aI0 release]; [div0 release]; [img1 release];
     

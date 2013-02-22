@@ -7,6 +7,7 @@
 //
 
 #import "LAHArray.h"
+#import "LAHRecognizer.h"
 
 @interface LAHArray ()
 @property(nonatomic, retain)NSMutableArray *array;
@@ -30,16 +31,19 @@
         array = [(LAHConstruct*)_father recieveObject:self];    //Assert array never be nil
     }
     
+    
     id value = nil;
-    if (object.indexSource == nil) {
+
+    NSArray *indexes = object.indexes;
+    if (indexes == nil || indexes.count == 0) {
         [array addObject:(value = object.newValue)];
     }else{
-        NSRange rBO = NSMakeRange(0, [_children indexOfObject:object]); //range before object
-        NSArray *subArray = [_children subarrayWithRange:rBO]; //child brefore object
+        NSUInteger count = 0;
+        for (LAHRecognizer *r in indexes) {
+            count += r.numberInRange;
+        }
         
-        NSUInteger index = object.index;    //sub index
-        for (LAHConstruct *c in subArray) index += c.count; //index is legal across all children
-        
+        NSUInteger index = count - 1;
         if (index < array.count) {
             value = [array objectAtIndex:index];
         }else{
@@ -52,7 +56,6 @@
 
 - (id)newValue{
     [self.array = [[NSMutableArray alloc] init] release];
-    _count ++;
     return _array;
 }
 

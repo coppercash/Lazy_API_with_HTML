@@ -11,12 +11,11 @@
 #import "LAHOperation.h"
 
 @implementation LAHConstruct
-@synthesize type = _type, key = _key, indexSource = _indexSource;
-@synthesize count = _count;
+@synthesize type = _type, key = _key, indexes = _indexes;
 
 - (id)initWithKey:(NSString *)key children:(LAHNode *)firstChild, ... NS_REQUIRES_NIL_TERMINATION{
     va_list children; va_start(children, firstChild);
-    self = [super initWithFirstChild:firstChild variadicChildren:children];
+    self = [self initWithFirstChild:firstChild variadicChildren:children];
     va_end(children);
     if (self){
         self.key = key;
@@ -25,14 +24,13 @@
 }
 
 - (void)dealloc{
-    [_key release]; _key = nil;
-    _indexSource = nil;
+    self.key = nil;
+    self.indexes = nil;
     
     [super dealloc];
 }
 
 - (id)recieveObject:(LAHConstruct*)object{
-    _count ++;
     return nil;
 }
 
@@ -40,9 +38,22 @@
     return nil;
 }
 
-- (NSUInteger)index{
-    if (_indexSource == nil) return NSNotFound;
-    return _indexSource.numberInRange - 1;
+- (void)saveStateForKey:(id)key{
+    for (LAHRecognizer *r in _indexes) {
+        [r saveStateForKey:key];
+    }
+    for (LAHRecognizer *c in _children) {
+        [c saveStateForKey:key];
+    }
+}
+
+- (void)restoreStateForKey:(id)key{
+    for (LAHRecognizer *r in _indexes) {
+        [r restoreStateForKey:key];
+    }
+    for (LAHRecognizer *c in _children) {
+        [c restoreStateForKey:key];
+    }
 }
 
 @end

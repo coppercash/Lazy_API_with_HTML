@@ -39,7 +39,6 @@
 
 - (id)newValue{
     [self.dictionary = [[NSMutableDictionary alloc] init] release];
-    _count ++;
     return _dictionary;
 }
 

@@ -20,27 +20,19 @@ typedef enum {
     LAHConstructType _type;
     
     NSString *_key;
-    LAHRecognizer *_indexSource;
-    NSUInteger _count;  //times of newValue being called
+    NSArray *_indexes;
 }
 @property(nonatomic, assign)LAHConstructType type;
 @property(nonatomic, copy)NSString *key;
-@property(nonatomic, assign)LAHRecognizer *indexSource;
-@property(nonatomic, readonly)NSUInteger count;
-@property(nonatomic, readonly)NSUInteger index;
+@property(nonatomic, retain)NSArray *indexes;
 @property(nonatomic, readonly)id container;
 
 - (id)initWithKey:(NSString*)key children:(LAHNode *)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
 - (id)recieveObject:(LAHConstruct*)object;
 - (id)newValue;
 
+- (void)saveStateForKey:(id)key;
+- (void)restoreStateForKey:(id)key;
 @end
 
-/*
-@interface LAHArray : LAHConstruct {
-    NSMutableArray *_array;
-}
-//@property(nonatomic, readonly)NSMutableArray *array;
-//- (NSMutableArray*)array;
-@end*/
 

@@ -89,16 +89,15 @@
 
 #pragma mark - Getter
 - (NSUInteger)numberInRange{
-    NSUInteger n = _numberOfMatched - _range.location;
-    return n;
+    NSRange wR = NSMakeRange(0, _numberOfMatched);  //whole range
+    NSRange iR = NSIntersectionRange(wR, _range);   //intersection range
+    return iR.length;
 }
 
 #pragma mark - Recursive
 - (BOOL)handleElement:(id<LAHHTMLElement>)element{
     //Step 0, check matching.
     if (![self isElementMatched:element]) return NO;
-
-
     DLogElement(element);
 
     //Step 1, fetch linked properties.
@@ -162,10 +161,6 @@
 - (void)saveStateForKey:(id)key{
     NSNumber *count = [[NSNumber alloc] initWithUnsignedInteger:_numberOfMatched];
     [_states setObject:count forKey:key]; 
-    
-    LAHRecognizer *father = (LAHRecognizer *)_father;
-    [father saveStateForKey:key];
-    
     [count release];
 }
 
@@ -173,9 +168,6 @@
     NSNumber *count = [_states objectForKey:key];
     _numberOfMatched = [count unsignedIntegerValue];
     [_states removeObjectForKey:key];
-    
-    LAHRecognizer *father = (LAHRecognizer *)_father;
-    [father restoreStateForKey:key];
 }
 
 - (void)refreshState{

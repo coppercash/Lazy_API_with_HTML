@@ -57,7 +57,8 @@
     };
     a1.downloaders = @[d];
 
-    LAHRecognizer *li = [[LAHRecognizer alloc] initWithChildren:a0, a1, nil]; li.tagName = @"li"; li.range = NSMakeRange(0, 7); item.indexSource = li;
+    LAHRecognizer *li = [[LAHRecognizer alloc] initWithChildren:a0, a1, nil]; li.tagName = @"li"; li.range = NSMakeRange(5, 7); //item.indexSource = li;
+    item.indexes = @[li];
     
     LAHRecognizer *ul = [[LAHRecognizer alloc] initWithChildren:li, nil]; ul.tagName = @"ul";
     

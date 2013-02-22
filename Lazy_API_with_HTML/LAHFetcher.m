@@ -49,8 +49,7 @@
     
     copy.type = self.type;
     copy.key = self.key;
-    copy.indexSource = self.indexSource;
-    
+    copy.indexes = self.indexes;
     copy.fetcher = self.fetcher;
     
     return copy;
@@ -59,14 +58,12 @@
 #pragma mark - Element
 - (void)fetchProperty:(id<LAHHTMLElement>)element{
     self.property = _fetcher(element);
-    
     if (_property == nil) return;
     LAHConstruct *father = (LAHConstruct *)_father;
     [father recieveObject:self];
 }
 
 - (id)newValue{
-    _count ++;
     if (_property == nil) return [NSNull null];
     return _property;
 }
