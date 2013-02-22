@@ -42,7 +42,7 @@
 
 - (NSUInteger)index{
     if (_indexSource == nil) return NSNotFound;
-    return _indexSource.numberOfMatched - _indexSource.range.location - 1;
+    return _indexSource.numberInRange - 1;
 }
 
 @end

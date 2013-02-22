@@ -87,12 +87,17 @@
     }
 }
 
+#pragma mark - Getter
+- (NSUInteger)numberInRange{
+    NSUInteger n = _numberOfMatched - _range.location;
+    return n;
+}
+
 #pragma mark - Recursive
 - (BOOL)handleElement:(id<LAHHTMLElement>)element{
     //Step 0, check matching.
     if (![self isElementMatched:element]) return NO;
-    _numberOfMatched ++;
-    if (!NSLocationInRange(_numberOfMatched - 1, _range)) return NO;
+
 
     DLogElement(element);
 
@@ -102,7 +107,7 @@
     }
     
     for (LAHRecognizer *node in _children) {
-        node.numberOfMatched = 0;
+        [node refreshState];
         for (id<LAHHTMLElement> e in element.children) {
             //if ([node handleElement:e]) node.indexOfElements ++;
             [node handleElement:e];
@@ -140,6 +145,11 @@
         if (!_rule(element)) return NO;
     }
 
+    //range indicates range of elements matched by above rules,
+    //so before using it, _numberOfMatched should increase.
+    _numberOfMatched ++;
+    if (!NSLocationInRange(_numberOfMatched - 1, _range)) return NO;
+    
     return YES;
 }
 
@@ -166,6 +176,10 @@
     
     LAHRecognizer *father = (LAHRecognizer *)_father;
     [father restoreStateForKey:key];
+}
+
+- (void)refreshState{
+    _numberOfMatched = 0;
 }
 
 @end

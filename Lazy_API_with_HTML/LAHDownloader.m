@@ -48,7 +48,7 @@
 
 - (void)seekWithRoot:(id<LAHHTMLElement>)element{
     for (LAHRecognizer* node in _children) {
-        node.numberOfMatched = 0;
+        [node refreshState];
         [node handleElement:element];
     }
     
