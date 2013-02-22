@@ -143,9 +143,9 @@
     return YES;
 }
 
-- (LAHOperation*)recursiveGreffier{
+- (LAHOperation*)recursiveOperation{
     LAHRecognizer *father = (LAHRecognizer *)_father;
-    return father.recursiveGreffier;
+    return father.recursiveOperation;
 }
 
 #pragma mark - State

@@ -85,6 +85,7 @@
 
 - (void)awakeDownloaderForKey:(id)key withElement:(id<LAHHTMLElement>)element{
     LAHDownloader *downloader = [_theDownloading objectForKey:key];
+    if (downloader == nil) return;
     
     [self addSeeker:downloader];
 
@@ -116,12 +117,16 @@
 
 - (void)addCompletion:(LAHCompletion)completion{
     if (completion == nil) return;
-    [_completions addObject:completion];
+    LAHCompletion copy = [completion copy];
+    [_completions addObject:copy];
+    [copy release];
 }
 
 - (void)addCorrector:(LAHCorrector)corrector{
     if (corrector == nil) return;
-    [_correctors addObject:corrector];
+    LAHCompletion copy = [corrector copy];
+    [_correctors addObject:copy];
+    [copy release];
 }
 
 - (void)handleError:(NSError*)error{

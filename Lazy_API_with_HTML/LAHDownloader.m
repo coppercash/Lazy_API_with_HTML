@@ -70,7 +70,7 @@
 
 - (LAHOperation*)recursiveOperation{
     LAHRecognizer *father = (LAHRecognizer*)_father;
-    LAHOperation* greffier = father.recursiveGreffier;
+    LAHOperation* greffier = father.recursiveOperation;
     return greffier;
 }
 

@@ -42,7 +42,7 @@
 #define DO_GCD_RETAIN_RELEASE 1
 #endif
 #endif
-
+/*
 #ifdef DEBUG
 #   define DLog(fmt, ...) {NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);}
 #   define ELog(err) {if(err) DLog(@"%@", err)}
@@ -50,7 +50,7 @@
 #   define DLog(...)
 #   define ELog(err)
 #endif
-
+*/
 // ALog always displays output regardless of the DEBUG setting
 #define ALog(fmt, ...) {NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);};
 

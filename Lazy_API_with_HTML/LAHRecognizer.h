@@ -44,7 +44,7 @@
 - (BOOL)isElementMatched:(id<LAHHTMLElement>)element;
 - (void)setIndex:(NSUInteger)index;
 
-- (LAHOperation*)recursiveGreffier;
+- (LAHOperation*)recursiveOperation;
 - (void)saveStateForKey:(id)key;
 - (void)restoreStateForKey:(id)key;
 @end

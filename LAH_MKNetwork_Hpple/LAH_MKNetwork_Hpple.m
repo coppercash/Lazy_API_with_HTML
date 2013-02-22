@@ -37,8 +37,9 @@
         NSData *rd = [completedOperation responseData];
         TFHpple * doc = [[TFHpple alloc] initWithHTMLData:rd];
         TFHppleElement<LAHHTMLElement> *root = (TFHppleElement<LAHHTMLElement>*)[doc peekAtSearchWithXPathQuery:@"/html/body"];
-        [doc release];
         [operation awakeDownloaderForKey:op withElement:root];
+        
+        [doc release];
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
         [operation handleError:error];
     }];

@@ -61,7 +61,8 @@
     div0.tagName = @"div"; div0.attributes = @{@"class":@"columnInner"};
     
     LAHRecognizer *img1 = [[LAHRecognizer alloc] init]; img1.fetchers = @[imgSrc1];
-    img1.tagName = @"img"; img1.attributes = @{@"class":@"photo"}; img1.rule = ^BOOL(id<LAHHTMLElement> element){
+    img1.tagName = @"img"; img1.attributes = @{@"class":@"photo"};
+    img1.rule = ^BOOL(id<LAHHTMLElement> element){
         NSString *alt = [element.attributes objectForKey:@"alt"];
         if (alt == nil) return NO;
         return YES;
