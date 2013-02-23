@@ -21,6 +21,7 @@
     
     //States
     NSMutableDictionary *_states;
+    BOOL _isIndex;
     NSUInteger _numberOfMatched;
     
     //Even handlers
@@ -33,8 +34,11 @@
 @property(nonatomic, copy)LAHRule rule;
 @property(nonatomic, assign)BOOL isTextNode;
 @property(nonatomic, assign)NSRange range;
+
+@property(nonatomic, assign)BOOL isIndex;
 @property(nonatomic, readonly)NSUInteger numberOfMatched;
 @property(nonatomic, readonly)NSUInteger numberInRange; //Elements in range, must be matched first.
+
 @property(nonatomic, retain)NSArray *fetchers;
 @property(nonatomic, retain)NSArray *downloaders;
 

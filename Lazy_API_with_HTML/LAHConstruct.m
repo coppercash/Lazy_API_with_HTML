@@ -38,6 +38,15 @@
     return nil;
 }
 
+- (void)setIndexes:(NSArray *)indexes{
+    [_indexes release];
+    _indexes = [indexes retain];
+    
+    for (LAHRecognizer *r in _indexes) {
+        r.isIndex = YES;
+    }
+}
+
 - (void)saveStateForKey:(id)key{
     for (LAHRecognizer *r in _indexes) {
         [r saveStateForKey:key];

@@ -37,6 +37,7 @@
 - (void)download:(id<LAHHTMLElement>)element{
     if (_linker == nil) return;
     NSString *link = _linker(element);
+    if (link == nil) return;
     
     LAHOperation *operation = self.recursiveOperation;
     id<LAHDelegate> delegate = operation.delegate;

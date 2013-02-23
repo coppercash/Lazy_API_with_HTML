@@ -15,7 +15,7 @@
 @implementation LAHRecognizer
 @synthesize tagName = _tagName, text = _text, attributes = _attributes, isTextNode = _isTextNode, rule = _rule;
 @synthesize range = _range;
-@synthesize numberOfMatched = _numberOfMatched;
+@synthesize isIndex = _isIndex, numberOfMatched = _numberOfMatched;
 @synthesize fetchers = _fetchers, downloaders = _downloaders;
 
 #pragma mark - Life Cycle
@@ -23,6 +23,7 @@
     self = [super init];
     if (self) {
         self.isTextNode = NO;
+        self.isIndex = NO;
         self.range = NSMakeRange(0, NSUIntegerMax);
         _states = [[NSMutableDictionary alloc] init];
     }
@@ -97,6 +98,7 @@
 #pragma mark - Recursive
 - (BOOL)handleElement:(id<LAHHTMLElement>)element{
     //Step 0, check matching.
+
     if (![self isElementMatched:element]) return NO;
     DLogElement(element);
 
@@ -106,7 +108,7 @@
     }
     
     for (LAHRecognizer *node in _children) {
-        [node refreshState];
+        if (_isIndex) [node refreshState];
         for (id<LAHHTMLElement> e in element.children) {
             //if ([node handleElement:e]) node.indexOfElements ++;
             [node handleElement:e];
@@ -172,6 +174,9 @@
 
 - (void)refreshState{
     _numberOfMatched = 0;
+    for (LAHRecognizer *r in _children) {
+        [r refreshState];
+    }
 }
 
 @end
