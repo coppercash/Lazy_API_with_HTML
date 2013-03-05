@@ -7,9 +7,12 @@
 //
 
 #import "LAHManager.h"
+#import "LAHManagerEnhance.h"
+
 @class MKNetworkEngine;
 @interface LAH_MKNetworkKit_Hpple : LAHManager {
     MKNetworkEngine *_engine;
 }
 - (id)initWithHostName:(NSString*)hostName;
+- (void)cancel;
 @end

@@ -35,6 +35,7 @@
 		BE94BB2316C11DE9002AF23E /* LAHRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = BE94BB2116C11DE9002AF23E /* LAHRecognizer.m */; };
 		BE94BB2A16C11E17002AF23E /* LAHDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = BE94BB2916C11E17002AF23E /* LAHDownloader.m */; };
 		BE94BB2B16C11E17002AF23E /* LAHDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = BE94BB2916C11E17002AF23E /* LAHDownloader.m */; };
+		BE95AE8C16E57A6E008D5A88 /* LAHManagerEnhance.m in Sources */ = {isa = PBXBuildFile; fileRef = BE95AE8B16E57A6E008D5A88 /* LAHManagerEnhance.m */; };
 		BE9C96CF16CE79A8000BC31F /* LAHConstruct.m in Sources */ = {isa = PBXBuildFile; fileRef = BE9C96CE16CE79A8000BC31F /* LAHConstruct.m */; };
 		BE9E221616C528D9004EF814 /* libMKNetworkKit-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BE9E221516C528D9004EF814 /* libMKNetworkKit-iOS.a */; };
 		BEB0617A16C50908003AA16F /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE93F0FE16C5074C008C3B3F /* CFNetwork.framework */; };
@@ -125,6 +126,8 @@
 		BE94BB2116C11DE9002AF23E /* LAHRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LAHRecognizer.m; sourceTree = "<group>"; };
 		BE94BB2816C11E17002AF23E /* LAHDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LAHDownloader.h; sourceTree = "<group>"; };
 		BE94BB2916C11E17002AF23E /* LAHDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LAHDownloader.m; sourceTree = "<group>"; };
+		BE95AE8A16E57A6E008D5A88 /* LAHManagerEnhance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LAHManagerEnhance.h; sourceTree = "<group>"; };
+		BE95AE8B16E57A6E008D5A88 /* LAHManagerEnhance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LAHManagerEnhance.m; sourceTree = "<group>"; };
 		BE9C96CD16CE79A8000BC31F /* LAHConstruct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LAHConstruct.h; sourceTree = "<group>"; };
 		BE9C96CE16CE79A8000BC31F /* LAHConstruct.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LAHConstruct.m; sourceTree = "<group>"; };
 		BE9E221516C528D9004EF814 /* libMKNetworkKit-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libMKNetworkKit-iOS.a"; sourceTree = "<group>"; };
@@ -235,6 +238,8 @@
 			children = (
 				BE93F0D016C5033A008C3B3F /* Hpple */,
 				BE93F0D416C5033A008C3B3F /* MKNetworkKit-iOS */,
+				BE95AE8A16E57A6E008D5A88 /* LAHManagerEnhance.h */,
+				BE95AE8B16E57A6E008D5A88 /* LAHManagerEnhance.m */,
 				BE93F0C916C502DF008C3B3F /* LAH_MKNetwork_Hpple.h */,
 				BE93F0CB16C502DF008C3B3F /* LAH_MKNetwork_Hpple.m */,
 				BE93F0C716C502DF008C3B3F /* Supporting Files */,
@@ -557,6 +562,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE93F0CC16C502DF008C3B3F /* LAH_MKNetwork_Hpple.m in Sources */,
+				BE95AE8C16E57A6E008D5A88 /* LAHManagerEnhance.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

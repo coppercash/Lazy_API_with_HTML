@@ -107,10 +107,11 @@
         [f fetchProperty:element];
     }
     
-    for (LAHRecognizer *node in _children) {
-        if (_isIndex) [node refreshState];
-        for (id<LAHHTMLElement> e in element.children) {
-            //if ([node handleElement:e]) node.indexOfElements ++;
+    //Step 2, recursion
+    //Two iteration in this order, so that the fetcher's fetching sequence depends on the sequence in the HTML.
+    for (id<LAHHTMLElement> e in element.children) {
+        for (LAHRecognizer *node in _children) {
+            if (_isIndex) [node refreshState];
             [node handleElement:e];
         }
     }

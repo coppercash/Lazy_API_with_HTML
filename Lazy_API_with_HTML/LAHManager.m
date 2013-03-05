@@ -8,19 +8,27 @@
 
 #import "LAHManager.h"
 #import "LAHOperation.h"
-@implementation LAHManager
 
+@interface LAHManager ()
+@property(nonatomic, retain)NSMutableArray *operations;
+@property(nonatomic, retain)NSMutableArray *networks;
+@end
+
+@implementation LAHManager
+@synthesize operations = _operations, delegate = _delegate;
 #pragma mark - Life Cycle
 - (id)init{
     self = [super init];
     if (self) {
-        _operations = [[NSMutableArray alloc] init];
+        [self.operations = [[NSMutableArray alloc] init] release];
+        [self.networks = [[NSMutableArray alloc] init] release];
     }
     return self;
 }
 
 - (void)dealloc{
-    [_operations release]; _operations = nil;
+    self.operations = nil;
+    self.networks = nil;
     [super dealloc];
 }
 
@@ -43,10 +51,46 @@
 }
 
 #pragma mark - LAHDelegate
-- (void)downloader:(LAHOperation *)operation didFetch:(id)info{}
+- (void)downloader:(LAHOperation *)operation didFetch:(id)info{
+    [_operations removeObject:operation];
+}
 
 - (id)downloader:(LAHDownloader*)downloader needFileAtPath:(NSString*)path{
     return nil;
 }
 
+#pragma mark - Network Management
+- (void)addNetwork:(id)network{
+    if (_networks.count == 0 && _delegate
+        && [_delegate respondsToSelector:@selector(managerStartRunning:)]){
+        [_delegate managerStartRunning:self];
+    }
+    [_networks addObject:network];
+}
+
+- (void)removeNetwork:(id)network{
+    [_networks removeObject:network];
+    if (_networks.count == 0
+        && _delegate && [_delegate respondsToSelector:@selector(managerStopRunnning:finish:)]){
+        [_delegate managerStopRunnning:self finish:YES];
+    }
+}
+
+- (void)cancelAllNetworks{
+    //Do cancel to every network
+    [_networks removeAllObjects];
+    if (_delegate && [_delegate respondsToSelector:@selector(managerStopRunnning:finish:)]){
+        [_delegate managerStopRunnning:self finish:NO];
+    }
+}
+
 @end
+
+NSString * const gLAHImg = @"img";
+NSString * const gLAHSrc = @"src";
+NSString * const gLAHP = @"p";
+NSString * const gLAHSpan = @"span";
+NSString * const gLAHDiv = @"div";
+
+
+
