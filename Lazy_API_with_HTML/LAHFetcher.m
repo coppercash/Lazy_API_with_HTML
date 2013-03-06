@@ -7,29 +7,36 @@
 //
 
 #import "LAHFetcher.h"
+#import "LAHRecognizer.h"
 
 @interface LAHFetcher ()
 @property(nonatomic, copy)NSString *property;
 @end
 
 @implementation LAHFetcher
-@synthesize fetcher = _fetcher, property = _property;
+@synthesize fetcher = _fetcher, property = _property, symbol = _symbol;
 #pragma mark - Life Cycle
-- (id)initWithKey:(NSString*)key fetcher:(LAHPropertyFetcher)fetcher{
+
+- (id)init{
     self = [super init];
     if (self) {
         self.type = LAHConstructTypeFetcher;
-        self.key = key;
-        self.fetcher = fetcher;
     }
     return self;
 }
 
 - (id)initWithFetcher:(LAHPropertyFetcher)property{
+    self = [self init];
+    if (self) {
+        self.fetcher = property;
+    }
+    return self;
+}
+
+- (id)initWithSymbol:(NSString *)symbol{
     self = [super init];
     if (self) {
-        self.type = LAHConstructTypeFetcher;
-        self.fetcher = property;
+        self.symbol = symbol;
     }
     return self;
 }
@@ -57,7 +64,18 @@
 
 #pragma mark - Element
 - (void)fetchProperty:(id<LAHHTMLElement>)element{
-    self.property = _fetcher(element);
+    if (_fetcher) {
+        self.property = _fetcher(element);
+    }else if (_symbol){
+        if ([_symbol isEqualToString:gRWTagName])  self.property = element.tagName;
+        else if ([_symbol isEqualToString:gRWText]) self.property = element.text;
+        else self.property = [element.attributes objectForKey:_symbol];
+    }else{
+        return;
+    }
+
+    //self.property = _fetcher(element);
+    
     if (_property == nil) return;
     LAHConstruct *father = (LAHConstruct *)_father;
     [father recieveObject:self];

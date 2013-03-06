@@ -12,8 +12,8 @@
 @class LAHFetcher;
 @interface LAHRecognizer : LAHNode {
     //Matching inforamtion
-    NSString *_tagName;
-    NSString *_text;
+    //NSString *_tagName;
+    //NSString *_text;
     NSDictionary *_attributes;
     LAHRule _rule;
     BOOL _isTextNode;
@@ -45,6 +45,9 @@
 - (id)initWithFirstFetcher:(LAHFetcher *)firstFetcher variadicFetchers:(va_list)fetchers;
 - (id)initWithFetchers:(LAHFetcher *)firstFetcher, ... NS_REQUIRES_NIL_TERMINATION;
 
+- (void)setKey:(NSString *)key firstValue:(NSString *)firstValue variadicValues:(va_list)values;
+- (void)setKey:(NSString *)key attributes:(NSString *)firstValue, ... NS_REQUIRES_NIL_TERMINATION;
+
 - (BOOL)handleElement:(id<LAHHTMLElement>)element;
 - (BOOL)isElementMatched:(id<LAHHTMLElement>)element;
 - (void)setIndex:(NSUInteger)index;
@@ -54,3 +57,8 @@
 - (void)restoreStateForKey:(id)key;
 - (void)refreshState;
 @end
+
+extern NSString * const gRWNone;
+extern NSString * const gRWNotNone;
+extern NSString * const gRWTagName;
+extern NSString * const gRWText;

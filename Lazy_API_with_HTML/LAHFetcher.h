@@ -11,10 +11,12 @@
 
 @interface LAHFetcher : LAHConstruct <NSCopying> {
     LAHPropertyFetcher _fetcher;
-    NSString* _property;
+    NSString *_property;
+    NSString *_symbol;
 }
 @property(nonatomic, copy)LAHPropertyFetcher fetcher;
-- (id)initWithKey:(NSString*)key fetcher:(LAHPropertyFetcher)fetcher;
+@property(nonatomic, copy)NSString *symbol;
 - (id)initWithFetcher:(LAHPropertyFetcher)property;
+- (id)initWithSymbol:(NSString *)symbol;
 - (void)fetchProperty:(id<LAHHTMLElement>)element;
 @end

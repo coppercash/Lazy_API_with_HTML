@@ -16,28 +16,20 @@
 }
 
 - (LAHOperation*)homePage{
-    LAHFetcher *type = [[LAHFetcher alloc] initWithKey:@"type" fetcher:^NSString *(id<LAHHTMLElement> element) {
-        return element.text;
-    }];
-    LAHFetcher *typeLink = [[LAHFetcher alloc] initWithKey:@"typelink" fetcher:^NSString *(id<LAHHTMLElement> element) {
-        return [element.attributes objectForKey:@"href"];
-    }];
-    LAHFetcher *name = [[LAHFetcher alloc] initWithKey:@"name" fetcher:^NSString *(id<LAHHTMLElement> element) {
-        return element.text;
-    }];
-    LAHFetcher *link = [[LAHFetcher alloc] initWithKey:@"link" fetcher:^NSString *(id<LAHHTMLElement> element) {
-        return [element.attributes objectForKey:@"href"];
-    }];
-    LAHFetcher *imgSrc = [[LAHFetcher alloc] initWithKey:@"imgSrc" fetcher:^NSString *(id<LAHHTMLElement> element) {
-        return [element.attributes objectForKey:@"src"];
-    }];
+    LAHFetcher *type = [[LAHFetcher alloc] initWithSymbol:gRWText]; type.key = @"type";
+    LAHFetcher *typeLink = [[LAHFetcher alloc] initWithSymbol:@"href"];  typeLink.key = @"typelink";
+    LAHFetcher *name = [[LAHFetcher alloc] initWithSymbol:gRWText]; name.key = @"name";
+    LAHFetcher *link = [[LAHFetcher alloc] initWithSymbol:@"src"]; link.key = @"link";
+    LAHFetcher *imgSrc = [[LAHFetcher alloc] initWithSymbol:@"src"]; imgSrc.key = @"imgSrc";
+    
     LAHDictionary *item = [[LAHDictionary alloc] initWithChildren:name, link, type, typeLink, imgSrc, nil]; 
     LAHArray *items = [[LAHArray alloc] initWithChildren:item, nil];
     
     
     LAHRecognizer *img = [[LAHRecognizer alloc] initWithFetchers:imgSrc, nil]; img.tagName = @"img";
     
-    LAHRecognizer *div = [[LAHRecognizer alloc] initWithChildren:img, nil]; div.tagName = @"div"; div.attributes = @{@"class":@"contentImage"};
+    LAHRecognizer *div = [[LAHRecognizer alloc] initWithChildren:img, nil]; div.tagName = @"div";
+    [div setKey:@"class" attributes:@"contentImage", nil];
     
     LAHDownloader *d = [[LAHDownloader alloc] initWithLinker:^NSString *(id<LAHHTMLElement> element) {
         NSString *imgSrc = [element.attributes objectForKey:@"href"];
@@ -62,8 +54,9 @@
     
     LAHRecognizer *ul = [[LAHRecognizer alloc] initWithChildren:li, nil]; ul.tagName = @"ul";
     
-    LAHRecognizer *span = [[LAHRecognizer alloc] initWithChildren:ul, nil]; span.tagName = @"span"; span.attributes = @{@"id":@"list"};
-
+    LAHRecognizer *span = [[LAHRecognizer alloc] initWithChildren:ul, nil]; span.tagName = @"span";
+    [span setKey:@"id" attributes:@"list", nil];
+    
     LAHOperation *op = [self operationWithPath:@"" rootContainer:items children:span, nil];
     
     [type release]; [typeLink release]; [name release]; [link release]; [imgSrc release]; [item release]; [items release];
