@@ -30,7 +30,16 @@
     }else{
         array = [(LAHConstruct*)_father recieveObject:self];    //Assert array never be nil
     }
-    
+    /*
+    NSUInteger count = 0;
+    for (LAHConstruct *c in _children)  count += c.count;
+    id value = nil;
+    NSUInteger index = count - 1;
+    if (count == array.count) {
+        value = [array objectAtIndex:index];
+    }else{
+        for (int i = array.count; i <= index; i++) [array addObject:(value = object.newValue)];
+    }*/
     
     id value = nil;
 
@@ -38,10 +47,7 @@
     if (indexes == nil || indexes.count == 0) {
         [array addObject:(value = object.newValue)];
     }else{
-        NSUInteger count = 0;
-        for (LAHRecognizer *r in indexes) {
-            count += r.numberInRange;
-        }
+        NSUInteger count = object.count;
         
         NSUInteger index = count - 1;
         if (index < array.count) {

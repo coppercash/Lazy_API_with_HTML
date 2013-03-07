@@ -77,6 +77,7 @@
     //self.property = _fetcher(element);
     
     if (_property == nil) return;
+    _count ++;
     LAHConstruct *father = (LAHConstruct *)_father;
     [father recieveObject:self];
 }
@@ -85,6 +86,13 @@
     if (_property == nil) return [NSNull null];
     return _property;
 }
+
+- (NSUInteger)count{
+    return _count;
+}
+
+#pragma mark - Index
+- (void)setIndexes:(NSArray *)indexes{}
 
 @end
 

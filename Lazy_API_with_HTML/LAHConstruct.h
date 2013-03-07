@@ -30,6 +30,7 @@ typedef enum {
 - (id)initWithKey:(NSString*)key children:(LAHNode *)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
 - (id)recieveObject:(LAHConstruct*)object;
 - (id)newValue;
+- (NSUInteger)count;
 
 - (void)saveStateForKey:(id)key;
 - (void)restoreStateForKey:(id)key;

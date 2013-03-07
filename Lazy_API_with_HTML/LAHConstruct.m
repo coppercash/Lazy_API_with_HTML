@@ -38,6 +38,16 @@
     return nil;
 }
 
+- (NSUInteger)count{
+    if (_indexes == nil) return 0;  //0 indicates do not have effection.
+    
+    NSUInteger count = 0;
+    for (LAHRecognizer *r in _indexes) {
+        count += r.numberInRange;
+    }
+    return count;
+}
+
 - (void)setIndexes:(NSArray *)indexes{
     [_indexes release];
     _indexes = [indexes retain];

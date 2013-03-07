@@ -16,14 +16,15 @@
 }
 
 - (LAHOperation*)homePage{
+    /*
     LAHFetcher *name0 = [[LAHFetcher alloc] initWithFetcher:^NSString *(id<LAHHTMLElement> element) {
         if (element.text != nil) return element.text;
         LAHEle span = [element.children objectAtIndex:1];
         return span.text;
         return nil;
-    }];
+    }];*/
+    LAHFetcher *name0 = [[LAHFetcher alloc] initWithSymbol:gRWText];
     name0.key = @"name";
-    
     LAHFetcher *link0 = [[LAHFetcher alloc] initWithSymbol:@"href"]; link0.key = @"link";
     LAHFetcher *imgSrc0 = [[LAHFetcher alloc] initWithSymbol:@"src"]; imgSrc0.key = @"imgSrc";
 
@@ -40,7 +41,13 @@
     LAHArray *items = [[LAHArray alloc] initWithChildren:dic0, nil];
     
     
-    LAHRecognizer *aNL0 = [[LAHRecognizer alloc] init]; aNL0.fetchers = @[name0, link0];
+    LAHRecognizer *span = [[LAHRecognizer alloc] init];
+    span.fetchers = @[name0];
+    span.tagName = @"span";
+    [span setKey:@"class" attributes:@"underlineLink", nil];
+    
+    LAHRecognizer *aNL0 = [[LAHRecognizer alloc] initWithChildren:span, nil];
+    aNL0.fetchers = @[name0, link0];
     aNL0.tagName = @"a";
     
     LAHRecognizer *h3 = [[LAHRecognizer alloc] initWithChildren:aNL0, nil];
@@ -57,6 +64,8 @@
     div0.tagName = @"div"; div0.range = NSMakeRange(0, 1);
     [div0 setKey:@"class" attributes:@"columnInner", nil];
     
+    
+    
     LAHRecognizer *img1 = [[LAHRecognizer alloc] init]; img1.fetchers = @[imgSrc0];
     img1.tagName = @"img"; //img1.attributes = @{@"class":@"photo"};
     [img1 setKey:@"class" attributes:@"photo", nil];
@@ -66,7 +75,10 @@
         return [element.attributes objectForKey:@"href"];
     } children:img1, nil];
     
-    LAHRecognizer *aNL1 = [[LAHRecognizer alloc] init]; aNL1.fetchers = @[name0, link0];
+    
+    
+    
+    LAHRecognizer *aNL1 = [[LAHRecognizer alloc] initWithChildren:span, nil]; aNL1.fetchers = @[name0, link0];
     aNL1.tagName = @"a"; aNL1.downloaders = @[d1];
 
     LAHRecognizer *h4_1 = [[LAHRecognizer alloc] initWithChildren:aNL1, nil];
@@ -79,7 +91,7 @@
     divContent.tagName = @"div"; 
     [divContent setKey:@"class" attributes:@"content_column2_widgethalf secondcolumn", nil];
     
-    LAHRecognizer *aNL2 = [[LAHRecognizer alloc] init]; aNL2.fetchers = @[name0, link0];
+    LAHRecognizer *aNL2 = [[LAHRecognizer alloc] initWithChildren:span, nil]; aNL2.fetchers = @[name0, link0];
     aNL2.tagName = @"a";
     
     LAHRecognizer *h4_2 = [[LAHRecognizer alloc] initWithChildren:aNL2, nil];
@@ -110,7 +122,7 @@
     
     LAHOperation *op = [self operationWithPath:@"" rootContainer:items children:div0 ,divContent, ul, nil];
     
-    [name0 release]; [link0 release]; [imgSrc0 release]; [imgSrc2 release]; [arr0 release];[dic0 release]; [items release];
+    [name0 release]; [link0 release]; [imgSrc0 release]; [imgSrc2 release]; [arr0 release];[dic0 release]; [items release]; [span release];
     
     [aNL0 release]; [h3 release]; [img0 release]; [aI0 release]; [div0 release]; [img1 release];
     
