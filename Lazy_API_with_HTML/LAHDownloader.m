@@ -12,35 +12,19 @@
 @implementation LAHDownloader
 @synthesize linker = _linker, symbol = _symbol;
 #pragma mark - Life Cycle
-- (id)initWithLinker:(LAHPropertyFetcher)linker firstChild:(LAHNode*)firstChild variadicChildren:(va_list)children{
-    self = [super initWithFirstChild:firstChild variadicChildren:children];
-    if (self) {
-        self.linker = linker;
-    }
-    return self;
-}
-
-- (id)initWithLinker:(LAHPropertyFetcher)linker children:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION{
-    va_list children;
-    va_start(children, firstChild);
-    self = [self initWithLinker:linker firstChild:firstChild variadicChildren:children];
-    va_end(children);
-    return self;
-}
-
 - (void)dealloc{
     [_linker release]; _linker = nil;
     [super dealloc];
 }
 
 #pragma mark - Seek
-- (void)download:(id<LAHHTMLElement>)element{
+- (void)download:(LAHEle)element{
     NSString *link = nil;
     if (_linker) {
         link = _linker(element);
     }else if (_symbol){
-        if ([_symbol isEqualToString:gRWTagName])  link = element.tagName;
-        else if ([_symbol isEqualToString:gRWText]) link = element.text;
+        if ([_symbol isEqualToString:LAH_TagName])  link = element.tagName;
+        else if ([_symbol isEqualToString:LAH_Text]) link = element.text;
         else link = [element.attributes objectForKey:_symbol];
     }else{
         return;
@@ -55,27 +39,15 @@
     }
 }
 
-- (void)seekWithRoot:(id<LAHHTMLElement>)element{
+- (void)seekWithRoot:(LAHEle)element{
     for (LAHRecognizer* node in _children) {
         [node handleElement:element];
     }
     
-    for (id<LAHHTMLElement> e in element.children) {
+    for (LAHEle e in element.children) {
         [self seekWithRoot:e];
     }
 }
-
-#pragma mark - State
-/*
-- (void)saveStateForKey:(id)key{
-    LAHRecognizer *father = (LAHRecognizer*)_father;
-    [father saveStateForKey:key];
-}
-
-- (void)restoreStateForKey:(id)key{
-    LAHRecognizer *father = (LAHRecognizer*)_father;
-    [father restoreStateForKey:key];
-}*/
 
 - (LAHOperation*)recursiveOperation{
     LAHRecognizer *father = (LAHRecognizer*)_father;

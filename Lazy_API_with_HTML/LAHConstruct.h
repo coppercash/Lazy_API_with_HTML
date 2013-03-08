@@ -7,7 +7,7 @@
 //
 
 #import "LAHNode.h"
-#import "LAHProtocols.h"
+#import "LAHInterface.h"
 
 typedef enum {
     LAHConstructTypeAbstract = 0,
@@ -21,21 +21,21 @@ typedef enum {
     LAHConstructType _type;
     
     NSString *_key;
-    NSArray *_indexes;
+    NSArray *_identifiers;
     
-    id _lastFather;
-    LAHEle _lastElement;
+    id _lastFatherContainer;
+    LAHEle _lastIdentifierElement;
 }
 @property(nonatomic, assign)LAHConstructType type;
 @property(nonatomic, copy)NSString *key;
-@property(nonatomic, retain)NSArray *indexes;
+@property(nonatomic, retain)NSArray *identifiers;
 @property(nonatomic, readonly)id container;
 
-- (id)initWithKey:(NSString*)key children:(LAHNode *)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
-- (BOOL)isIdentifierChanged;
-- (LAHEle)currentRecognizer;
+- (BOOL)isIdentifierElementChanged;
+- (LAHEle)currentIdentifierElement;
 
 - (BOOL)checkUpate:(LAHConstruct *)object;
+- (void)update;
 - (void)recieve:(LAHConstruct*)object;
 @end
 

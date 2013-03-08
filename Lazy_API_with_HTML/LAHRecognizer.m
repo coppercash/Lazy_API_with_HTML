@@ -10,7 +10,6 @@
 #import "LAHConstruct.h"
 #import "LAHFetcher.h"
 #import "LAHDownloader.h"
-#import "LAHProtocols.h"
 
 @implementation LAHRecognizer
 @dynamic tagName, text;
@@ -74,14 +73,14 @@
     NSSet *tagNames = [[NSSet alloc] initWithObjects:tagName, nil];
     if (_attributes) {
         NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithDictionary:_attributes];
-        [temp setObject:tagNames forKey:gRWTagName];
+        [temp setObject:tagNames forKey:LAH_TagName];
         
         NSDictionary *newAttr = [[NSDictionary alloc] initWithDictionary:temp];
 
         self.attributes = newAttr;
         [temp release]; [newAttr release];
     }else{
-        NSDictionary *newAttr = [[NSDictionary alloc] initWithObjectsAndKeys:tagNames, gRWTagName, nil];
+        NSDictionary *newAttr = [[NSDictionary alloc] initWithObjectsAndKeys:tagNames, LAH_TagName, nil];
         
         self.attributes = newAttr;
         [newAttr release];
@@ -93,14 +92,14 @@
     NSSet *texts = [[NSSet alloc] initWithObjects:text, nil];
     if (_attributes) {
         NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithDictionary:_attributes];
-        [temp setObject:texts forKey:gRWText];
+        [temp setObject:texts forKey:LAH_Text];
         
         NSDictionary *newAttr = [[NSDictionary alloc] initWithDictionary:temp];
         
         self.attributes = newAttr;
         [temp release]; [newAttr release];
     }else{
-        NSDictionary *newAttr = [[NSDictionary alloc] initWithObjectsAndKeys:texts, gRWText, nil];
+        NSDictionary *newAttr = [[NSDictionary alloc] initWithObjectsAndKeys:texts, LAH_Text, nil];
         
         self.attributes = newAttr;
         [newAttr release];
@@ -161,11 +160,10 @@
 }
 
 #pragma mark - Recursive
-- (BOOL)handleElement:(id<LAHHTMLElement>)element{
+- (BOOL)handleElement:(LAHEle)element{
     
     //Step 0, check matching.
     if (![self isElementMatched:element]) return NO;
-    DLogElement(element);
 
     _matchingElement = element;
     //Step 1, fetch linked properties.
@@ -175,7 +173,7 @@
     
     //Step 2, recursion
     //Two iteration in this order, so that the fetcher's fetching sequence depends on the sequence in the HTML.
-    for (id<LAHHTMLElement> e in element.children) {
+    for (LAHEle e in element.children) {
         for (LAHRecognizer *node in _children) {
             if (_isIndex) [node refreshState];
             [node handleElement:e];
@@ -191,15 +189,15 @@
     return YES;
 }
 
-- (BOOL)isElementMatched:(id<LAHHTMLElement>)element{
+- (BOOL)isElementMatched:(LAHEle)element{
     for (NSString *key in _attributes) {
         NSSet *lVs = [_attributes objectForKey:key];    //legal values
         NSAssert([lVs isKindOfClass:[NSSet class]], @"LAHRecognizer: legal values should be a NSSet.");
 
         NSString *value = nil;
-        if ([key isEqualToString:gRWTagName]) {
+        if ([key isEqualToString:LAH_TagName]) {
             value = element.tagName;
-        }else if ([key isEqualToString:gRWText]){
+        }else if ([key isEqualToString:LAH_Text]){
             value = element.text;
         }else{
             value = [element.attributes objectForKey:key];
@@ -209,7 +207,7 @@
         
         if (value) {
             for (NSString *lV in lVs) {
-                if ([lV isEqualToString:gRWNotNone]) {
+                if ([lV isEqualToString:LAH_NotNone]) {
                     isMatched = YES;
                     break;
                 }
@@ -217,7 +215,7 @@
             }
         }else {
             for (NSString *lV in lVs)
-                isMatched |= [lV isEqualToString:gRWNone];
+                isMatched |= [lV isEqualToString:LAH_None];
         }
         if (!isMatched) return NO;
         
@@ -283,7 +281,7 @@
 
 @end
 
-NSString * const gRWNone = @"_none";
-NSString * const gRWNotNone = @"_notNone";
-NSString * const gRWTagName = @"_tag";
-NSString * const gRWText = @"_text";
+NSString * const LAH_None = @"_none";
+NSString * const LAH_NotNone = @"_notNone";
+NSString * const LAH_TagName = @"_tag";
+NSString * const LAH_Text = @"_text";

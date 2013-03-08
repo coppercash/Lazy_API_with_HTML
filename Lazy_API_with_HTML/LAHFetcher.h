@@ -7,7 +7,7 @@
 //
 
 #import "LAHConstruct.h"
-#import "LAHProtocols.h"
+#import "LAHInterface.h"
 
 @interface LAHFetcher : LAHConstruct <NSCopying> {
     LAHPropertyFetcher _fetcher;
@@ -18,5 +18,5 @@
 @property(nonatomic, copy)NSString *symbol;
 - (id)initWithFetcher:(LAHPropertyFetcher)property;
 - (id)initWithSymbol:(NSString *)symbol;
-- (void)fetchProperty:(id<LAHHTMLElement>)element;
+- (void)fetchProperty:(LAHEle)element;
 @end

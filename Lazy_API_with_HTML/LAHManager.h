@@ -28,12 +28,3 @@
 - (void)managerStartRunning:(LAHManager *)manager;
 - (void)managerStopRunnning:(LAHManager *)manager finish:(BOOL)finish;
 @end
-
-extern NSString * const gLAHImg;
-extern NSString * const gLAHSrc;
-extern NSString * const gLAHP;
-extern NSString * const gLAHA;
-extern NSString * const gLAHSpan;
-extern NSString * const gLAHDiv;
-extern NSString * const gLAHHref;
-

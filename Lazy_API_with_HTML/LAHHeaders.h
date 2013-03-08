@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Coder Dreamer. All rights reserved.
 //
 
-#import "LAHManager.h"
+#import "LAHInterface.h"
 #import "LAHOperation.h"
 #import "LAHDownloader.h"
 #import "LAHRecognizer.h"

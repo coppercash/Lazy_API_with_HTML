@@ -42,7 +42,7 @@
         [self.correctors = [[NSMutableArray alloc] init] release];
 
         self.rootContainer = rootContainer;
-        self.linker = ^(id<LAHHTMLElement> element){
+        self.linker = ^(LAHEle element){
             return path;
         };
     }
@@ -87,7 +87,7 @@
     }
 }
 
-- (void)awakeDownloaderForKey:(id)key withElement:(id<LAHHTMLElement>)element{
+- (void)awakeDownloaderForKey:(id)key withElement:(LAHEle)element{
     LAHDownloader *downloader = [_theDownloading objectForKey:key];
     if (downloader == nil) return;
     

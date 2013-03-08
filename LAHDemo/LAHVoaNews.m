@@ -16,19 +16,10 @@
 }
 
 - (LAHOperation*)homePage{
-    /*
-    LAHFetcher *name0 = [[LAHFetcher alloc] initWithFetcher:^NSString *(id<LAHHTMLElement> element) {
-        if (element.text != nil) return element.text;
-        LAHEle span = [element.children objectAtIndex:1];
-        return span.text;
-        return nil;
-    }];*/
-    LAHFetcher *name0 = [[LAHFetcher alloc] initWithSymbol:gRWText];
-    name0.key = @"name";
-    LAHFetcher *link0 = [[LAHFetcher alloc] initWithSymbol:@"href"]; link0.key = @"link";
-    LAHFetcher *imgSrc0 = [[LAHFetcher alloc] initWithSymbol:@"src"]; imgSrc0.key = @"imgSrc";
-
-    LAHFetcher *imgSrc2 = [[LAHFetcher alloc] initWithFetcher:^NSString *(id<LAHHTMLElement> element) {
+    LAHFetcher *name0 = [[LAHFetcher alloc] initWithSymbol:LAH_Text];
+    LAHFetcher *link0 = [[LAHFetcher alloc] initWithSymbol:@"href"];
+    LAHFetcher *imgSrc0 = [[LAHFetcher alloc] initWithSymbol:@"src"];
+    LAHFetcher *imgSrc2 = [[LAHFetcher alloc] initWithFetcher:^NSString *(LAHEle element) {
         NSString *style = [element.attributes objectForKey:@"style"];
         NSRange sR = [style rangeOfString:@"url("];
         NSRange eR = [style rangeOfString:@")"];
@@ -36,10 +27,10 @@
         return [style substringWithRange:r];
     }];
     
-    LAHArray *arr0 = [[LAHArray alloc] initWithKey:@"imgSrc" children:imgSrc0, imgSrc2, nil];
-    LAHDictionary *dic0 = [[LAHDictionary alloc] initWithChildren:name0, link0, arr0, nil];
-    LAHArray *items = [[LAHArray alloc] initWithChildren:dic0, nil];
-    
+    LAHArray *arr0 = [[LAHArray alloc] initWithObjects:imgSrc0, imgSrc2, nil];
+    LAHDictionary *dic0 = [[LAHDictionary alloc] initWithObjectsAndKeys:
+                           name0, @"name", link0, @"link", arr0, @"imgSrc", nil];
+    LAHArray *items = [[LAHArray alloc] initWithObjects:dic0, nil];
     
     LAHRecognizer *span = [[LAHRecognizer alloc] init];
     span.fetchers = @[name0];
@@ -69,14 +60,10 @@
     LAHRecognizer *img1 = [[LAHRecognizer alloc] init]; img1.fetchers = @[imgSrc0];
     img1.tagName = @"img"; //img1.attributes = @{@"class":@"photo"};
     [img1 setKey:@"class" attributes:@"photo", nil];
-    [img1 setKey:@"alt" attributes:gRWNotNone, nil];
+    [img1 setKey:@"alt" attributes:LAH_NotNone, nil];
     
-    LAHDownloader *d1 = [[LAHDownloader alloc] initWithLinker:^NSString *(id<LAHHTMLElement> element) {
-        return [element.attributes objectForKey:@"href"];
-    } children:img1, nil];
-    
-    
-    
+    LAHDownloader *d1 = [[LAHDownloader alloc] initWithChildren:img1, nil];
+    d1.symbol = @"href";
     
     LAHRecognizer *aNL1 = [[LAHRecognizer alloc] initWithChildren:span, nil]; aNL1.fetchers = @[name0, link0];
     aNL1.tagName = @"a"; aNL1.downloaders = @[d1];
@@ -118,7 +105,7 @@
     LAHRecognizer *ul = [[LAHRecognizer alloc] initWithChildren:li, nil];
     [ul setKey:@"class" attributes:@"overview", nil];
     
-    dic0.indexes = @[div0, h4_1, div2I];
+    dic0.identifiers = @[div0, h4_1, div2I];
     
     LAHOperation *op = [self operationWithPath:@"" rootContainer:items children:div0 ,divContent, ul, nil];
     

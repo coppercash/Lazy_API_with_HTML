@@ -1,11 +1,10 @@
 //
-//  LBEHTMLProtocols.h
+//  LAHInteface.h
 //  Lazy_API_with_HTML
 //
-//  Created by William Remaerd on 2/4/13.
+//  Created by William Remaerd on 3/8/13.
 //  Copyright (c) 2013 Coder Dreamer. All rights reserved.
 //
-
 
 @protocol LAHHTMLElement <NSObject>
 - (NSString*)tagName;
@@ -14,28 +13,23 @@
 - (NSArray*)children;
 - (BOOL)isTextNode;
 @end
-#define LAHEle id<LAHHTMLElement>
 
 @class LAHOperation, LAHDownloader;
 typedef NSString*(^LAHPropertyFetcher)(id<LAHHTMLElement> element);
 typedef BOOL(^LAHRule)(id<LAHHTMLElement> element);
 typedef void(^LAHCompletion)(LAHOperation *operation);
 typedef void(^LAHCorrector)(LAHOperation *operation, NSError* error);
+typedef id<LAHHTMLElement> LAHEle;
 
 @protocol LAHDelegate <NSObject>
 - (id)downloader:(LAHDownloader*)downloader needFileAtPath:(NSString*)path;
 - (void)downloader:(LAHOperation*)operation didFetch:(id)info;
 @end
 
-//#define DEBUG_MODE
-#ifdef DEBUG_MODE
-
-#define DLogElement(x) NSLog(@"\n%@\t%@\n%@", (x).tagName, (x).text, (x).attributes);
-#define DLogFetcher(x) NSLog(@"\n%@\t%@\n%@\n%@", (x).tagName, (x).key, (x).text, (x).attributes);
-
-#else
-
-#define DLogElement(x)
-#define DLogFetcher(x)
-
-#endif
+extern NSString * const gLAHImg;
+extern NSString * const gLAHSrc;
+extern NSString * const gLAHP;
+extern NSString * const gLAHA;
+extern NSString * const gLAHSpan;
+extern NSString * const gLAHDiv;
+extern NSString * const gLAHHref;

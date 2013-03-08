@@ -11,5 +11,7 @@
 @interface LAHDictionary : LAHConstruct {
     NSMutableDictionary *_dictionary;
 }
+- (id)initWithObjectsAndKeys:(LAHConstruct *)firstObj , ... NS_REQUIRES_NIL_TERMINATION;
+- (id)initWithFirstObject:(LAHConstruct *)firstObj variadicObjectsAndKeys:(va_list)OtherObjsAndKeys;
 @end
 

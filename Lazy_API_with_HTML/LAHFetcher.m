@@ -56,19 +56,19 @@
     
     copy.type = self.type;
     copy.key = self.key;
-    copy.indexes = self.indexes;
+    copy.identifiers = self.identifiers;
     copy.fetcher = self.fetcher;
     
     return copy;
 }
 
 #pragma mark - Element
-- (void)fetchProperty:(id<LAHHTMLElement>)element{
+- (void)fetchProperty:(LAHEle)element{
     if (_fetcher) {
         self.property = _fetcher(element);
     }else if (_symbol){
-        if ([_symbol isEqualToString:gRWTagName])  self.property = element.tagName;
-        else if ([_symbol isEqualToString:gRWText]) self.property = element.text;
+        if ([_symbol isEqualToString:LAH_TagName])  self.property = element.tagName;
+        else if ([_symbol isEqualToString:LAH_Text]) self.property = element.text;
         else self.property = [element.attributes objectForKey:_symbol];
     }else{
         return;
@@ -90,7 +90,7 @@
 }
 
 #pragma mark - Index
-- (void)setIndexes:(NSArray *)indexes{}
+- (void)setIdentifiers:(NSArray *)indexes{}
 
 @end
 

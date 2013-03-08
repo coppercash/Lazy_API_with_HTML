@@ -11,30 +11,20 @@
 #import "LAHOperation.h"
 
 @implementation LAHConstruct
-@synthesize type = _type, key = _key, indexes = _indexes;
-
-- (id)initWithKey:(NSString *)key children:(LAHNode *)firstChild, ... NS_REQUIRES_NIL_TERMINATION{
-    va_list children; va_start(children, firstChild);
-    self = [super initWithFirstChild:firstChild variadicChildren:children];
-    va_end(children);
-    if (self){
-        self.key = key;
-    }
-    return self;
-}
+@synthesize type = _type, key = _key, identifiers = _identifiers;
 
 - (void)dealloc{
     self.key = nil;
-    self.indexes = nil;
+    self.identifiers = nil;
     
     [super dealloc];
 }
 
-- (void)setIndexes:(NSArray *)indexes{
-    [_indexes release];
-    _indexes = [indexes retain];
+- (void)setIdentifiers:(NSArray *)indexes{
+    [_identifiers release];
+    _identifiers = [indexes retain];
     
-    for (LAHRecognizer *r in _indexes) {
+    for (LAHRecognizer *r in _identifiers) {
         r.isIndex = YES;
     }
 }
@@ -53,28 +43,37 @@
 }
 
 #pragma mark - Identifier
-- (LAHEle)currentRecognizer{
-    for (LAHRecognizer *r in _indexes) {
+- (LAHEle)currentIdentifierElement{
+    for (LAHRecognizer *r in _identifiers) {
         LAHEle matchingElement = r.matchingElement;
         if (matchingElement != nil) return matchingElement;
     }
     return nil;
 }
 
-- (BOOL)isIdentifierChanged{
-    LAHEle current = self.currentRecognizer;
-    return _lastElement != current;
+- (BOOL)isIdentifierElementChanged{
+    LAHEle current = self.currentIdentifierElement;
+    return _lastIdentifierElement != current;
 }
 
 #pragma mark - recursion
 - (BOOL)checkUpate:(LAHConstruct *)object{
+    LAHConstruct *father = (LAHConstruct *)_father;
+    BOOL update =
+    [father checkUpate:self] ||
+    father.container != _lastFatherContainer ||
+    self.container == nil;
+
+    if (update) [self update];
+    
+    _lastFatherContainer = father.container;
+    _lastIdentifierElement = self.currentIdentifierElement;
     return NO;
 }
 
-- (void)recieve:(LAHConstruct*)object{
-    
-}
+- (void)update{}
 
+- (void)recieve:(LAHConstruct*)object{}
 
 @end
 

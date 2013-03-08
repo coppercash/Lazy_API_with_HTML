@@ -11,5 +11,6 @@
 @interface LAHArray : LAHConstruct {
     NSMutableArray *_array;
 }
+- (id)initWithObjects:(LAHConstruct *)firstObj, ... NS_REQUIRES_NIL_TERMINATION;
 @end
 

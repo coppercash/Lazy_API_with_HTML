@@ -7,7 +7,7 @@
 //
 
 #import "LAHNode.h"
-#import "LAHProtocols.h"
+#import "LAHInterface.h"
 
 @interface LAHNode ()
 @property(nonatomic, retain)NSMutableDictionary* states;
@@ -16,11 +16,18 @@
 @implementation LAHNode
 @synthesize father = _father, children = _children, states = _states;
 #pragma mark - Life Cycle
-- (id)initWithFirstChild:(LAHNode*)firstChild variadicChildren:(va_list)children{
+
+- (id)init{
     self = [super init];
     if (self) {
         [self.states = [[NSMutableDictionary alloc] init] release];
-        
+    }
+    return self;
+}
+
+- (id)initWithFirstChild:(LAHNode*)firstChild variadicChildren:(va_list)children{
+    self = [self init];
+    if (self) {
         [self.children = [[NSMutableArray alloc] initWithObjects:firstChild, nil] release];
         firstChild.father = self;
 
@@ -60,11 +67,11 @@
     return _father.recursiveGreffier;
 }
 
-- (void)handleElement:(id<LAHHTMLElement>)element atIndex:(NSUInteger)index{
+- (void)handleElement:(LAHEle)element atIndex:(NSUInteger)index{
     NSArray *fakeChildren = [[NSArray alloc] initWithArray:_children];
     for (LAHNode *node in fakeChildren) {
         NSUInteger index = 0;
-        for (id<LAHHTMLElement> e in element.children) {
+        for (LAHEle e in element.children) {
             [node handleElement:e atIndex:index];
             index++;
         }

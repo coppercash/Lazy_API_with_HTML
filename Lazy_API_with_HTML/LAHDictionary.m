@@ -16,6 +16,40 @@
 @implementation LAHDictionary
 @synthesize dictionary = _dictionary;
 
+- (id)initWithObjectsAndKeys:(LAHConstruct *)firstObj , ... NS_REQUIRES_NIL_TERMINATION{
+    va_list other; va_start(other, firstObj);
+    self = [self initWithFirstObject:firstObj variadicObjectsAndKeys:other];
+    va_end(other);
+    return self;
+}
+
+- (id)initWithFirstObject:(LAHConstruct *)firstObj variadicObjectsAndKeys:(va_list)OtherObjsAndKeys{
+    self = [super init];
+    if (self) {
+        self.type = LAHConstructTypeDictionary;
+        
+        [self.children = [[NSMutableArray alloc] initWithObjects:firstObj, nil] release];
+        firstObj.father = self;
+        
+        LAHConstruct *child = firstObj;
+        BOOL isObj = NO;
+        id objOrKey;
+        while ((objOrKey = va_arg(OtherObjsAndKeys, id)) != nil){
+            if (isObj) {
+                child = (LAHConstruct *)objOrKey;
+                [_children addObject:child];
+                child.father = self;
+                isObj = NO;
+            }else{
+                NSString *key = (NSString *)objOrKey;
+                child.key = key;
+                isObj = YES;
+            }
+        }
+    }
+    return self;
+}
+
 - (id)initWithFirstChild:(LAHNode *)firstChild variadicChildren:(va_list)children{
     self = [super initWithFirstChild:firstChild variadicChildren:children];
     if (self) {
@@ -29,21 +63,9 @@
     [super dealloc];
 }
 
-- (BOOL)checkUpate:(LAHConstruct *)object{
-    LAHConstruct *father = (LAHConstruct *)_father;
-    BOOL update = NO;
-    update |= [father checkUpate:self];
-    update |= father.container != _lastFather;
-    update |= _dictionary == nil;
-
-    if (update) {
-        [self.dictionary = [[NSMutableDictionary alloc] init] release];
-        [father recieve:self];
-    }
-
-    _lastFather = father.container;
-    _lastElement = self.currentRecognizer;
-    return NO;
+- (void)update{
+    [self.dictionary = [[NSMutableDictionary alloc] init] release];
+    [(LAHConstruct *)_father recieve:self];
 }
 
 - (void)recieve:(LAHConstruct*)object{
@@ -56,8 +78,8 @@
 
 - (void)saveStateForKey:(id)key{
     NSMutableDictionary *collector = [[NSMutableDictionary alloc] initWithCapacity:3];
-    if (_lastFather) [collector setObject:_lastFather forKey:gKeyLastFatherContainer];
-    if (_lastElement) [collector setObject:_lastElement forKey:gKeyLastIdentifierElement];
+    if (_lastFatherContainer) [collector setObject:_lastFatherContainer forKey:gKeyLastFatherContainer];
+    if (_lastIdentifierElement) [collector setObject:_lastIdentifierElement forKey:gKeyLastIdentifierElement];
     if (_dictionary) [collector setObject:_dictionary forKey:gKeyContainer];
     
     [_states setObject:collector forKey:key];
@@ -68,8 +90,8 @@
 
 - (void)restoreStateForKey:(id)key{
     NSDictionary *state = [_states objectForKey:key];
-    _lastFather = [state objectForKey:gKeyLastFatherContainer];
-    _lastElement = [state objectForKey:gKeyLastIdentifierElement];
+    _lastFatherContainer = [state objectForKey:gKeyLastFatherContainer];
+    _lastIdentifierElement = [state objectForKey:gKeyLastIdentifierElement];
     self.dictionary = [state objectForKey:gKeyContainer];
     [_states removeObjectForKey:key];
     

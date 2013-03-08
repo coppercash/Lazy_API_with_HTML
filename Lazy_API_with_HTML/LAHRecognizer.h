@@ -7,7 +7,7 @@
 //
 
 #import "LAHNode.h"
-#import "LAHProtocols.h"
+#import "LAHInterface.h"
 
 @class LAHFetcher;
 @interface LAHRecognizer : LAHNode {
@@ -46,15 +46,15 @@
 - (void)setKey:(NSString *)key firstValue:(NSString *)firstValue variadicValues:(va_list)values;
 - (void)setKey:(NSString *)key attributes:(NSString *)firstValue, ... NS_REQUIRES_NIL_TERMINATION;
 
-- (BOOL)handleElement:(id<LAHHTMLElement>)element;
-- (BOOL)isElementMatched:(id<LAHHTMLElement>)element;
+- (BOOL)handleElement:(LAHEle)element;
+- (BOOL)isElementMatched:(LAHEle)element;
 - (void)setIndex:(NSUInteger)index;
 
 - (LAHOperation*)recursiveOperation;
 - (void)refreshState;
 @end
 
-extern NSString * const gRWNone;
-extern NSString * const gRWNotNone;
-extern NSString * const gRWTagName;
-extern NSString * const gRWText;
+extern NSString * const LAH_None;
+extern NSString * const LAH_NotNone;
+extern NSString * const LAH_TagName;
+extern NSString * const LAH_Text;

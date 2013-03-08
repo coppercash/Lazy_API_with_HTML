@@ -31,7 +31,7 @@
 - (void)handleError:(NSError*)error;
 
 - (void)saveDownloader:(LAHDownloader*)downloader forKey:(id)key;
-- (void)awakeDownloaderForKey:(id)key withElement:(id<LAHHTMLElement>)element;
+- (void)awakeDownloaderForKey:(id)key withElement:(LAHEle)element;
 
 - (void)addSeeker:(LAHDownloader*)fetcher;
 - (void)removeSeeker:(LAHDownloader*)fetcher;
