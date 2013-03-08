@@ -40,7 +40,7 @@
     [voaHome start];
     
     
-    [self performSelector:@selector(clean) withObject:nil afterDelay:10.0f];
+    //[self performSelector:@selector(clean) withObject:nil afterDelay:10.0f];
 }
 
 - (void)clean{

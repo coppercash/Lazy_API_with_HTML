@@ -9,13 +9,19 @@
 #import "LAHNode.h"
 #import "LAHProtocols.h"
 
+@interface LAHNode ()
+@property(nonatomic, retain)NSMutableDictionary* states;
+@end
+
 @implementation LAHNode
-@synthesize father = _father, children = _children;
+@synthesize father = _father, children = _children, states = _states;
 #pragma mark - Life Cycle
 - (id)initWithFirstChild:(LAHNode*)firstChild variadicChildren:(va_list)children{
     self = [super init];
     if (self) {
-        _children = [[NSMutableArray alloc] initWithObjects:firstChild, nil];
+        [self.states = [[NSMutableDictionary alloc] init] release];
+        
+        [self.children = [[NSMutableArray alloc] initWithObjects:firstChild, nil] release];
         firstChild.father = self;
 
         LAHNode* child;
@@ -35,8 +41,9 @@
 }
 
 - (void)dealloc{
-    _father = nil;
-    [_children release]; _children = nil;
+    self.father = nil;
+    self.children = nil;
+    self.states = nil;
     [super dealloc];
 }
 
@@ -73,5 +80,9 @@
         [_father releaseChild:self];
     }
 }
+
+#pragma mark - States
+- (void)saveStateForKey:(id)key{}
+- (void)restoreStateForKey:(id)key{}
 
 @end

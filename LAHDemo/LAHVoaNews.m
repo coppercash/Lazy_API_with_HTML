@@ -82,7 +82,7 @@
     aNL1.tagName = @"a"; aNL1.downloaders = @[d1];
 
     LAHRecognizer *h4_1 = [[LAHRecognizer alloc] initWithChildren:aNL1, nil];
-    h4_1.tagName = @"h4"; h4_1.range = NSMakeRange(1, 3);
+    h4_1.tagName = @"h4"; h4_1.range = NSMakeRange(3, 3);
     
     LAHRecognizer *div1 = [[LAHRecognizer alloc] initWithChildren:h4_1, nil];
     div1.tagName = @"div";

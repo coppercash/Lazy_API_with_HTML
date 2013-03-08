@@ -10,13 +10,13 @@
 #import "LAHRecognizer.h"
 @interface LAHDownloader : LAHNode {
     LAHPropertyFetcher _linker;
+    NSString *_symbol;
 }
 @property(nonatomic, copy)LAHPropertyFetcher linker;
+@property(nonatomic, copy)NSString *symbol;
 - (id)initWithLinker:(LAHPropertyFetcher)linker firstChild:(LAHNode*)firstChild variadicChildren:(va_list)children;
 - (id)initWithLinker:(LAHPropertyFetcher)linker children:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
 
-- (void)saveStateForKey:(id)key;
-- (void)restoreStateForKey:(id)key;
 - (LAHOperation*)recursiveOperation;
 
 - (void)download:(id<LAHHTMLElement>)element;

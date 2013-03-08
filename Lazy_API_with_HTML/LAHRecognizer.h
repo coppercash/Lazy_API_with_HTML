@@ -11,18 +11,15 @@
 
 @class LAHFetcher;
 @interface LAHRecognizer : LAHNode {
-    //Matching inforamtion
-    //NSString *_tagName;
-    //NSString *_text;
     NSDictionary *_attributes;
     LAHRule _rule;
     BOOL _isTextNode;
     NSRange _range;
     
     //States
-    NSMutableDictionary *_states;
     BOOL _isIndex;
     NSUInteger _numberOfMatched;
+    LAHEle _matchingElement;
     
     //Even handlers
     NSArray *_fetchers;
@@ -38,6 +35,7 @@
 @property(nonatomic, assign)BOOL isIndex;
 @property(nonatomic, readonly)NSUInteger numberOfMatched;
 @property(nonatomic, readonly)NSUInteger numberInRange; //Elements in range, must be matched first.
+@property(nonatomic, readonly)LAHEle matchingElement;
 
 @property(nonatomic, retain)NSArray *fetchers;
 @property(nonatomic, retain)NSArray *downloaders;
@@ -53,8 +51,6 @@
 - (void)setIndex:(NSUInteger)index;
 
 - (LAHOperation*)recursiveOperation;
-- (void)saveStateForKey:(id)key;
-- (void)restoreStateForKey:(id)key;
 - (void)refreshState;
 @end
 

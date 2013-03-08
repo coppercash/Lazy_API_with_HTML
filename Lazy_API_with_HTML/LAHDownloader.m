@@ -10,7 +10,7 @@
 #import "LAHOperation.h"
 
 @implementation LAHDownloader
-@synthesize linker = _linker;
+@synthesize linker = _linker, symbol = _symbol;
 #pragma mark - Life Cycle
 - (id)initWithLinker:(LAHPropertyFetcher)linker firstChild:(LAHNode*)firstChild variadicChildren:(va_list)children{
     self = [super initWithFirstChild:firstChild variadicChildren:children];
@@ -35,10 +35,18 @@
 
 #pragma mark - Seek
 - (void)download:(id<LAHHTMLElement>)element{
-    if (_linker == nil) return;
-    NSString *link = _linker(element);
+    NSString *link = nil;
+    if (_linker) {
+        link = _linker(element);
+    }else if (_symbol){
+        if ([_symbol isEqualToString:gRWTagName])  link = element.tagName;
+        else if ([_symbol isEqualToString:gRWText]) link = element.text;
+        else link = [element.attributes objectForKey:_symbol];
+    }else{
+        return;
+    }
     if (link == nil) return;
-    
+
     LAHOperation *operation = self.recursiveOperation;
     id<LAHDelegate> delegate = operation.delegate;
     if (delegate && [delegate respondsToSelector:@selector(downloader:needFileAtPath:)]) {
@@ -58,6 +66,7 @@
 }
 
 #pragma mark - State
+/*
 - (void)saveStateForKey:(id)key{
     LAHRecognizer *father = (LAHRecognizer*)_father;
     [father saveStateForKey:key];
@@ -66,7 +75,7 @@
 - (void)restoreStateForKey:(id)key{
     LAHRecognizer *father = (LAHRecognizer*)_father;
     [father restoreStateForKey:key];
-}
+}*/
 
 - (LAHOperation*)recursiveOperation{
     LAHRecognizer *father = (LAHRecognizer*)_father;

@@ -12,10 +12,13 @@
 @interface LAHNode : NSObject {
     LAHNode *_father;
     NSMutableArray *_children;
+    NSMutableDictionary *_states;
 }
 @property(nonatomic, assign)LAHNode *father;
 @property(nonatomic, retain)NSMutableArray *children;
 - (id)initWithFirstChild:(LAHNode*)firstChild variadicChildren:(va_list)children;
 - (id)initWithChildren:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
 - (void)releaseChild:(LAHNode*)child;
+- (void)saveStateForKey:(id)key;
+- (void)restoreStateForKey:(id)key;
 @end

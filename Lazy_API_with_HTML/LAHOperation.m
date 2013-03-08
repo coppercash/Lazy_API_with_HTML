@@ -80,7 +80,11 @@
 #pragma mark - Queue
 - (void)saveDownloader:(LAHDownloader*)downloader forKey:(id)key{
     [_theDownloading setObject:downloader forKey:key];
+    
     [_rootContainer saveStateForKey:key];
+    for (LAHConstruct *c in _children) {
+        [c saveStateForKey:key];
+    }
 }
 
 - (void)awakeDownloaderForKey:(id)key withElement:(id<LAHHTMLElement>)element{
@@ -88,8 +92,11 @@
     if (downloader == nil) return;
     
     [self addSeeker:downloader];
-
+    
     [_rootContainer restoreStateForKey:key];
+    for (LAHConstruct *c in _children) {
+        [c restoreStateForKey:key];
+    }
     [downloader seekWithRoot:element];
     
     [_theDownloading removeObjectForKey:key];

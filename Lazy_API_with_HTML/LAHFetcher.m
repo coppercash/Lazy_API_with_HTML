@@ -34,7 +34,7 @@
 }
 
 - (id)initWithSymbol:(NSString *)symbol{
-    self = [super init];
+    self = [self init];
     if (self) {
         self.symbol = symbol;
     }
@@ -48,7 +48,7 @@
     [super dealloc];
 }
 
-- (id)copyWithZone:(NSZone *)zone {
+- (id)copyWithZone:(NSZone *)zone{
     LAHFetcher *copy = [[[self class] allocWithZone:zone] init];
     
     copy.father = self.father;
@@ -73,22 +73,20 @@
     }else{
         return;
     }
-
-    //self.property = _fetcher(element);
-    
     if (_property == nil) return;
-    _count ++;
+    
     LAHConstruct *father = (LAHConstruct *)_father;
-    [father recieveObject:self];
+    [father checkUpate:self];
+    [father recieve:self];
+}
+
+- (id)container{
+    return _property;
 }
 
 - (id)newValue{
     if (_property == nil) return [NSNull null];
     return _property;
-}
-
-- (NSUInteger)count{
-    return _count;
 }
 
 #pragma mark - Index

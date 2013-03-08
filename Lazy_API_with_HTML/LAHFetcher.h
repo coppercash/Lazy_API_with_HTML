@@ -13,7 +13,6 @@
     LAHPropertyFetcher _fetcher;
     NSString *_property;
     NSString *_symbol;
-    NSUInteger _count;
 }
 @property(nonatomic, copy)LAHPropertyFetcher fetcher;
 @property(nonatomic, copy)NSString *symbol;

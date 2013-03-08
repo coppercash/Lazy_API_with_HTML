@@ -16,7 +16,7 @@
 @dynamic tagName, text;
 @synthesize attributes = _attributes, isTextNode = _isTextNode, rule = _rule;
 @synthesize range = _range;
-@synthesize isIndex = _isIndex, numberOfMatched = _numberOfMatched;
+@synthesize isIndex = _isIndex, numberOfMatched = _numberOfMatched, matchingElement = _matchingElement;
 @synthesize fetchers = _fetchers, downloaders = _downloaders;
 
 #pragma mark - Life Cycle
@@ -26,7 +26,6 @@
         self.isTextNode = NO;
         self.isIndex = NO;
         self.range = NSMakeRange(0, NSUIntegerMax);
-        _states = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -56,19 +55,14 @@
     self = [super initWithFirstChild:firstChild variadicChildren:children];
     if (self) {
         self.isTextNode = NO;
+        self.isIndex = NO;
         self.range = NSMakeRange(0, NSUIntegerMax);
-        _states = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
 
 - (void)dealloc{
-    //[_tagName release]; _tagName = nil;
-    //[_text release]; _text = nil;
     [_attributes release]; _attributes = nil;
-
-    [_states release]; _states = nil;
-    
     [_fetchers release]; _fetchers = nil;
     [_downloaders release]; _downloaders = nil;
     
@@ -168,11 +162,12 @@
 
 #pragma mark - Recursive
 - (BOOL)handleElement:(id<LAHHTMLElement>)element{
+    
     //Step 0, check matching.
-
     if (![self isElementMatched:element]) return NO;
     DLogElement(element);
 
+    _matchingElement = element;
     //Step 1, fetch linked properties.
     for (LAHFetcher *f in _fetchers) {
         [f fetchProperty:element];
@@ -186,6 +181,7 @@
             [node handleElement:e];
         }
     }
+    _matchingElement = nil;
 
     //Step 3, download with the property.
     for (LAHDownloader *d in _downloaders) {
@@ -253,37 +249,6 @@
     
     return YES;
 }
-/*
-- (BOOL)isElementMatched:(id<LAHHTMLElement>)element{
-    if (_tagName != nil) {
-        NSString *tagName = element.tagName;
-        if (![_tagName isEqualToString:tagName]) return NO;
-    }
-    if (_text != nil) {
-        if (![_text isEqualToString:element.text]) return NO;
-    }
-    if (_attributes != nil) {
-        if (element.attributes == nil) return NO;
-        for (NSString *key in _attributes.allKeys) {
-            NSString *rAV = [_attributes valueForKey:key];   //recognizer attribute value
-            NSString *eAV = [element.attributes valueForKey:key];   //element attribute value
-            if (eAV == nil || ![rAV isEqualToString:eAV]) return NO;
-        }
-    }
-    if (_isTextNode != element.isTextNode) {
-        return NO;
-    }
-    if (_rule != nil) {
-        if (!_rule(element)) return NO;
-    }
-
-    //range indicates range of elements matched by above rules,
-    //so before using it, _numberOfMatched should increase.
-    _numberOfMatched ++;
-    if (!NSLocationInRange(_numberOfMatched - 1, _range)) return NO;
-    
-    return YES;
-}*/
 
 - (LAHOperation*)recursiveOperation{
     LAHRecognizer *father = (LAHRecognizer *)_father;
@@ -292,15 +257,21 @@
 
 #pragma mark - State
 - (void)saveStateForKey:(id)key{
-    NSNumber *count = [[NSNumber alloc] initWithUnsignedInteger:_numberOfMatched];
-    [_states setObject:count forKey:key]; 
-    [count release];
+    //NSNumber *count = [[NSNumber alloc] initWithUnsignedInteger:_numberOfMatched];
+    if (_matchingElement) [_states setObject:_matchingElement forKey:key];
+    //[count release];
+    for (LAHConstruct *c in _children) {
+        [c saveStateForKey:key];
+    }
 }
 
 - (void)restoreStateForKey:(id)key{
-    NSNumber *count = [_states objectForKey:key];
-    _numberOfMatched = [count unsignedIntegerValue];
+    //NSNumber *count = [_states objectForKey:key];
+    _matchingElement = [_states objectForKey:key];
     [_states removeObjectForKey:key];
+    for (LAHConstruct *c in _children) {
+        [c restoreStateForKey:key];
+    }
 }
 
 - (void)refreshState{

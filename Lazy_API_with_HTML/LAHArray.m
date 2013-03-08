@@ -16,57 +16,63 @@
 @implementation LAHArray
 @synthesize array = _array;
 
+- (id)initWithFirstChild:(LAHNode *)firstChild variadicChildren:(va_list)children{
+    self = [super initWithFirstChild:firstChild variadicChildren:children];
+    if (self) {
+        self.type = LAHConstructTypeArray;
+    }
+    return self;
+}
+
 - (void)dealloc{
     self.array = nil;
     [super dealloc];
 }
 
-
-- (id)recieveObject:(LAHConstruct*)object{
-    NSMutableArray *array = nil;
-    if (_father == nil) { //root construct
-        if (_array == nil) [self.array = [[NSMutableArray alloc] init] release];
-        array = _array;
-    }else{
-        array = [(LAHConstruct*)_father recieveObject:self];    //Assert array never be nil
-    }
-    /*
-    NSUInteger count = 0;
-    for (LAHConstruct *c in _children)  count += c.count;
-    id value = nil;
-    NSUInteger index = count - 1;
-    if (count == array.count) {
-        value = [array objectAtIndex:index];
-    }else{
-        for (int i = array.count; i <= index; i++) [array addObject:(value = object.newValue)];
-    }*/
-    
-    id value = nil;
-
-    NSArray *indexes = object.indexes;
-    if (indexes == nil || indexes.count == 0) {
-        [array addObject:(value = object.newValue)];
-    }else{
-        NSUInteger count = object.count;
-        
-        NSUInteger index = count - 1;
-        if (index < array.count) {
-            value = [array objectAtIndex:index];
-        }else{
-            for (int i = array.count; i <= index; i++) [array addObject:(value = object.newValue)];
-        }
+- (BOOL)checkUpate:(LAHConstruct *)object{
+    LAHConstruct *father = (LAHConstruct *)_father;
+    BOOL update = NO;
+    update |= [father checkUpate:self];
+    update |= father.container != _lastFather;
+    update |= _array == nil;
+    if (update) {
+        [self.array = [[NSMutableArray alloc] init] release];
+        [father recieve:self];
     }
     
-    return value;
+    _lastFather = father.container;
+    _lastElement = self.currentRecognizer;
+    return object.isIdentifierChanged;
 }
 
-- (id)newValue{
-    [self.array = [[NSMutableArray alloc] init] release];
-    return _array;
+- (void)recieve:(LAHConstruct*)object{
+    [_array addObject:object.container];
 }
 
 - (id)container{
     return _array;
+}
+
+- (void)saveStateForKey:(id)key{
+        NSMutableDictionary *collector = [[NSMutableDictionary alloc] initWithCapacity:3];
+        if (_lastFather) [collector setObject:_lastFather forKey:gKeyLastFatherContainer];
+        if (_lastElement) [collector setObject:_lastElement forKey:gKeyLastIdentifierElement];
+        if (_array) [collector setObject:_array forKey:gKeyContainer];
+        
+        [_states setObject:collector forKey:key];
+        [collector release];
+        
+        [super saveStateForKey:key];
+}
+
+- (void)restoreStateForKey:(id)key{
+    NSDictionary *state = [_states objectForKey:key];
+    _lastFather = [state objectForKey:gKeyLastFatherContainer];
+    _lastElement = [state objectForKey:gKeyLastIdentifierElement];
+    self.array = [state objectForKey:gKeyContainer];
+    [_states removeObjectForKey:key];
+    
+    [super restoreStateForKey:key];
 }
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "LAHDictionary.h"
+#import "LAHRecognizer.h"
 
 @interface LAHDictionary ()
 @property(nonatomic, retain)NSMutableDictionary *dictionary;
@@ -15,35 +16,64 @@
 @implementation LAHDictionary
 @synthesize dictionary = _dictionary;
 
+- (id)initWithFirstChild:(LAHNode *)firstChild variadicChildren:(va_list)children{
+    self = [super initWithFirstChild:firstChild variadicChildren:children];
+    if (self) {
+        self.type = LAHConstructTypeDictionary;
+    }
+    return self;
+}
+
 - (void)dealloc{
     self.dictionary = nil;
     [super dealloc];
 }
 
-- (id)recieveObject:(LAHConstruct*)object{
-    NSMutableDictionary *dictionary = nil;
-    if (_father == nil) {   //root construct
-        if (_dictionary == nil) [self.dictionary = [[NSMutableDictionary alloc] init] release];
-        dictionary = _dictionary;
-    }else{
-        dictionary = [(LAHConstruct*)_father recieveObject:self];   //Assert dictionary never be nil
+- (BOOL)checkUpate:(LAHConstruct *)object{
+    LAHConstruct *father = (LAHConstruct *)_father;
+    BOOL update = NO;
+    update |= [father checkUpate:self];
+    update |= father.container != _lastFather;
+    update |= _dictionary == nil;
+
+    if (update) {
+        [self.dictionary = [[NSMutableDictionary alloc] init] release];
+        [father recieve:self];
     }
-    
-    id value = [dictionary objectForKey:object.key];
-    if (value == nil) {
-        [dictionary setObject:(value = object.newValue) forKey:object.key];
-    }
-    
-    return value;
+
+    _lastFather = father.container;
+    _lastElement = self.currentRecognizer;
+    return NO;
 }
 
-- (id)newValue{
-    [self.dictionary = [[NSMutableDictionary alloc] init] release];
-    return _dictionary;
+- (void)recieve:(LAHConstruct*)object{
+    [_dictionary setObject:object.container forKey:object.key];
 }
 
 - (id)container{
     return _dictionary;
+}
+
+- (void)saveStateForKey:(id)key{
+    NSMutableDictionary *collector = [[NSMutableDictionary alloc] initWithCapacity:3];
+    if (_lastFather) [collector setObject:_lastFather forKey:gKeyLastFatherContainer];
+    if (_lastElement) [collector setObject:_lastElement forKey:gKeyLastIdentifierElement];
+    if (_dictionary) [collector setObject:_dictionary forKey:gKeyContainer];
+    
+    [_states setObject:collector forKey:key];
+    [collector release];
+    
+    [super saveStateForKey:key];
+}
+
+- (void)restoreStateForKey:(id)key{
+    NSDictionary *state = [_states objectForKey:key];
+    _lastFather = [state objectForKey:gKeyLastFatherContainer];
+    _lastElement = [state objectForKey:gKeyLastIdentifierElement];
+    self.dictionary = [state objectForKey:gKeyContainer];
+    [_states removeObjectForKey:key];
+    
+    [super restoreStateForKey:key];
 }
 
 @end
