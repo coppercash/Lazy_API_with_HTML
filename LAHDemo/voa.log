@@ -1,0 +1,185 @@
+ <LAHArray: 0x757f0d0>():
+ 	<LAHDictionary: 0x8d75e40>(id=(<LAHRecognizer: 0x7287450>, <LAHRecognizer: 0x7679c20>, <LAHRecognizer: 0x757fa30>, ), ):
+ 		<LAHArray: 0x8d75de0>(key=imgSrc, ):
+ 			<LAHFetcher: 0x8d76760>(sym=src, )
+ 			<LAHFetcher: 0x7679210>()
+ 		<LAHFetcher: 0xa8b2930>(sym=href, key=link, )
+ 		<LAHFetcher: 0xa8b2a20>(sym=_text, key=name, )
+ <LAHOperation: 0x757f530>(root=<LAHArray: 0x757f0d0>, path=):
+ 	<LAHRecognizer: 0x757fa30>(tag={div, }, "class"={columnInerr, }, range=(0, 1), ):
+ 		<LAHRecognizer: 0x72868d0>(tag={a, }, "id"={ctl00_ctl00_cpAB_cp1_widgetDeskSection_ctl02_ctl02_ctl00_ImageHyperlink1, }, ):
+ 			<LAHRecognizer: 0x7286b00>(tag={img, }, ):
+ 				<LAHRecognizer: 0x7286bf0>(tag={h3, }, ):
+ 					<LAHRecognizer: 0x7286cf0>(tag={a, }, ):
+ 						<LAHRecognizer: 0x7286e30>(tag={span, }, "class"={underlineLink, }, ):
+ 							<LAHFetcher: 0xa8b2a20>(sym=_text, key=name, )
+ 						<LAHFetcher: 0xa8b2a20>(sym=_text, key=name, )
+ 						<LAHFetcher: 0xa8b2930>(sym=href, key=link, )
+ 				<LAHFetcher: 0x8d76760>(sym=src, )
+ 	<LAHRecognizer: 0x72871a0>(tag={div, }, "class"={content_column2_widgethalf secondcolumn, }, ):
+ 		<LAHRecognizer: 0x7287340>(tag={div, }, ):
+ 			<LAHRecognizer: 0x7287450>(tag={h4, }, range=(3, 3), ):
+ 				<LAHRecognizer: 0x76792d0>(tag={a, }, ):
+ 					<LAHDownloader: 0x7679500>(sym=href, ):
+ 						<LAHRecognizer: 0x76795b0>(tag={img, }, "class"={photo, }, "alt"={_notNone, }, ):
+ 							<LAHFetch
+                            er: 0x8d76760>(sym=src, )
+ 					<LAHFetcher: 0xa8b2930>(sym=href, key=link, )
+ 					<LAHFetcher: 0xa8b2a20>(sym=_text, key=name, )
+ 	<LAHRecognizer: 0x7679870>(tag={ul, }, "class"={overview, }, ):
+ 		<LAHRecognizer: 0x76799f0>(tag={li, }, range=(0, 1), ):
+ 			<LAHRecognizer: 0x7679b20>(tag={div, }, ):
+ 				<LAHRecognizer: 0x7679c20>(tag={div, }, range=(0, 5), ):
+ 					<LAHRecognizer: 0xa8b2b70>(tag={div, }, ):
+ 						<LAHRecognizer: 0xa8b2c80>(tag={a, }, ):
+ 							<LAHRecognizer: 0xa8b2d80>(tag={img, }, ):
+ 								<LAHRecognizer: 0xa8b2ee0>(tag={h4, }, ):
+ 									<LAHRecognizer: 0xa8b2ff0>(tag={a, }, ):
+ 										<LAHFetcher: 0xa8b2a20>(sym=_text, key=name, )
+ 										<LAHFetcher: 0xa8b2930>(sym=href, key=link, )
+ 								<LAHFetcher: 0x7679210>()
+                                
+                                
+ <LAHArray: 0x7253a00>():
+ 	<LAHDictionary: 0x7224110>(id=(<LAHRecognizer: 0x7613790>, <LAHRecognizer: 0x8c1a590>, <LAHRecognizer: 0x7511bc0>, ), ):
+ 		<LAHArray: 0x922c300>(key=imgSrc, ):
+ 			<LAHFetcher: 0x922cc20>(sym=src, )
+ 			<LAHFetcher: 0x922cd50>()
+ 		<LAHFetcher: 0x901d970>(sym=href, key=link, )
+ 		<LAHFetcher: 0x7253a60>(sym=_text, key=name, )
+ <LAHOperation: 0x752f670>(root=<LAHArray: 0x7253a00>, path=):
+ 	<LAHRecognizer: 0x752fb70>(tag={div, }, "class"={columnInerr, }, range=(0, 1), ):
+		<LAHRecognizer: 0x922d0b0>(tag={a, }, "id"={ctl00_ctl00_cpAB_cp1_widgetDeskSection_ctl02_ctl02_ctl00_ImageHyperlink1, }, ):
+ 			<LAHRecognizer: 0x922d2c0>(tag={img, }, ):
+ 				<LAHRecognizer: 0x922d3d0>(tag={h3, }, ):
+ 					<LAHRecognizer: 0x922d4d0>(tag={a, }, ):
+ 						<LAHRecognizer: 0x922d610>(tag={span, }, "class"={underlineLink, }, )
+ 	<LAHRecognizer: 0x922d980>(tag={div, }, "class"={content_column2_widgethalf secondcolumn, }, ):
+ 		<LAHRecognizer: 0x922db20>(tag={div, }, ):
+ 			<LAHRecognizer: 0x922dc30>(tag={h4, }, range=(3, 3), ):
+ 				<LAHRecognizer: 0x7253c30>(tag={a, }, ):
+ 					<LAHDownloader: 0x7253d60>(sym=href, ):
+ 						<LAHRecognizer: 0x7253e10>(tag={img, }, "class"={photo, }, "alt"={_all, }, )
+ 	<LAHRecognizer: 0x72540d0>(tag={ul, }, "class"={overview, }, ):
+ 		<LAHRecognizer: 0x7254250>(tag={li, }, range=(0, 1), ):
+ 			<LAHRecognizer: 0x7254380>(tag={div, }, ):
+ 				<LAHRecognizer: 0x7254480>(tag={div, }, range=(0, 5), ):
+ 					<LAHRecognizer: 0x911fc50>(tag={div, }, ):
+ 						<LAHRecognizer: 0x911fd60>(tag={a, }, ):
+ 							<LAHRecognizer: 0x911fe60>(tag={img, }, ):
+ 								<LAHRecognizer: 0x911ffc0>(tag={h4, }, ):
+ 									<LAHRecognizer: 0x91200e0>(tag={a, }, )
+
+
+
+ <LAHArray: 0x8e13ba0>():
+ 	<LAHDictionary: 0x7224110>(id=(<LAHRecognizer: 0x7613790>, <LAHRecognizer: 0x8c1a590>, <LAHRecognizer: 0x7511bc0>, ), ):
+ 		<LAHArray: 0x7224200>(key=imgSrc, ):
+ 			<LAHFetcher: 0x7224b50>(sym=src, )
+ 			<LAHFetcher: 0x8c19d40>()
+ 		<LAHFetcher: 0x75111a0>(sym=href, key=link, )
+ 		<LAHFetcher: 0x8c19f30>(sym=_text, key=name, )
+ <LAHOperation: 0x8c1a270>(root=<LAHArray: 0x8e13ba0>, path=):
+ 	<LAHRecognizer: 0x8c1a590>(tag={div, }, "class"={columnInerr, }, range=(0, 1), ):
+ 		<LAHRecognizer: 0x760b360>(tag={a, }, "id"={ctl00_ctl00_cpAB_cp1_widgetDeskSection_ctl02_ctl02_ctl00_ImageHyperlink1, }, ):
+ 			<LAHRecognizer: 0x7610d10>(tag={img, }, ):
+ 				<LAHRecognizer: 0x7610e30>(tag={h3, }, ):
+ 					<LAHRecognizer: 0x7610f70>(tag={a, }, ):
+ 						<LAHRecognizer: 0x7611090>(tag={span, }, "class"={underlineLink, }, )
+ 							<LAHFetcher: 0x8c19f30>(sym=_text, key=name, )
+ 						<LAHFetcher: 0x75111a0>(sym=href, key=link, )
+ 						<LAHFetcher: 0x8c19f30>(sym=_text, key=name, )
+ 				<LAHFetcher: 0x7224b50>(sym=src, )
+ 	<LAHRecognizer: 0x7611400>(tag={div, }, "class"={content_column2_widgethalf secondcolumn, }, ):
+ 		<LAHRecognizer: 0x7613680>(tag={div, }, ):
+ 			<LAHRecognizer: 0x7613790>(tag={h4, }, range=(3, 3), ):
+ 				<LAHRecognizer: 0x7511260>(tag={a, }, ):
+ 					<LAHDownloader: 0x75114a0>(sym=href, ):
+ 						<LAHRecognizer: 0x7511550>(tag={img, }, "class"={photo, }, "alt"={_all, }, )
+ 							<LAHFetcher: 0x7224b50>(sym=src, )
+ 					<LAHFetcher: 0x8c19f30>(sym=_text, key=name, )
+ 					<LAHFetcher: 0x75111a0>(sym=href, key=link, )
+ 	<LAHRecognizer: 0x7511810>(tag={ul, }, "class"={overview, }, ):
+ 		<LAHRecognizer: 0x7511990>(tag={li, }, range=(0, 1), ):
+ 			<LAHRecognizer: 0x7511ac0>(tag={div, }, ):
+ 				<LAHRecognizer: 0x7511bc0>(tag={div, }, range=(0, 5), ):
+ 					<LAHRecognizer: 0x8c1a750>(tag={div, }, ):
+ 						<LAHRecognizer: 0x8c1a860>(tag={a, }, ):
+ 							<LAHRecognizer: 0x8c1a960>(tag={img, }, ):
+ 								<LAHRecognizer: 0x8c1aac0>(tag={h4, }, ):
+ 									<LAHRecognizer: 0x8c1abc0>(tag={a, }, )
+ 										<LAHFetcher: 0x75111a0>(sym=href, key=link, )
+ 										<LAHFetcher: 0x8c19f30>(sym=_text, key=name, )
+ 								<LAHFetcher: 0x8c19d40>()
+                                
+                                
+                                
+ <LAHArray: 0x89864f0>():
+ 	<LAHDictionary: 0x7668dc0>(id=(<LAHRecognizer: 0x89880a0>, <LAHRecognizer: 0x766a200>, <LAHRecognizer: 0x8987660>, ), ):
+ 		<LAHArray: 0x7668eb0>(key=imgSrc, ):
+ 			<LAHFetcher: 0x76697e0>(sym=src, )
+ 			<LAHFetcher: 0x7669910>()
+ 		<LAHFetcher: 0x76699f0>(sym=href, key=link, )
+ 		<LAHFetcher: 0x7669ac0>(sym=_text, key=name, )
+ <LAHOperation: 0x7669ef0>(root=<LAHArray: 0x89864f0>, path=):
+ 	<LAHRecognizer: 0x766a200>(tag={div, }, "class"={columnInerr, }, range=(0, 1), ):
+ 		<LAHRecognizer: 0x8986ae0>(tag={a, }, "id"={ctl00_ctl00_cpAB_cp1_widgetDeskSection_ctl02_ctl02_ctl00_ImageHyperlink1, }, ):
+ 			<LAHRecognizer: 0x8986d00>(tag={img, }, ):
+ 				<LAHRecognizer: 0x8986e00>(tag={h3, }, ):
+ 					<LAHRecognizer: 0x8986f00>(tag={a, }, ):
+ 						<LAHRecognizer: 0x8987040>(tag={span, }, "class"={underlineLink, }, )
+ 	<LAHRecognizer: 0x89873b0>(tag={div, }, "class"={content_column2_widgethalf secondcolumn, }, ):
+ 		<LAHRecognizer: 0x8987550>(tag={div, }, ):
+ 			<LAHRecognizer: 0x8987660>(tag={h4, }, range=(3, 3), ):
+ 				<LAHRecognizer: 0x8987850>(tag={a, }, )
+ 	<LAHRecognizer: 0x8987cf0>(tag={ul, }, "class"={overview, }, ):
+ 		<LAHRecognizer: 0x8987e70>(tag={li, }, range=(0, 1), ):
+ 			<LAHRecognizer: 0x8987fa0>(tag={div, }, ):
+ 				<LAHRecognizer: 0x89880a0>(tag={div, }, range=(0, 5), ):
+ 					<LAHRecognizer: 0x755e7d0>(tag={div, }, ):
+ 						<LAHRecognizer: 0x755e8e0>(tag={a, }, ):
+ 							<LAHRecognizer: 0x755e9e0>(tag={img, }, ):
+ 								<LAHRecognizer: 0x755eb40>(tag={h4, }, ):
+ 									<LAHRecognizer: 0x755ec40>(tag={a, }, )
+
+
+
+ <LAHArray: 0x7626010>():
+ 	<LAHDictionary: 0x7533cb0>(id=(<LAHRecognizer: 0x8c34c80>, <LAHRecognizer: 0x7534e10>, <LAHRecognizer: 0x7236ef0>, ), ):
+ 		<LAHArray: 0x7533ec0>(key=imgSrc, ):
+ 			<LAHFetcher: 0x7534670>(sym=src, )
+ 			<LAHFetcher: 0x1091b9d0>()
+ 		<LAHFetcher: 0x7626240>(sym=href, key=link, )
+ 		<LAHFetcher: 0x7534780>(sym=_text, key=name, )
+ <LAHOperation: 0x7534b00>(root=<LAHArray: 0x7626010>, path=):
+ 	<LAHRecognizer: 0x7534e10>(tag={div, }, "class"={columnInerr, }, range=(0, 1), ):
+ 		<LAHRecognizer: 0x8c34100>(tag={a, }, "id"={ctl00_ctl00_cpAB_cp1_widgetDeskSection_ctl02_ctl02_ctl00_ImageHyperlink1, }, ):
+ 			<LAHRecognizer: 0x8c34310>(tag={img, }, ):
+ 				<LAHRecognizer: 0x8c34420>(tag={h3, }, ):
+ 					<LAHRecognizer: 0x8c34520>(tag={a, }, ):
+ 						<LAHRecognizer: 0x8c34660>(tag={span, }, "class"={underlineLink, }, )
+ 							<LAHFetcher: 0x7534780>(sym=_text, key=name, )
+ 						<LAHFetcher: 0x7534780>(sym=_text, key=name, )
+ 						<LAHFetcher: 0x7626240>(sym=href, key=link, )
+ 				<LAHFetcher: 0x7534670>(sym=src, )
+ 	<LAHRecognizer: 0x8c349d0>(tag={div, }, "class"={content_column2_widgethalf secondcolumn, }, ):
+ 		<LAHRecognizer: 0x8c34b70>(tag={div, }, ):
+ 			<LAHRecognizer: 0x8c34c80>(tag={h4, }, range=(3, 3), ):
+ 				<LAHRecognizer: 0x7236970>(tag={a, }, )
+ 					<LAHFetcher: 0x7534780>(sym=_text, key=name, )
+ 					<LAHFetcher: 0x7626240>(sym=href, key=link, )
+ 					<LAHDownloader: 0x7234680>(sym=href, ):
+ 						<LAHRecognizer: 0x7234730>(tag={img, }, "class"={photo, }, "alt"={_all, }, )
+ 							<LAHFetcher: 0x7534670>(sym=src, )
+ 	<LAHRecognizer: 0x7236b40>(tag={ul, }, "class"={overview, }, ):
+ 		<LAHRecognizer: 0x7236cc0>(tag={li, }, range=(0, 1), ):
+ 			<LAHRecognizer: 0x7236df0>(tag={div, }, ):
+ 				<LAHRecognizer: 0x7236ef0>(tag={div, }, range=(0, 5), ):
+ 					<LAHRecognizer: 0x7534fd0>(tag={div, }, ):
+ 						<LAHRecognizer: 0x75350e0>(tag={a, }, ):
+ 							<LAHRecognizer: 0x75351e0>(tag={img, }, ):
+ 								<LAHRecognizer: 0x7535340>(tag={h4, }, ):
+ 									<LAHRecognizer: 0x7535440>(tag={a, }, )
+ 										<LAHFetcher: 0x7626240>(sym=href, key=link, )
+ 										<LAHFetcher: 0x7534780>(sym=_text, key=name, )
+ 								<LAHFetcher: 0x1091b9d0>()

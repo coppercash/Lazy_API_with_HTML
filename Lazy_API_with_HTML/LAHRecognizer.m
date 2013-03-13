@@ -12,7 +12,6 @@
 #import "LAHDownloader.h"
 
 @implementation LAHRecognizer
-@dynamic tagName, text;
 @synthesize attributes = _attributes, isTextNode = _isTextNode, rule = _rule;
 @synthesize range = _range;
 @synthesize isIndex = _isIndex, numberOfMatched = _numberOfMatched, matchingElement = _matchingElement;
@@ -73,14 +72,14 @@
     NSSet *tagNames = [[NSSet alloc] initWithObjects:tagName, nil];
     if (_attributes) {
         NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithDictionary:_attributes];
-        [temp setObject:tagNames forKey:LAH_TagName];
+        [temp setObject:tagNames forKey:LAHParaTag];
         
         NSDictionary *newAttr = [[NSDictionary alloc] initWithDictionary:temp];
 
         self.attributes = newAttr;
         [temp release]; [newAttr release];
     }else{
-        NSDictionary *newAttr = [[NSDictionary alloc] initWithObjectsAndKeys:tagNames, LAH_TagName, nil];
+        NSDictionary *newAttr = [[NSDictionary alloc] initWithObjectsAndKeys:tagNames, LAHParaTag, nil];
         
         self.attributes = newAttr;
         [newAttr release];
@@ -92,14 +91,14 @@
     NSSet *texts = [[NSSet alloc] initWithObjects:text, nil];
     if (_attributes) {
         NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithDictionary:_attributes];
-        [temp setObject:texts forKey:LAH_Text];
+        [temp setObject:texts forKey:LAHParaText];
         
         NSDictionary *newAttr = [[NSDictionary alloc] initWithDictionary:temp];
         
         self.attributes = newAttr;
         [temp release]; [newAttr release];
     }else{
-        NSDictionary *newAttr = [[NSDictionary alloc] initWithObjectsAndKeys:texts, LAH_Text, nil];
+        NSDictionary *newAttr = [[NSDictionary alloc] initWithObjectsAndKeys:texts, LAHParaText, nil];
         
         self.attributes = newAttr;
         [newAttr release];
@@ -125,6 +124,10 @@
     NSRange wR = NSMakeRange(0, _numberOfMatched);  //whole range
     NSRange iR = NSIntersectionRange(wR, _range);   //intersection range
     return iR.length;
+}
+
+- (NSUInteger)index{
+    return _range.location;
 }
 
 #pragma mark - Attributes
@@ -195,9 +198,9 @@
         NSAssert([lVs isKindOfClass:[NSSet class]], @"LAHRecognizer: legal values should be a NSSet.");
 
         NSString *value = nil;
-        if ([key isEqualToString:LAH_TagName]) {
+        if ([key isEqualToString:LAHParaTag]) {
             value = element.tagName;
-        }else if ([key isEqualToString:LAH_Text]){
+        }else if ([key isEqualToString:LAHParaText]){
             value = element.text;
         }else{
             value = [element.attributes objectForKey:key];
@@ -207,7 +210,7 @@
         
         if (value) {
             for (NSString *lV in lVs) {
-                if ([lV isEqualToString:LAH_NotNone]) {
+                if ([lV isEqualToString:LAHValAll]) {
                     isMatched = YES;
                     break;
                 }
@@ -215,7 +218,7 @@
             }
         }else {
             for (NSString *lV in lVs)
-                isMatched |= [lV isEqualToString:LAH_None];
+                isMatched |= [lV isEqualToString:LAHValNone];
         }
         if (!isMatched) return NO;
         
@@ -279,9 +282,43 @@
     }
 }
 
+#pragma mark - Interpreter
+- (void)addFetcher:(LAHFetcher *)fetcher{
+    if (_fetchers == nil) [self.fetchers = [[NSMutableArray alloc] init] release];
+    [(NSMutableArray *)_fetchers addObject:fetcher];
+}
+
+- (void)addDownloader:(LAHDownloader *)downloader{
+    if (_downloaders == nil) [self.downloaders = [[NSMutableArray alloc] init] release];
+    [(NSMutableArray *)_downloaders addObject:downloader];
+}
+
+- (void)addAttributes:(NSSet *)attributes withKey:(NSString *)key{
+    if (_attributes == nil) [self.attributes = [[NSMutableDictionary alloc] init] release];
+    [(NSMutableDictionary *)_attributes setObject:attributes forKey:key];
+}
+
+- (void)appendProperties:(NSMutableString *)msg{
+    for (NSString *key in _attributes.allKeys) {
+        [msg appendFormat:@"%@={", key];
+        NSSet *attrs = [_attributes objectForKey:key];
+        for (NSString *attr in attrs) {
+            [msg appendFormat:@"%@, ", attr];
+        }
+        [msg appendString:@"}, "];
+    }
+    
+    if (!NSEqualRanges(_range, NSMakeRange(0, NSUIntegerMax))) {
+        [msg appendFormat:@"range=(%d, %d), ", _range.location, _range.length];
+    }
+    if (_isTextNode) [msg appendString:@"isTextNode, "];
+}
+
+- (void)log:(NSUInteger)degere{
+    [super log:degere];
+    for (LAHFetcher *f in _fetchers) [f log:degere + 1];
+    for (LAHDownloader *d in _downloaders) [d log:degere + 1];
+}
+
 @end
 
-NSString * const LAH_None = @"_none";
-NSString * const LAH_NotNone = @"_notNone";
-NSString * const LAH_TagName = @"_tag";
-NSString * const LAH_Text = @"_text";

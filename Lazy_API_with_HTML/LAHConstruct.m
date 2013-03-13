@@ -75,6 +75,24 @@
 
 - (void)recieve:(LAHConstruct*)object{}
 
+#pragma mark - Interpreter
+- (void)addIdentifier:(LAHRecognizer *)identifier{
+    if (_identifiers == nil) [self.identifiers = [[NSMutableArray alloc] init] release];
+    [(NSMutableArray *)_identifiers addObject:identifier];
+}
+
+- (void)appendProperties:(NSMutableString *)msg{
+    if (_key) [msg appendFormat:@"key=%@, ", _key];
+    if (_identifiers) {
+        [msg appendString:@"id="];
+        [msg appendString:@"("];
+        for (LAHRecognizer *r in _identifiers) {
+            [msg appendFormat:@"%@, ", r];
+        }
+        [msg appendString:@"), "];
+    }
+}
+
 @end
 
 NSString * const gKeyLastFatherContainer = @"LFC";

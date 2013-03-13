@@ -23,8 +23,8 @@
     if (_linker) {
         link = _linker(element);
     }else if (_symbol){
-        if ([_symbol isEqualToString:LAH_TagName])  link = element.tagName;
-        else if ([_symbol isEqualToString:LAH_Text]) link = element.text;
+        if ([_symbol isEqualToString:LAHParaTag])  link = element.tagName;
+        else if ([_symbol isEqualToString:LAHParaText]) link = element.text;
         else link = [element.attributes objectForKey:_symbol];
     }else{
         return;
@@ -53,6 +53,11 @@
     LAHRecognizer *father = (LAHRecognizer*)_father;
     LAHOperation* greffier = father.recursiveOperation;
     return greffier;
+}
+
+#pragma mark - Interpreter
+- (void)appendProperties:(NSMutableString *)msg{
+    if (_symbol) [msg appendFormat:@"sym=%@, ", _symbol];
 }
 
 @end

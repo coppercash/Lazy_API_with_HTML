@@ -14,11 +14,14 @@
     NSMutableArray *_theSeeking;
 
     LAHConstruct *_rootContainer;
+    NSString *_path;
     
     id<LAHDelegate> _delegate;
     NSMutableArray *_completions;
     NSMutableArray *_correctors;
 }
+@property(nonatomic, retain)LAHConstruct *rootContainer;
+@property(nonatomic, copy)NSString *path;
 @property(nonatomic, assign)id<LAHDelegate> delegate;
 @property(nonatomic, readonly)id container;
 
@@ -26,14 +29,15 @@
 - (id)initWithPath:(NSString*)path rootContainer:(LAHConstruct*)rootContainer children:(LAHRecognizer*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
 
 - (void)start;
+- (void)handleError:(NSError*)error;
 - (void)addCompletion:(LAHCompletion)completion;
 - (void)addCorrector:(LAHCorrector)corrector;
-- (void)handleError:(NSError*)error;
 
 - (void)saveDownloader:(LAHDownloader*)downloader forKey:(id)key;
 - (void)awakeDownloaderForKey:(id)key withElement:(LAHEle)element;
 
 - (void)addSeeker:(LAHDownloader*)fetcher;
 - (void)removeSeeker:(LAHDownloader*)fetcher;
+
 @end
 

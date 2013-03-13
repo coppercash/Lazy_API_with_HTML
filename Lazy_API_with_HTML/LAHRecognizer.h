@@ -31,6 +31,7 @@
 @property(nonatomic, copy)LAHRule rule;
 @property(nonatomic, assign)BOOL isTextNode;
 @property(nonatomic, assign)NSRange range;
+@property(nonatomic, assign)NSUInteger index;
 
 @property(nonatomic, assign)BOOL isIndex;
 @property(nonatomic, readonly)NSUInteger numberOfMatched;
@@ -48,13 +49,13 @@
 
 - (BOOL)handleElement:(LAHEle)element;
 - (BOOL)isElementMatched:(LAHEle)element;
-- (void)setIndex:(NSUInteger)index;
 
 - (LAHOperation*)recursiveOperation;
 - (void)refreshState;
-@end
 
-extern NSString * const LAH_None;
-extern NSString * const LAH_NotNone;
-extern NSString * const LAH_TagName;
-extern NSString * const LAH_Text;
+#pragma mark - Interpreter
+- (void)addAsChild:(LAHNode *)child;
+- (void)addFetcher:(LAHFetcher *)fetcher;
+- (void)addDownloader:(LAHDownloader *)downloader;
+- (void)addAttributes:(NSSet *)attributes withKey:(NSString *)key;
+@end

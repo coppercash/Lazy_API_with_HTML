@@ -33,3 +33,29 @@ extern NSString * const gLAHA;
 extern NSString * const gLAHSpan;
 extern NSString * const gLAHDiv;
 extern NSString * const gLAHHref;
+
+
+extern NSString * const LAHEntArr;
+extern NSString * const LAHEntDic;
+extern NSString * const LAHEntFet;
+extern NSString * const LAHEntOpe;
+extern NSString * const LAHEntRec;
+extern NSString * const LAHEntDow;
+
+extern NSString * const LAHParaId;
+extern NSString * const LAHParaKey;
+extern NSString * const LAHParaSym;
+extern NSString * const LAHParaRoot;
+extern NSString * const LAHParaPath;
+extern NSString * const LAHParaTag;
+extern NSString * const LAHParaClass;
+extern NSString * const LAHParaText;
+extern NSString * const LAHParaRange;
+extern NSString * const LAHParaIndex;
+extern NSString * const LAHParaIsText;
+
+extern NSString * const LAHValText;
+extern NSString * const LAHValTag;
+extern NSString * const LAHValNone;
+extern NSString * const LAHValAll;
+extern NSString * const LAHParaDefault;

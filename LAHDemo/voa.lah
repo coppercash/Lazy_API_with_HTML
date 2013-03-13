@@ -1,0 +1,40 @@
+arr'root':
+    dic(id={'id0', 'id1', 'id2'}):
+        arr(key="imgSrc"):
+            fet'imgSrc0'(sym="src"):
+            fet'imgSrc1':
+        fet'link'(sym="href", key="link"):
+        fet'name'(_text, key="name"):
+
+ope(root='root', path = ""):
+    rec'id0'(tag="div", "class"="columnInerr", range=(0,1)):
+        rec(tag="a", "id"="ctl00_ctl00_cpAB_cp1_widgetDeskSection_ctl02_ctl02_ctl00_ImageHyperlink1"):
+            rec(tag="img"):
+                'imgSrc0'
+                rec("h3"):
+                    rec("a"):
+                        'link'
+                        'name'
+                        rec("span", "class"="underlineLink"):
+                            'name'
+    rec("div", "class"="content_column2_widgethalf secondcolumn"):
+        rec("div"):
+            rec'id1'("h4", range=(3,3)):
+                rec("a"):
+                    'name'
+                    'link'
+                    dow(sym="href"):
+                        rec("img", "class"="photo", "alt"=_all):
+                            'imgSrc0'
+    rec("ul", "class"="overview"):
+        rec("li", index=0):
+            rec("div"):
+                rec'id2'("div", range=(0,5)):
+                    rec("div"):
+                        rec("a"):
+                            rec("img"):
+                                'imgSrc1'
+                                rec("h4"):
+                                    rec("a"):
+                                        'name'
+                                        'link'

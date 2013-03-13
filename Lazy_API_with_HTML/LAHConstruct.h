@@ -37,6 +37,8 @@ typedef enum {
 - (BOOL)checkUpate:(LAHConstruct *)object;
 - (void)update;
 - (void)recieve:(LAHConstruct*)object;
+#pragma mark - Interpreter
+- (void)addIdentifier:(LAHRecognizer *)identifier;
 @end
 
 extern NSString * const gKeyLastFatherContainer;

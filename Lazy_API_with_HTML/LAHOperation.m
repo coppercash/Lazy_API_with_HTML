@@ -11,7 +11,6 @@
 #import "LAHConstruct.h"
 
 @interface LAHOperation ()
-@property(nonatomic, retain)LAHConstruct *rootContainer;
 @property(nonatomic, retain)NSMutableDictionary *theDownloading;
 @property(nonatomic, retain)NSMutableArray *theSeeking;
 @property(nonatomic, retain)NSMutableArray *completions;
@@ -19,16 +18,22 @@
 @end
 
 @implementation LAHOperation
-@synthesize rootContainer = _rootContainer;
+@synthesize rootContainer = _rootContainer, path = _path;
 @synthesize theDownloading = _theDownloading, theSeeking = _theSeeking, completions = _completions, correctors = _correctors;
 @synthesize delegate = _delegate;
+
+- (void)initialize{
+    [self.theDownloading = [[NSMutableDictionary alloc] init] release];
+    [self.theSeeking = [[NSMutableArray alloc] init] release];
+    [self.completions = [[NSMutableArray alloc] init] release];
+    [self.correctors = [[NSMutableArray alloc] init] release];
+}
+
 - (id)init{
     self = [super init];
     if (self) {
-        [self.theDownloading = [[NSMutableDictionary alloc] init] release];
-        [self.theSeeking = [[NSMutableArray alloc] init] release];
-        [self.completions = [[NSMutableArray alloc] init] release];
-        [self.correctors = [[NSMutableArray alloc] init] release];
+        [self initialize];
+        self.path = @"";
     }
     return self;
 }
@@ -36,15 +41,9 @@
 - (id)initWithPath:(NSString*)path rootContainer:(LAHConstruct*)rootContainer firstChild:(LAHRecognizer*)firstChild variadicChildren:(va_list)children{
     self = [super initWithFirstChild:firstChild variadicChildren:children];
     if (self) {
-        [self.theDownloading = [[NSMutableDictionary alloc] init] release];
-        [self.theSeeking = [[NSMutableArray alloc] init] release];
-        [self.completions = [[NSMutableArray alloc] init] release];
-        [self.correctors = [[NSMutableArray alloc] init] release];
-
+        [self initialize];
+        self.path = path;
         self.rootContainer = rootContainer;
-        self.linker = ^(LAHEle element){
-            return path;
-        };
     }
     return self;
 }
@@ -64,12 +63,25 @@
     self.theSeeking = nil;
     self.completions = nil;
     self.correctors = nil;
-
+    self.path = nil;
+    
     self.rootContainer = nil;
     
     self.delegate = nil;
     
     [super dealloc];
+}
+
+#pragma mark - Download
+- (void)download:(LAHEle)element{
+    NSString *link = _path;
+    
+    LAHOperation *operation = self.recursiveOperation;
+    id<LAHDelegate> delegate = operation.delegate;
+    if (delegate && [delegate respondsToSelector:@selector(downloader:needFileAtPath:)]) {
+        id key = [delegate downloader:self needFileAtPath:link];
+        [operation saveDownloader:self forKey:key];
+    }
 }
 
 #pragma mark - Recursive
@@ -145,6 +157,11 @@
 #pragma mark - Getter
 - (id)container{
     return _rootContainer.container;
+}
+
+- (void)appendProperties:(NSMutableString *)msg{
+    if (_rootContainer) [msg appendFormat:@"root=%@, ", _rootContainer];
+    if (_path) [msg appendFormat:@"path=%@", _path];
 }
 
 @end

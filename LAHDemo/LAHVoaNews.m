@@ -16,7 +16,7 @@
 }
 
 - (LAHOperation*)homePage{
-    LAHFetcher *name0 = [[LAHFetcher alloc] initWithSymbol:LAH_Text];
+    LAHFetcher *name0 = [[LAHFetcher alloc] initWithSymbol:LAHValText];
     LAHFetcher *link0 = [[LAHFetcher alloc] initWithSymbol:@"href"];
     LAHFetcher *imgSrc0 = [[LAHFetcher alloc] initWithSymbol:@"src"];
     LAHFetcher *imgSrc2 = [[LAHFetcher alloc] initWithFetcher:^NSString *(LAHEle element) {
@@ -60,7 +60,7 @@
     LAHRecognizer *img1 = [[LAHRecognizer alloc] init]; img1.fetchers = @[imgSrc0];
     img1.tagName = @"img"; //img1.attributes = @{@"class":@"photo"};
     [img1 setKey:@"class" attributes:@"photo", nil];
-    [img1 setKey:@"alt" attributes:LAH_NotNone, nil];
+    [img1 setKey:@"alt" attributes:LAHValAll, nil];
     
     LAHDownloader *d1 = [[LAHDownloader alloc] initWithChildren:img1, nil];
     d1.symbol = @"href";
@@ -77,6 +77,7 @@
     LAHRecognizer *divContent = [[LAHRecognizer alloc] initWithChildren:div1, nil];
     divContent.tagName = @"div"; 
     [divContent setKey:@"class" attributes:@"content_column2_widgethalf secondcolumn", nil];
+    
     
     LAHRecognizer *aNL2 = [[LAHRecognizer alloc] initWithChildren:span, nil]; aNL2.fetchers = @[name0, link0];
     aNL2.tagName = @"a";

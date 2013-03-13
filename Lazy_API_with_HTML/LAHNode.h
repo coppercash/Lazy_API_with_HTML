@@ -21,4 +21,8 @@
 - (void)releaseChild:(LAHNode*)child;
 - (void)saveStateForKey:(id)key;
 - (void)restoreStateForKey:(id)key;
+#pragma mark - Interpreter
+- (void)addChild:(LAHNode *)child;
+- (void)log:(NSUInteger)degere;
+- (void)appendProperties:(NSMutableString *)msg;
 @end

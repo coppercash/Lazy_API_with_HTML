@@ -16,9 +16,9 @@
 }
 
 - (LAHOperation*)homePage{
-    LAHFetcher *type = [[LAHFetcher alloc] initWithSymbol:LAH_Text]; type.key = @"type";
+    LAHFetcher *type = [[LAHFetcher alloc] initWithSymbol:LAHValText]; type.key = @"type";
     LAHFetcher *typeLink = [[LAHFetcher alloc] initWithSymbol:@"href"];  typeLink.key = @"typelink";
-    LAHFetcher *name = [[LAHFetcher alloc] initWithSymbol:LAH_Text]; name.key = @"name";
+    LAHFetcher *name = [[LAHFetcher alloc] initWithSymbol:LAHValText]; name.key = @"name";
     LAHFetcher *link = [[LAHFetcher alloc] initWithSymbol:@"href"]; link.key = @"link";
     LAHFetcher *imgSrc = [[LAHFetcher alloc] initWithSymbol:@"src"]; imgSrc.key = @"imgSrc";
     

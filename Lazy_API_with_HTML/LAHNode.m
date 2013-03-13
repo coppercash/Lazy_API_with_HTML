@@ -40,7 +40,7 @@
     return self;
 }
 
-- (id)initWithChildren:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION{
+- (id)initWithChildren:(LAHNode*)firstChild, ... {
     va_list children; va_start(children, firstChild);
     self = [self initWithFirstChild:firstChild variadicChildren:children];
     va_end(children);
@@ -91,5 +91,31 @@
 #pragma mark - States
 - (void)saveStateForKey:(id)key{}
 - (void)restoreStateForKey:(id)key{}
+
+#pragma mark - Interpreter
+- (void)addChild:(LAHNode *)child{
+    if (_children == nil) [self.children = [[NSMutableArray alloc] init] release];
+    [_children addObject:child];
+}
+
+- (void)appendProperties:(NSMutableString *)msg{
+    
+}
+
+- (void)log:(NSUInteger)degere{
+    NSMutableString *msg = [NSMutableString string];
+    for (int i = 0; i < degere; i ++) [msg appendString:@"\t"];
+    [msg appendFormat:@"%@", self];
+    
+    [msg appendString:@"("];
+    [self appendProperties:msg];
+    [msg appendString:@")"];
+    
+    if (_children) [msg appendString:@":"];
+    NSLog(@"%@", msg);
+    for (LAHNode *n in _children) {
+        [n log:degere + 1];
+    }
+}
 
 @end
