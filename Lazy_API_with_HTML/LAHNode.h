@@ -24,5 +24,6 @@
 #pragma mark - Interpreter
 - (void)addChild:(LAHNode *)child;
 - (void)log:(NSUInteger)degere;
+- (void)logSelf;
 - (void)appendProperties:(NSMutableString *)msg;
 @end

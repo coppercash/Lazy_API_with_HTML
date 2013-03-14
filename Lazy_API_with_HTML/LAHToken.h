@@ -9,17 +9,15 @@
 #import <Foundation/Foundation.h>
 
 
-@interface Token : NSObject {
+@interface LAHToken : NSObject {
 	NSString *source;
 	NSRange range;
 }
 
 + (NSArray *)tokenizeString:(NSString *)string;
-+ (Token *)EOFToken;
-+ (Token *)indentToken;
-+ (Token *)dedentToken;
 
 - (id)initWithSource:(NSString *)source range:(NSRange)range;
+- (id)initAsEOFToken;
 - (BOOL)isEqualToString:(NSString *)string;
 - (BOOL)isNumber;
 - (BOOL)isString;

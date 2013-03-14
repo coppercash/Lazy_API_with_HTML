@@ -1,185 +1,141 @@
- <LAHArray: 0x757f0d0>():
- 	<LAHDictionary: 0x8d75e40>(id=(<LAHRecognizer: 0x7287450>, <LAHRecognizer: 0x7679c20>, <LAHRecognizer: 0x757fa30>, ), ):
- 		<LAHArray: 0x8d75de0>(key=imgSrc, ):
- 			<LAHFetcher: 0x8d76760>(sym=src, )
- 			<LAHFetcher: 0x7679210>()
- 		<LAHFetcher: 0xa8b2930>(sym=href, key=link, )
- 		<LAHFetcher: 0xa8b2a20>(sym=_text, key=name, )
- <LAHOperation: 0x757f530>(root=<LAHArray: 0x757f0d0>, path=):
- 	<LAHRecognizer: 0x757fa30>(tag={div, }, "class"={columnInerr, }, range=(0, 1), ):
- 		<LAHRecognizer: 0x72868d0>(tag={a, }, "id"={ctl00_ctl00_cpAB_cp1_widgetDeskSection_ctl02_ctl02_ctl00_ImageHyperlink1, }, ):
- 			<LAHRecognizer: 0x7286b00>(tag={img, }, ):
- 				<LAHRecognizer: 0x7286bf0>(tag={h3, }, ):
- 					<LAHRecognizer: 0x7286cf0>(tag={a, }, ):
- 						<LAHRecognizer: 0x7286e30>(tag={span, }, "class"={underlineLink, }, ):
- 							<LAHFetcher: 0xa8b2a20>(sym=_text, key=name, )
- 						<LAHFetcher: 0xa8b2a20>(sym=_text, key=name, )
- 						<LAHFetcher: 0xa8b2930>(sym=href, key=link, )
- 				<LAHFetcher: 0x8d76760>(sym=src, )
- 	<LAHRecognizer: 0x72871a0>(tag={div, }, "class"={content_column2_widgethalf secondcolumn, }, ):
- 		<LAHRecognizer: 0x7287340>(tag={div, }, ):
- 			<LAHRecognizer: 0x7287450>(tag={h4, }, range=(3, 3), ):
- 				<LAHRecognizer: 0x76792d0>(tag={a, }, ):
- 					<LAHDownloader: 0x7679500>(sym=href, ):
- 						<LAHRecognizer: 0x76795b0>(tag={img, }, "class"={photo, }, "alt"={_notNone, }, ):
- 							<LAHFetch
-                            er: 0x8d76760>(sym=src, )
- 					<LAHFetcher: 0xa8b2930>(sym=href, key=link, )
- 					<LAHFetcher: 0xa8b2a20>(sym=_text, key=name, )
- 	<LAHRecognizer: 0x7679870>(tag={ul, }, "class"={overview, }, ):
- 		<LAHRecognizer: 0x76799f0>(tag={li, }, range=(0, 1), ):
- 			<LAHRecognizer: 0x7679b20>(tag={div, }, ):
- 				<LAHRecognizer: 0x7679c20>(tag={div, }, range=(0, 5), ):
- 					<LAHRecognizer: 0xa8b2b70>(tag={div, }, ):
- 						<LAHRecognizer: 0xa8b2c80>(tag={a, }, ):
- 							<LAHRecognizer: 0xa8b2d80>(tag={img, }, ):
- 								<LAHRecognizer: 0xa8b2ee0>(tag={h4, }, ):
- 									<LAHRecognizer: 0xa8b2ff0>(tag={a, }, ):
- 										<LAHFetcher: 0xa8b2a20>(sym=_text, key=name, )
- 										<LAHFetcher: 0xa8b2930>(sym=href, key=link, )
- 								<LAHFetcher: 0x7679210>()
-                                
-                                
- <LAHArray: 0x7253a00>():
- 	<LAHDictionary: 0x7224110>(id=(<LAHRecognizer: 0x7613790>, <LAHRecognizer: 0x8c1a590>, <LAHRecognizer: 0x7511bc0>, ), ):
- 		<LAHArray: 0x922c300>(key=imgSrc, ):
- 			<LAHFetcher: 0x922cc20>(sym=src, )
- 			<LAHFetcher: 0x922cd50>()
- 		<LAHFetcher: 0x901d970>(sym=href, key=link, )
- 		<LAHFetcher: 0x7253a60>(sym=_text, key=name, )
- <LAHOperation: 0x752f670>(root=<LAHArray: 0x7253a00>, path=):
- 	<LAHRecognizer: 0x752fb70>(tag={div, }, "class"={columnInerr, }, range=(0, 1), ):
-		<LAHRecognizer: 0x922d0b0>(tag={a, }, "id"={ctl00_ctl00_cpAB_cp1_widgetDeskSection_ctl02_ctl02_ctl00_ImageHyperlink1, }, ):
- 			<LAHRecognizer: 0x922d2c0>(tag={img, }, ):
- 				<LAHRecognizer: 0x922d3d0>(tag={h3, }, ):
- 					<LAHRecognizer: 0x922d4d0>(tag={a, }, ):
- 						<LAHRecognizer: 0x922d610>(tag={span, }, "class"={underlineLink, }, )
- 	<LAHRecognizer: 0x922d980>(tag={div, }, "class"={content_column2_widgethalf secondcolumn, }, ):
- 		<LAHRecognizer: 0x922db20>(tag={div, }, ):
- 			<LAHRecognizer: 0x922dc30>(tag={h4, }, range=(3, 3), ):
- 				<LAHRecognizer: 0x7253c30>(tag={a, }, ):
- 					<LAHDownloader: 0x7253d60>(sym=href, ):
- 						<LAHRecognizer: 0x7253e10>(tag={img, }, "class"={photo, }, "alt"={_all, }, )
- 	<LAHRecognizer: 0x72540d0>(tag={ul, }, "class"={overview, }, ):
- 		<LAHRecognizer: 0x7254250>(tag={li, }, range=(0, 1), ):
- 			<LAHRecognizer: 0x7254380>(tag={div, }, ):
- 				<LAHRecognizer: 0x7254480>(tag={div, }, range=(0, 5), ):
- 					<LAHRecognizer: 0x911fc50>(tag={div, }, ):
- 						<LAHRecognizer: 0x911fd60>(tag={a, }, ):
- 							<LAHRecognizer: 0x911fe60>(tag={img, }, ):
- 								<LAHRecognizer: 0x911ffc0>(tag={h4, }, ):
- 									<LAHRecognizer: 0x91200e0>(tag={a, }, )
-
-
-
- <LAHArray: 0x8e13ba0>():
- 	<LAHDictionary: 0x7224110>(id=(<LAHRecognizer: 0x7613790>, <LAHRecognizer: 0x8c1a590>, <LAHRecognizer: 0x7511bc0>, ), ):
- 		<LAHArray: 0x7224200>(key=imgSrc, ):
- 			<LAHFetcher: 0x7224b50>(sym=src, )
- 			<LAHFetcher: 0x8c19d40>()
- 		<LAHFetcher: 0x75111a0>(sym=href, key=link, )
- 		<LAHFetcher: 0x8c19f30>(sym=_text, key=name, )
- <LAHOperation: 0x8c1a270>(root=<LAHArray: 0x8e13ba0>, path=):
- 	<LAHRecognizer: 0x8c1a590>(tag={div, }, "class"={columnInerr, }, range=(0, 1), ):
- 		<LAHRecognizer: 0x760b360>(tag={a, }, "id"={ctl00_ctl00_cpAB_cp1_widgetDeskSection_ctl02_ctl02_ctl00_ImageHyperlink1, }, ):
- 			<LAHRecognizer: 0x7610d10>(tag={img, }, ):
- 				<LAHRecognizer: 0x7610e30>(tag={h3, }, ):
- 					<LAHRecognizer: 0x7610f70>(tag={a, }, ):
- 						<LAHRecognizer: 0x7611090>(tag={span, }, "class"={underlineLink, }, )
- 							<LAHFetcher: 0x8c19f30>(sym=_text, key=name, )
- 						<LAHFetcher: 0x75111a0>(sym=href, key=link, )
- 						<LAHFetcher: 0x8c19f30>(sym=_text, key=name, )
- 				<LAHFetcher: 0x7224b50>(sym=src, )
- 	<LAHRecognizer: 0x7611400>(tag={div, }, "class"={content_column2_widgethalf secondcolumn, }, ):
- 		<LAHRecognizer: 0x7613680>(tag={div, }, ):
- 			<LAHRecognizer: 0x7613790>(tag={h4, }, range=(3, 3), ):
- 				<LAHRecognizer: 0x7511260>(tag={a, }, ):
- 					<LAHDownloader: 0x75114a0>(sym=href, ):
- 						<LAHRecognizer: 0x7511550>(tag={img, }, "class"={photo, }, "alt"={_all, }, )
- 							<LAHFetcher: 0x7224b50>(sym=src, )
- 					<LAHFetcher: 0x8c19f30>(sym=_text, key=name, )
- 					<LAHFetcher: 0x75111a0>(sym=href, key=link, )
- 	<LAHRecognizer: 0x7511810>(tag={ul, }, "class"={overview, }, ):
- 		<LAHRecognizer: 0x7511990>(tag={li, }, range=(0, 1), ):
- 			<LAHRecognizer: 0x7511ac0>(tag={div, }, ):
- 				<LAHRecognizer: 0x7511bc0>(tag={div, }, range=(0, 5), ):
- 					<LAHRecognizer: 0x8c1a750>(tag={div, }, ):
- 						<LAHRecognizer: 0x8c1a860>(tag={a, }, ):
- 							<LAHRecognizer: 0x8c1a960>(tag={img, }, ):
- 								<LAHRecognizer: 0x8c1aac0>(tag={h4, }, ):
- 									<LAHRecognizer: 0x8c1abc0>(tag={a, }, )
- 										<LAHFetcher: 0x75111a0>(sym=href, key=link, )
- 										<LAHFetcher: 0x8c19f30>(sym=_text, key=name, )
- 								<LAHFetcher: 0x8c19d40>()
+<LAHOperation: 0x7284a30>(path=):
+ 	<LAHArray: 0x7283010>():
+ 		<LAHDictionary: 0x7282f40>(id=(<LAHRecognizer: 0x7283950>, <LAHRecognizer: 0x7283e20>, <LAHRecognizer: 0x7284440>, ), ):
+ 			<LAHFetcher: 0x72829d0>(sym=_text, key=name, )
+ 			<LAHFetcher: 0x7282aa0>(sym=href, key=link, )
+ 			<LAHArray: 0x7282d50>(key=imgSrc, ):
+ 				<LAHFetcher: 0x7282b00>(sym=src, )
+ 				<LAHFetcher: 0x7282b60>(sym=<__NSGlobalBlock__: 0x402d0>, )
+ 	<LAHRecognizer: 0x7283950>(tag={div, }, class={columnInner, }, range=(0, 1), ):
+ 		<LAHRecognizer: 0x72836c0>(tag={h3, }, ):
+ 			<LAHRecognizer: 0x72835d0>(tag={a, }, ):
+ 				<LAHFetcher: 0x72829d0>(sym=_text, key=name, )
+ 				<LAHFetcher: 0x7282aa0>(sym=href, key=link, )
+ 				<LAHRecognizer: 0x7283330>(tag={span, }, class={underlineLink, }, ):
+ 					<LAHFetcher: 0x72829d0>(sym=_text, key=name, )
+ 		<LAHRecognizer: 0x7283830>(tag={a, }, id={ctl00_ctl00_cpAB_cp1_widgetDeskSection_ctl02_ctl02_ctl00_ImageHyperlink1, }, ):
+ 			<LAHRecognizer: 0x7283780>(tag={img, }, ):
+ 				<LAHFetcher: 0x7282b00>(sym=src, )
+ 	<LAHRecognizer: 0x7283fc0>(tag={div, }, class={content_column2_widgethalf secondcolumn, }, ):
+ 		<LAHRecognizer: 0x7283ef0>(tag={div, }, ):
+ 			<LAHRecognizer: 0x7283e20>(tag={h4, }, range=(2, 3), ):
+ 				<LAHRecognizer: 0x7283d30>(tag={a, }, ):
+ 					<LAHFetcher: 0x72829d0>(sym=_text, key=name, )
+ 					<LAHFetcher: 0x7282aa0>(sym=href, key=link, )
+ 					<LAHDownloader: 0x7283c80>(sym=href, ):
+ 						<LAHRecognizer: 0x7283a40>(tag={img, }, class={photo, }, alt={_all, }, ):
+ 							<LAHFetcher: 0x7282b00>(sym=src, )
+ 					<LAHRecognizer: 0x7283330>(tag={span, }, class={underlineLink, }, ):
+ 						<LAHFetcher: 0x72829d0>(sym=_text, key=name, )
+ 	<LAHRecognizer: 0x72846b0>(tag={ul, }, class={overview, }, range=(2, 1), ):
+ 		<LAHRecognizer: 0x72845e0>(tag={li, }, range=(0, 1), ):
+ 			<LAHRecognizer: 0x7284510>(tag={div, }, ):
+ 				<LAHRecognizer: 0x7284440>(tag={div, }, range=(0, 5), ):
+ 					<LAHRecognizer: 0x7284370>(tag={div, }, ):
+ 						<LAHRecognizer: 0x7284140>(tag={h4, }, ):
+ 							<LAHRecognizer: 0x72840e0>(tag={a, }, ):
+ 								<LAHFetcher: 0x72829d0>(sym=_text, key=name, )
+ 								<LAHFetcher: 0x7282aa0>(sym=href, key=link, )
+ 								<LAHRecognizer: 0x7283330>(tag={span, }, class={underlineLink, }, ):
+ 									<LAHFetcher: 0x72829d0>(sym=_text, key=name, )
+ 						<LAHRecognizer: 0x72842a0>(tag={a, }, ):
+ 							<LAHRecognizer: 0x72841f0>(tag={img, }, ):
+ 								<LAHFetcher: 0x7282b60>(sym=<__NSGlobalBlock__: 0x402d0>, )
                                 
                                 
                                 
- <LAHArray: 0x89864f0>():
- 	<LAHDictionary: 0x7668dc0>(id=(<LAHRecognizer: 0x89880a0>, <LAHRecognizer: 0x766a200>, <LAHRecognizer: 0x8987660>, ), ):
- 		<LAHArray: 0x7668eb0>(key=imgSrc, ):
- 			<LAHFetcher: 0x76697e0>(sym=src, )
- 			<LAHFetcher: 0x7669910>()
- 		<LAHFetcher: 0x76699f0>(sym=href, key=link, )
- 		<LAHFetcher: 0x7669ac0>(sym=_text, key=name, )
- <LAHOperation: 0x7669ef0>(root=<LAHArray: 0x89864f0>, path=):
- 	<LAHRecognizer: 0x766a200>(tag={div, }, "class"={columnInerr, }, range=(0, 1), ):
- 		<LAHRecognizer: 0x8986ae0>(tag={a, }, "id"={ctl00_ctl00_cpAB_cp1_widgetDeskSection_ctl02_ctl02_ctl00_ImageHyperlink1, }, ):
- 			<LAHRecognizer: 0x8986d00>(tag={img, }, ):
- 				<LAHRecognizer: 0x8986e00>(tag={h3, }, ):
- 					<LAHRecognizer: 0x8986f00>(tag={a, }, ):
- 						<LAHRecognizer: 0x8987040>(tag={span, }, "class"={underlineLink, }, )
- 	<LAHRecognizer: 0x89873b0>(tag={div, }, "class"={content_column2_widgethalf secondcolumn, }, ):
- 		<LAHRecognizer: 0x8987550>(tag={div, }, ):
- 			<LAHRecognizer: 0x8987660>(tag={h4, }, range=(3, 3), ):
- 				<LAHRecognizer: 0x8987850>(tag={a, }, )
- 	<LAHRecognizer: 0x8987cf0>(tag={ul, }, "class"={overview, }, ):
- 		<LAHRecognizer: 0x8987e70>(tag={li, }, range=(0, 1), ):
- 			<LAHRecognizer: 0x8987fa0>(tag={div, }, ):
- 				<LAHRecognizer: 0x89880a0>(tag={div, }, range=(0, 5), ):
- 					<LAHRecognizer: 0x755e7d0>(tag={div, }, ):
- 						<LAHRecognizer: 0x755e8e0>(tag={a, }, ):
- 							<LAHRecognizer: 0x755e9e0>(tag={img, }, ):
- 								<LAHRecognizer: 0x755eb40>(tag={h4, }, ):
- 									<LAHRecognizer: 0x755ec40>(tag={a, }, )
-
-
-
- <LAHArray: 0x7626010>():
- 	<LAHDictionary: 0x7533cb0>(id=(<LAHRecognizer: 0x8c34c80>, <LAHRecognizer: 0x7534e10>, <LAHRecognizer: 0x7236ef0>, ), ):
- 		<LAHArray: 0x7533ec0>(key=imgSrc, ):
- 			<LAHFetcher: 0x7534670>(sym=src, )
- 			<LAHFetcher: 0x1091b9d0>()
- 		<LAHFetcher: 0x7626240>(sym=href, key=link, )
- 		<LAHFetcher: 0x7534780>(sym=_text, key=name, )
- <LAHOperation: 0x7534b00>(root=<LAHArray: 0x7626010>, path=):
- 	<LAHRecognizer: 0x7534e10>(tag={div, }, "class"={columnInerr, }, range=(0, 1), ):
- 		<LAHRecognizer: 0x8c34100>(tag={a, }, "id"={ctl00_ctl00_cpAB_cp1_widgetDeskSection_ctl02_ctl02_ctl00_ImageHyperlink1, }, ):
- 			<LAHRecognizer: 0x8c34310>(tag={img, }, ):
- 				<LAHRecognizer: 0x8c34420>(tag={h3, }, ):
- 					<LAHRecognizer: 0x8c34520>(tag={a, }, ):
- 						<LAHRecognizer: 0x8c34660>(tag={span, }, "class"={underlineLink, }, )
- 							<LAHFetcher: 0x7534780>(sym=_text, key=name, )
- 						<LAHFetcher: 0x7534780>(sym=_text, key=name, )
- 						<LAHFetcher: 0x7626240>(sym=href, key=link, )
- 				<LAHFetcher: 0x7534670>(sym=src, )
- 	<LAHRecognizer: 0x8c349d0>(tag={div, }, "class"={content_column2_widgethalf secondcolumn, }, ):
- 		<LAHRecognizer: 0x8c34b70>(tag={div, }, ):
- 			<LAHRecognizer: 0x8c34c80>(tag={h4, }, range=(3, 3), ):
- 				<LAHRecognizer: 0x7236970>(tag={a, }, )
- 					<LAHFetcher: 0x7534780>(sym=_text, key=name, )
- 					<LAHFetcher: 0x7626240>(sym=href, key=link, )
- 					<LAHDownloader: 0x7234680>(sym=href, ):
- 						<LAHRecognizer: 0x7234730>(tag={img, }, "class"={photo, }, "alt"={_all, }, )
- 							<LAHFetcher: 0x7534670>(sym=src, )
- 	<LAHRecognizer: 0x7236b40>(tag={ul, }, "class"={overview, }, ):
- 		<LAHRecognizer: 0x7236cc0>(tag={li, }, range=(0, 1), ):
- 			<LAHRecognizer: 0x7236df0>(tag={div, }, ):
- 				<LAHRecognizer: 0x7236ef0>(tag={div, }, range=(0, 5), ):
- 					<LAHRecognizer: 0x7534fd0>(tag={div, }, ):
- 						<LAHRecognizer: 0x75350e0>(tag={a, }, ):
- 							<LAHRecognizer: 0x75351e0>(tag={img, }, ):
- 								<LAHRecognizer: 0x7535340>(tag={h4, }, ):
- 									<LAHRecognizer: 0x7535440>(tag={a, }, )
- 										<LAHFetcher: 0x7626240>(sym=href, key=link, )
- 										<LAHFetcher: 0x7534780>(sym=_text, key=name, )
- 								<LAHFetcher: 0x1091b9d0>()
+                                
+ <LAHOperation: 0x755cec0>(path=):
+ 	<LAHArray: 0x755b3e0>():
+ 		<LAHDictionary: 0x755b300>(id=(<LAHRecognizer: 0x755bdc0>, <LAHRecognizer: 0x755c2b0>, <LAHRecognizer: 0x755c8d0>, ), ):
+ 			<LAHFetcher: 0x755ae50>(sym=_text, key=name, )
+ 			<LAHFetcher: 0x755af20>(sym=href, key=link, )
+ 			<LAHArray: 0x755b160>(key=imgSrc, ):
+ 				<LAHFetcher: 0x755af80>(sym=src, )
+ 				<LAHFetcher: 0x755afe0>()
+ 	<LAHRecognizer: 0x755bdc0>(tag={div, }, class={columnInner, }, range=(0, 1), ):
+ 		<LAHRecognizer: 0x755bb20>(tag={h3, }, ):
+ 			<LAHRecognizer: 0x755b9e0>(tag={a, }, ):
+ 				<LAHFetcher: 0x755ae50>(sym=_text, key=name, )
+ 				<LAHFetcher: 0x755af20>(sym=href, key=link, )
+ 				<LAHRecognizer: 0x755b780>(tag={span, }, class={underlineLink, }, ):
+ 					<LAHFetcher: 0x755ae50>(sym=_text, key=name, )
+ 		<LAHRecognizer: 0x755bca0>(tag={a, }, id={ctl00_ctl00_cpAB_cp1_widgetDeskSection_ctl02_ctl02_ctl00_ImageHyperlink1, }, ):
+ 			<LAHRecognizer: 0x755bbf0>(tag={img, }, ):
+ 				<LAHFetcher: 0x755af80>(sym=src, )
+ 	<LAHRecognizer: 0x755c450>(tag={div, }, class={content_column2_widgethalf secondcolumn, }, ):
+ 		<LAHRecognizer: 0x755c380>(tag={div, }, ):
+ 			<LAHRecognizer: 0x755c2b0>(tag={h4, }, range=(2, 3), ):
+ 				<LAHRecognizer: 0x755c1c0>(tag={a, }, ):
+ 					<LAHFetcher: 0x755ae50>(sym=_text, key=name, )
+ 					<LAHFetcher: 0x755af20>(sym=href, key=link, )
+ 					<LAHDownloader: 0x755c110>(sym=href, ):
+ 						<LAHRecognizer: 0x755beb0>(tag={img, }, class={photo, }, alt={_all, }, ):
+ 							<LAHFetcher: 0x755af80>(sym=src, )
+ 					<LAHRecognizer: 0x755b780>(tag={span, }, class={underlineLink, }, ):
+ 						<LAHFetcher: 0x755ae50>(sym=_text, key=name, )
+ 	<LAHRecognizer: 0x755cb40>(tag={ul, }, class={overview, }, range=(2, 1), ):
+ 		<LAHRecognizer: 0x755ca70>(tag={li, }, range=(0, 1), ):
+ 			<LAHRecognizer: 0x755c9a0>(tag={div, }, ):
+ 				<LAHRecognizer: 0x755c8d0>(tag={div, }, range=(0, 5), ):
+ 					<LAHRecognizer: 0x755c800>(tag={div, }, ):
+ 						<LAHRecognizer: 0x755c5d0>(tag={h4, }, ):
+ 							<LAHRecognizer: 0x755c570>(tag={a, }, ):
+ 								<LAHFetcher: 0x755ae50>(sym=_text, key=name, )
+ 								<LAHFetcher: 0x755af20>(sym=href, key=link, )
+ 								<LAHRecognizer: 0x755b780>(tag={span, }, class={underlineLink, }, ):
+ 									<LAHFetcher: 0x755ae50>(sym=_text, key=name, )
+ 						<LAHRecognizer: 0x755c730>(tag={a, }, ):
+ 							<LAHRecognizer: 0x755c680>(tag={img, }, ):
+ 								<LAHFetcher: 0x755afe0>()
+ 
+ voanews
+(
+        {
+        imgSrc =         (
+            "http://gdb.voanews.com/D585CC64-1831-49FE-995C-4E10ADB75445_w443_r1_s.jpg"
+        );
+        link = "/content/black-smoke-seen-on-sistine-chapel/1620532.html";
+        name = "Black Smoke Rises from Sistine Chapel";
+    },
+        {
+        link = "/content/kurdish-rebels-release-8-turkish-captives/1620536.html";
+        name = "Kurdish Rebels Release 8 Turkish Captives";
+    },
+        {
+        imgSrc =         (
+            "http://gdb.voanews.com/5BC7E446-6985-4493-8700-0D4F46944849_w640_r1_s.jpg",
+            "http://gdb.voanews.com/F49AEAE4-F06A-48C3-A7FA-6145BAEEBC67_w268_r1.png",
+            "http://gdb.voanews.com/F49AEAE4-F06A-48C3-A7FA-6145BAEEBC67_w640_r1_s.png"
+        );
+        link = "/content/seven-dead-in-kashmir-attack/1620511.html";
+        name = "7 Dead in Kashmir Attack ";
+    },
+        {
+        imgSrc =         (
+            "http://gdb.voanews.com/FF19FF01-AFC0-428B-8691-D76D4FDB2FC1_w640_r1_s_cx0_cy4_cw0.jpg"
+        );
+        link = "/content/united-nations-iran-tehran-human-rights-violations-increasing/1620078.html";
+        name = "UN Expert Says Iranian Rights Abuses Increasing";
+    },
+        {
+        link = "/content/gun-control-debate-firing-up-local-communities/1620547.html";
+        name = "Local Communities Debate Gun Control";
+    },
+        {
+        link = "/content/chavez-latin-america-legacy/1620386.html";
+        name = "Cuba Was Major Beneficiary";
+    },
+        {
+        link = "/content/iran-armenia-find-solidarity-in-isolation/1619833.html";
+        name = "Iran, Armenia Find Solidarity in Isolation";
+    },
+        {
+        link = "/content/kenyatt-follows-father-to-win-kenya-top-job/1618472.html";
+        name = "Kenyatta Wins Kenya's Top Job";
+    },
+        {
+        link = "/content/cardinals_debate_qualifications_for_pope_vatican/1617323.html";
+        name = "Cardinals Debate Qualifications for Pope";
+    }
+)

@@ -44,6 +44,7 @@
 - (void)dealloc{
     self.fetcher = nil;
     self.property = nil;
+    self.symbol = nil;
     
     [super dealloc];
 }
@@ -67,8 +68,8 @@
     if (_fetcher) {
         self.property = _fetcher(element);
     }else if (_symbol){
-        if ([_symbol isEqualToString:LAHParaTag])  self.property = element.tagName;
-        else if ([_symbol isEqualToString:LAHParaText]) self.property = element.text;
+        if ([_symbol isEqualToString:LAHValTag])  self.property = element.tagName;
+        else if ([_symbol isEqualToString:LAHValText]) self.property = element.text;
         else self.property = [element.attributes objectForKey:_symbol];
     }else{
         return;
@@ -95,6 +96,7 @@
 #pragma mark - Interpreter
 - (void)appendProperties:(NSMutableString *)msg{
     if (_symbol) [msg appendFormat:@"sym=%@, ", _symbol];
+    if (_fetcher) [msg appendFormat:@"sym=%@, ", _fetcher];
     [super appendProperties:msg];
 }
 

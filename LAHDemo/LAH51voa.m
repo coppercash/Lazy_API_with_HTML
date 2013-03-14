@@ -14,6 +14,19 @@
     self = [super initWithHostName:@"www.51voa.com"];
     return self;
 }
+/*
+- (LAHOperation*)homePage{
+    LAHRecognizer *span = [[LAHRecognizer alloc] init]; span.tagName = @"span";
+    [span setKey:@"id" attributes:@"list", nil];
+    
+    LAHOperation *op = [self operationWithPath:@"" rootContainer:nil children:span, nil];
+    
+    [span release];
+    
+    return op;
+}*/
+
+
 
 - (LAHOperation*)homePage{
     LAHFetcher *type = [[LAHFetcher alloc] initWithSymbol:LAHValText]; type.key = @"type";
@@ -45,7 +58,7 @@
         if (![fC.tagName isEqualToString:@"text"]) return NO;
         return YES;
     };
-    a1.downloaders = @[d];
+    //a1.downloaders = @[d];
 
     LAHRecognizer *li = [[LAHRecognizer alloc] initWithChildren:a0, a1, nil]; li.tagName = @"li"; li.range = NSMakeRange(10, 7); //item.indexSource = li;
     item.identifiers = @[li];

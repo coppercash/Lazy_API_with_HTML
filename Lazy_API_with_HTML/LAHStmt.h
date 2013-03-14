@@ -7,23 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-/*
-typedef enum {
-    LAHStmtEntityTypeUnknown,
-    LAHStmtEntityTypeArray,
-    LAHStmtEntityTypeDicitonary,
-    LAHStmtEntityTypeFetcher,
-    LAHStmtEntityTypeOperation,
-    LAHStmtEntityTypeRecognizer,
-    LAHStmtEntityTypeDownloader
-}LAHStmtEntityType;
-*/
 @class LAHNode, LAHConstruct;
 
 @interface LAHFrame : NSObject
 @property(nonatomic, retain)NSMutableDictionary *generates;
 @property(nonatomic, retain)NSMutableSet *gains;
-- (id)initWithContainer:(NSMutableDictionary *)container;
+- (id)initWithDictionary:(NSMutableDictionary *)container;
 - (void)doGain;
 @end
 
@@ -35,11 +24,8 @@ typedef enum {
 @property(nonatomic, retain)NSArray *statements;
 @end
 
-//@class LAHStmtGenerate;
 @interface LAHStmtEntity : LAHStmt
-//@property(nonatomic)LAHStmtEntityType type;
 @property(nonatomic, copy)NSString *generate;
-//@property(nonatomic, retain)LAHStmtGenerate *generate;
 @property(nonatomic, retain)NSArray *properties;
 @property(nonatomic, retain)NSArray *children;
 - (void)generate:(LAHNode *)object inFrame:(LAHFrame *)frame;
@@ -67,15 +53,12 @@ typedef enum {
 
 @interface LAHStmtDownloader : LAHStmtEntity
 @end
-/*
-@interface LAHStmtGenerate : LAHStmt
-@property(nonatomic, copy)NSString *name;
-@end
-*/
+
 @class LAHStmtValue;
 @interface LAHStmtProperty : LAHStmt
 @property(nonatomic, copy)NSString *name;
 @property(nonatomic, retain)LAHStmtValue *value;
+- (NSString *)propertyName;
 @end
 
 @interface LAHStmtValue : LAHStmt
@@ -97,3 +80,5 @@ typedef enum {
 @property(nonatomic, assign)SEL method;
 - (id)evaluate:(LAHFrame *)frame target:(id)target method:(SEL)method;
 @end
+
+NSString *quotedString(NSString *string);

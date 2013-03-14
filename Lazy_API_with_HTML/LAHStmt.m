@@ -17,7 +17,7 @@
 #import "LAHDownloader.h"
 
 @implementation LAHFrame
-- (id)initWithContainer:(NSMutableDictionary *)container{
+- (id)initWithDictionary:(NSMutableDictionary *)container{
     self = [super init];
     if (self) {
         self.generates = container;
@@ -36,12 +36,13 @@
 
 - (void)registerGenerate:(LAHNode *)entity withKey:(NSString *)key{
     [_generates setObject:entity forKey:key];
-    NSLog(@"%@", key);
 }
 
 - (void)doGain{
     for (LAHStmtGain *g in _gains) {
-        LAHNode *value = [_generates objectForKey:g.name];
+        LAHNode *value = [_generates objectForKey:quotedString(g.name)];
+        //[self assert:value != nil error:@"Can't find gain named:"];
+        if (value == nil) continue;
         
         LAHNode *target = g.target;
         SEL method = g.method;
@@ -63,6 +64,12 @@
     return nil;
 }
 
+- (void)dealloc{
+    self.generates = nil;
+    self.gains = nil;
+    [super dealloc];
+}
+
 @end
 
 @implementation LAHStmt
@@ -79,11 +86,16 @@
     }
     return collector;
 }
+
+- (void)dealloc{
+    self.statements = nil;
+    [super dealloc];
+}
 @end
 
 @implementation LAHStmtEntity
 - (void)generate:(id)object inFrame:(LAHFrame *)frame{
-    NSString *generate = self.generate;
+    NSString *generate = quotedString(self.generate);
     if (generate) {
         [frame registerGenerate:object withKey:generate];
     }
@@ -104,12 +116,19 @@
     }
 }
 
+- (void)dealloc{
+    self.generate = nil;
+    self.properties = nil;
+    self.children = nil;
+    [super dealloc];
+}
+
 @end
 
 @implementation LAHStmtConstruct
 - (void)propertiesOfObject:(LAHConstruct *)object inFrame:(LAHFrame *)frame{
     for (LAHStmtProperty *p in self.properties) {
-        NSString *pN = p.name;  //property name
+        NSString *pN = p.propertyName;  //property name
         id pV = [p evaluate:frame]; //property value
         
         if ([pN isEqualToString:LAHParaKey]) {
@@ -179,7 +198,7 @@
     NSUInteger index = 0;
     LAHFetcher *fetcher = (LAHFetcher *)object;
     for (LAHStmtProperty *p in self.properties) {
-        NSString *pN = p.name;  //property name
+        NSString *pN = p.propertyName;  //property name
         id pV = [p evaluate:frame]; //property value
         
         if ([pN isEqualToString:LAHParaDefault]) {
@@ -229,7 +248,7 @@
     NSUInteger index = 0;
     LAHOperation *ope = (LAHOperation *)object;
     for (LAHStmtProperty *p in self.properties) {
-        NSString *pN = p.name;  //property name
+        NSString *pN = p.propertyName;  //property name
         
         if ([pN isEqualToString:LAHParaDefault]) {
             switch (index) {
@@ -280,7 +299,7 @@
     };
     
     for (LAHStmtProperty *p in self.properties) {
-        NSString *pN = p.name;  //property name
+        NSString *pN = p.propertyName;  //property name
         id pV = [p evaluate:frame]; //property value
         
         if ([pN isEqualToString:LAHParaDefault]) {
@@ -311,14 +330,6 @@
             addAsAttributes(pV, pN);
         }
         
-        /*
-        else if ([pN isEqualToString:LAHParaTag]) {
-            [rec addAttributes:pV withKey:LAHParaTag];
-        } else if ([pN isEqualToString:LAHParaClass]) {
-            [rec addAttributes:pV withKey:LAHParaClass];
-        } else if ([pN isEqualToString:LAHParaText]) {
-            [rec addAttributes:pV withKey:LAHParaText];
-        }*/
         index ++;
     }
 }
@@ -357,9 +368,9 @@
 
 - (void)propertiesOfObject:(LAHConstruct *)object inFrame:(LAHFrame *)frame{
     NSUInteger index = 0;
+    LAHDownloader *dow = (LAHDownloader *)object;
     for (LAHStmtProperty *p in self.properties) {
-        LAHDownloader *dow = (LAHDownloader *)object;
-        NSString *pN = p.name;  //property name
+        NSString *pN = p.propertyName;  //property name
         id pV = [p evaluate:frame]; //property value
         
         if ([pN isEqualToString:LAHParaDefault]) {
@@ -381,10 +392,6 @@
 
 @end
 
-/*
-@implementation LAHStmtGenerate
-@end
-*/
 @implementation LAHStmtGain
 - (id)evaluate:(LAHFrame *)frame{
     return nil;
@@ -397,11 +404,29 @@
     return nil;
 }
 
+- (void)dealloc{
+    self.name = nil;
+    [super dealloc];
+}
 @end
 
 @implementation LAHStmtProperty
 - (id)evaluate:(LAHFrame *)frame{
     return [_value evaluate:frame];
+}
+
+- (NSString *)propertyName{
+    NSString *name = self.name;
+    if ([name characterAtIndex:0] == '"' && [name characterAtIndex:name.length - 1] == '"') {
+        return quotedString(name);
+    }
+    return name;
+}
+
+- (void)dealloc{
+    self.name = nil;
+    self.value = nil;
+    [super dealloc];
 }
 @end
 
@@ -417,12 +442,17 @@
             return _string;
         }break;
         case '"':{
-            return [_string substringWithRange:NSMakeRange(1, _string.length - 2)];
+            return quotedString(_string);
         }break;
         default:
             break;
     }
     return nil;
+}
+
+- (void)dealloc{
+    self.string = nil;
+    [super dealloc];
 }
 @end
 
@@ -440,6 +470,11 @@
     
     return [set autorelease];
 }
+
+- (void)dealloc{
+    self.values = nil;
+    [super dealloc];
+}
 @end
 
 @implementation LAHStmtSet
@@ -456,4 +491,14 @@
     
     return [set autorelease];
 }
+
+- (void)dealloc{
+    self.values = nil;
+    [super dealloc];
+}
 @end
+
+NSString *quotedString(NSString *string){
+    NSString *str = [string substringWithRange:NSMakeRange(1, string.length - 2)];
+    return str;
+}

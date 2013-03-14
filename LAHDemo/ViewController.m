@@ -11,9 +11,7 @@
 #import "LAH51voa.h"
 #import "LAHVoaNews.h"
 
-#import "Token.h"
-#import "LAHParser.h"
-#import "LAHStmt.h"
+#import "LAHInterpreter.h"
 
 @interface ViewController ()
 
@@ -25,50 +23,33 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"voa" ofType:@"lah"];
-    NSString *string = [NSString stringWithContentsOfFile:path encoding:NSASCIIStringEncoding error:nil];
-    /*
-    NSArray *tokens = [Token tokenizeString:string];
-    for (Token *t in tokens) {
-        NSLog(@"%@", t.stringValue);
-    }*/
-    LAHParser *parser = [[LAHParser alloc] initWithString:string];
-    LAHStmtSuite *suite = [parser parse];
-    NSMutableDictionary *container = [[NSMutableDictionary alloc] init];
-    LAHFrame *frame = [[LAHFrame alloc] initWithContainer:container];
-    NSArray *results = [suite evaluate:frame];
-    [frame doGain];
     
-    for (LAHNode *r in results) {
-        [r log:0];
-    }
-    //[parser parse];
     
-    /*
     _51voa = [[LAH51voa alloc] init];
-    
     LAHOperation *homePage = [_51voa homePage];
+    
     [homePage addCompletion:^(LAHOperation *operation) {
         NSLog(@"\n51voa\n%@", operation.container);
     }];
     [homePage start];
      
     
-    _voaNews = [[LAHVoaNews alloc] init];
     
+    _voaNews = [[LAHVoaNews alloc] init];
     LAHOperation *voaHome = [_voaNews homePage];
+    [voaHome log:0];
     [voaHome addCompletion:^(LAHOperation *operation) {
         NSLog(@"\nvoanews\n%@", operation.container);
     }];
     [voaHome start];
-    */
     
-    //[self performSelector:@selector(clean) withObject:nil afterDelay:10.0f];
+    
+    [self performSelector:@selector(clean) withObject:nil afterDelay:10.0f];
 }
 
 - (void)clean{
-    [_51voa release];
-    [_voaNews release];
+    [_51voa release]; _51voa= nil;
+    [_voaNews release]; _voaNews = nil;
     NSLog(@"Finish cleaning.");
 }
 

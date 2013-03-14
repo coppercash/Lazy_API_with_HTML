@@ -8,12 +8,16 @@
 
 #import "LAH_MKNetwork_Hpple.h"
 #import "LAHOperation.h"
+@interface LAH_MKNetworkKit_Hpple ()
+@property(nonatomic, retain)MKNetworkEngine *engine;
+@end
 
 @implementation LAH_MKNetworkKit_Hpple
+@synthesize engine = _engine;
 - (id)initWithHostName:(NSString *)hostName{
     self = [super init];
     if (self) {
-        _engine = [[MKNetworkEngine alloc] initWithHostName:hostName];
+        [self.engine = [[MKNetworkEngine alloc] initWithHostName:hostName] release];
         [_engine useCache];
     }
     return self;
@@ -21,12 +25,11 @@
 
 - (void)dealloc{
     [self cancel];
-    [_engine release]; _engine = nil;
+    self.engine = nil;
     [super dealloc];
 }
 
 - (void)cancel{
-    //[_engine cancelAllOperations];
     [self cancelAllNetworks];
     [_operations removeAllObjects];
 }
@@ -36,11 +39,12 @@
 }*/
 
 - (id)downloader:(LAHDownloader*)downloader needFileAtPath:(NSString*)path{
-    MKNetworkOperation *op = [[_engine operationWithPath:path] autorelease];
+    __block MKNetworkOperation *op = [_engine operationWithPath:path];
+    __block LAH_MKNetworkKit_Hpple *bSelf = self;
+    __block LAHOperation *operation = downloader.recursiveOperation;
     
-    LAHOperation *operation = downloader.recursiveOperation;
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
-        [self removeNetwork:op];
+        [bSelf removeNetwork:op];
         NSData *rd = [completedOperation responseData];
         TFHpple * doc = [[TFHpple alloc] initWithHTMLData:rd];
         TFHppleElement<LAHHTMLElement> *root = (TFHppleElement<LAHHTMLElement>*)[doc peekAtSearchWithXPathQuery:@"/html/body"];
@@ -48,7 +52,7 @@
         
         [doc release];
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
-        [self removeNetwork:op];
+        [bSelf removeNetwork:op];
         [operation handleError:error];
     }];
     

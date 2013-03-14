@@ -56,6 +56,7 @@
 
 #pragma mark - Setter
 - (void)setChildren:(NSMutableArray *)children{
+    [_children release];
     _children = [children retain];
     for (LAHNode* node in _children) {
         node.father = self;
@@ -96,10 +97,20 @@
 - (void)addChild:(LAHNode *)child{
     if (_children == nil) [self.children = [[NSMutableArray alloc] init] release];
     [_children addObject:child];
+    child.father = self;
 }
 
 - (void)appendProperties:(NSMutableString *)msg{
     
+}
+
+- (void)logSelf{
+    NSMutableString *msg = [NSMutableString string];
+    [msg appendFormat:@"%@", self];
+    [msg appendString:@"("];
+    [self appendProperties:msg];
+    [msg appendString:@")"];
+    NSLog(@"%@", msg);
 }
 
 - (void)log:(NSUInteger)degere{

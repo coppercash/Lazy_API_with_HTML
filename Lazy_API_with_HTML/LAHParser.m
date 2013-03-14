@@ -9,120 +9,30 @@
 #import "LAHParser.h"
 #import "LAHStmt.h"
 #import "LAHInterface.h"
-#import "Token.h"
+#import "LAHToken.h"
+
+@interface LAHParser ()
+@property(nonatomic, retain)NSArray *tokens;
+@property(nonatomic, retain)LAHToken *eof;
+@end
 
 @implementation LAHParser
+@synthesize tokens = _tokens, eof = _eof;
 
-#pragma mark Initialization
-- (id)initWithString:(NSString *)source {
-	if ((self = [self init])) {
-		tokens = [Token tokenizeString:source];
-		index = 0;
-	}
-	return self;
-}
-
-#pragma mark - Key words
-/**
- * Returns YES if the given string a Python keyword.
- */
-+ (BOOL)isKeyword:(NSString *)string {
-    static NSSet *keywords = nil;
-    if (!keywords) {
-        keywords = [[NSSet alloc] initWithObjects:
-                    LAHEntArr,
-                    LAHEntDic,
-                    LAHEntFet,
-                    LAHEntOpe,
-                    LAHEntRec,
-                    LAHEntDow,
-                    LAHParaId,
-                    LAHParaKey,
-                    LAHParaSym,
-                    LAHParaRoot,
-                    LAHParaTag,
-                    LAHParaText,
-                    LAHParaRange,
-                    LAHParaIndex,
-                    LAHValText,
-                    LAHValTag,
-                    LAHValNone,
-                    LAHValAll,
-                    nil];
+#pragma mark - Class Basic
+- (id)initWithTokens:(NSArray *)tokens{
+    if (self = [self init]) {
+        self.tokens = tokens;
+        _index = 0;
+        [self.eof = [[LAHToken alloc] initAsEOFToken] release];
     }
-    return [keywords containsObject:string];
+    return self;
 }
 
-+ (BOOL)isPropertyName:(NSString *)name{
-    static NSSet *keywords = nil;
-    if (!keywords) {
-        keywords = [[NSSet alloc] initWithObjects:
-                    LAHParaId,
-                    LAHParaKey,
-                    LAHParaSym,
-                    LAHParaRoot,
-                    LAHParaPath,
-                    LAHParaTag,
-                    LAHParaText,
-                    LAHParaRange,
-                    LAHParaIndex,
-                    nil];
-    }
-    return [keywords containsObject:name];
-}
-
-#pragma mark Parsing helpers
-
-/**
- * Returns the current token.
- */
-- (Token *)token {
-	if (index < [tokens count]) {
-		return [tokens objectAtIndex:index];
-	} else {
-		return [Token EOFToken];
-	}
-}
-
-/**
- * Advance to the next token, making it the new current token.
- */
-- (void)advance {
-	index += 1;
-    NSLog(@"%@", [[self token] stringValue]);
-}
-
-/**
- * Returns YES if the current token matches the given one and consumes it
- * or returns NO and keeps the current token.
- */
-- (BOOL)at:(NSString *)token {
-	if ([[self token] isEqualToString:token]) {
-		[self advance];
-		return YES;
-	}
-	return NO;
-}
-
-/**
- * Raises a SyntaxError exception with the given message.
- */
-- (id)error:(NSString *)message {
-    message = [NSString stringWithFormat:@"%@ but found %@ in line %d",
-               message,
-               [[self token] stringValue],
-               [[self token] lineNumber]];
-	@throw [NSException exceptionWithName:@"SyntaxError" reason:message userInfo:nil];
-}
-
-/**
- * Raises an exception if the current token does not match the given one.
- * Otherwise consume the token and advance to the next token.
- */
-- (void)expect:(NSString *)token {
-	if (![self at:token]) {
-        [self error:[NSString stringWithFormat:@"expected %@", token]];
-	}
+- (void)dealloc{
+    self.tokens = nil;
+    self.eof = nil;
+    [super dealloc];
 }
 
 #pragma mark Suite parsing
@@ -165,8 +75,6 @@
         NSString *expStr = [NSString stringWithFormat:@"expected: %@, %@, %@, %@, %@, %@,", LAHEntArr, LAHEntDic, LAHEntFet, LAHEntOpe, LAHEntRec, LAHEntDow];
         [self error:expStr];
     }
-    //LAHStmtEntity *entity = [[[LAHStmtEntity alloc] init] autorelease];
-    //entity.type = type;
     
     NSString *tokenValue = [[self token] stringValue];
 	unichar ch = [tokenValue characterAtIndex:0];
@@ -195,19 +103,10 @@
     
     return [entity autorelease];
 }
-/*
-- (LAHStmtGenerate *)parseGenerate{
-    NSString *tokenValue = [[self token] stringValue];
-	unichar ch = [tokenValue characterAtIndex:0];
-	if (ch == '\'') {
-        [self advance];
-	}
-	return [self error:@"expected GENERATE"];;
-}*/
 
 #pragma mark - Parse Property
 - (NSArray *)parseProperties{
-    NSMutableArray *properties = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *properties = [NSMutableArray array];
     if ([self at:@")"]) {
 		return nil;
 	}
@@ -224,7 +123,7 @@
 }
 
 - (LAHStmtProperty *)parseProperty{
-    Token *next = [tokens objectAtIndex:index + 1];
+    LAHToken *next = [_tokens objectAtIndex:_index + 1];
     NSString *nextValue = next.stringValue;
     NSString *name = nil; LAHStmtValue *value = nil;
     if ([nextValue isEqualToString:@"="]) {
@@ -232,7 +131,9 @@
         if ([self at:@"="]) {
             value = [self parseValue];
         }
-    }else if ([nextValue isEqualToString:@","] || [nextValue isEqualToString:@")"]) {
+    }else if ([nextValue isEqualToString:@","] ||
+              [nextValue isEqualToString:@")"] ||
+              [self.token.stringValue isEqualToString:@"{"]) {
         name = LAHParaDefault;
         value = [self parseValue];
     }
@@ -243,7 +144,7 @@
         return pro;
     }
 
-    return [self error:@"expected PORPERTY"];
+    return [self error:@"expected PROPERTY"];
 }
 
 - (NSString *)parsePropertyName{
@@ -278,7 +179,7 @@
 }
 
 - (LAHStmtTuple *)parseTuple{
-    NSMutableArray *values = [[NSMutableArray alloc] init];
+    NSMutableArray *values = [NSMutableArray array];
     while (![self at:@")"]) {
         if (![self at:@","]) {
             [values addObject:[self parseValue]];
@@ -290,7 +191,7 @@
 }
 
 - (LAHStmtSet *)parseSet{
-    NSMutableArray *values = [[NSMutableArray alloc] init];
+    NSMutableArray *values = [NSMutableArray array];
     while (![self at:@"}"]) {
         if (![self at:@","]) {
             [values addObject:[self parseValue]];
@@ -299,6 +200,81 @@
     LAHStmtSet *tuple = [[LAHStmtSet alloc] init];
     tuple.values = values;
     return [tuple autorelease];
+}
+
+#pragma mark - Key words
+/**
+ * Returns YES if the given string a LAH property name.
+ */
++ (BOOL)isPropertyName:(NSString *)name{
+    static NSSet *keywords = nil;
+    if (!keywords) {
+        keywords = [[NSSet alloc] initWithObjects:
+                    LAHParaId,
+                    LAHParaKey,
+                    LAHParaSym,
+                    LAHParaRoot,
+                    LAHParaPath,
+                    LAHParaTag,
+                    LAHParaText,
+                    LAHParaRange,
+                    LAHParaIndex,
+                    nil];
+    }
+    return [keywords containsObject:name];
+}
+
+#pragma mark Parsing helpers
+/**
+ * Returns the current token.
+ */
+- (LAHToken *)token {
+	if (_index < [_tokens count]) {
+		return [_tokens objectAtIndex:_index];
+	} else {
+		return _eof;
+	}
+}
+
+/**
+ * Advance to the next token, making it the new current token.
+ */
+- (void)advance {
+	_index += 1;
+    //NSLog(@"%@", self.token.stringValue);
+}
+
+/**
+ * Returns YES if the current token matches the given one and consumes it
+ * or returns NO and keeps the current token.
+ */
+- (BOOL)at:(NSString *)token {
+	if ([[self token] isEqualToString:token]) {
+		[self advance];
+		return YES;
+	}
+	return NO;
+}
+
+/**
+ * Raises a SyntaxError exception with the given message.
+ */
+- (id)error:(NSString *)message {
+    message = [NSString stringWithFormat:@"%@ but found %@ in line %d",
+               message,
+               [[self token] stringValue],
+               [[self token] lineNumber]];
+	@throw [NSException exceptionWithName:@"SyntaxError" reason:message userInfo:nil];
+}
+
+/**
+ * Raises an exception if the current token does not match the given one.
+ * Otherwise consume the token and advance to the next token.
+ */
+- (void)expect:(NSString *)token {
+	if (![self at:token]) {
+        [self error:[NSString stringWithFormat:@"expected %@", token]];
+	}
 }
 
 @end

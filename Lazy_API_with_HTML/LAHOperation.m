@@ -122,8 +122,9 @@
 - (void)removeSeeker:(LAHDownloader*)fetcher{
     [_theSeeking removeObject:fetcher];
     if (_theSeeking.count + _theDownloading.count == 0) {
+        __block LAHOperation *bSelf = self;
         for (LAHCompletion completion in _completions) {
-            completion(self);
+            completion(bSelf);
         }
         [_delegate downloader:self didFetch:_rootContainer.container];
     }
@@ -160,8 +161,25 @@
 }
 
 - (void)appendProperties:(NSMutableString *)msg{
-    if (_rootContainer) [msg appendFormat:@"root=%@, ", _rootContainer];
     if (_path) [msg appendFormat:@"path=%@", _path];
+}
+
+- (void)log:(NSUInteger)degere{
+    NSMutableString *msg = [NSMutableString string];
+    for (int i = 0; i < degere; i ++) [msg appendString:@"\t"];
+    [msg appendFormat:@"%@", self];
+    
+    [msg appendString:@"("];
+    [self appendProperties:msg];
+    [msg appendString:@")"];
+    
+    if (_rootContainer || _children) [msg appendString:@":"];
+    NSLog(@"%@", msg);
+    
+    [_rootContainer log:degere + 1];
+    for (LAHNode *n in _children) {
+        [n log:degere + 1];
+    }
 }
 
 @end

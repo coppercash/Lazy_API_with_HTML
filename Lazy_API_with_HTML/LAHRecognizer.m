@@ -60,10 +60,11 @@
 }
 
 - (void)dealloc{
-    [_attributes release]; _attributes = nil;
-    [_fetchers release]; _fetchers = nil;
-    [_downloaders release]; _downloaders = nil;
-    
+    self.attributes = nil;
+    self.rule = nil;
+    self.fetchers = nil;
+    self.downloaders = nil;
+ 
     [super dealloc];
 }
 
@@ -153,7 +154,7 @@
         [newAttr release];
     }
     
-    [collector release];
+    [collector release]; [set release];
 }
 
 - (void)setKey:(NSString *)key attributes:(NSString *)firstValue, ... NS_REQUIRES_NIL_TERMINATION{
@@ -164,10 +165,9 @@
 
 #pragma mark - Recursive
 - (BOOL)handleElement:(LAHEle)element{
-    
     //Step 0, check matching.
     if (![self isElementMatched:element]) return NO;
-
+    
     _matchingElement = element;
     //Step 1, fetch linked properties.
     for (LAHFetcher *f in _fetchers) {
@@ -220,7 +220,7 @@
             for (NSString *lV in lVs)
                 isMatched |= [lV isEqualToString:LAHValNone];
         }
-        if (!isMatched) return NO;
+        //if (!isMatched) return NO;
         
         //Statement below has same logic with the above one.But in each step of loop, it do [value isEqualToString:gRWNone].So its performance is worse.
         /*
@@ -291,6 +291,7 @@
 - (void)addDownloader:(LAHDownloader *)downloader{
     if (_downloaders == nil) [self.downloaders = [[NSMutableArray alloc] init] release];
     [(NSMutableArray *)_downloaders addObject:downloader];
+    downloader.father = self;
 }
 
 - (void)addAttributes:(NSSet *)attributes withKey:(NSString *)key{
@@ -315,9 +316,20 @@
 }
 
 - (void)log:(NSUInteger)degere{
-    [super log:degere];
+    NSMutableString *msg = [NSMutableString string];
+    for (int i = 0; i < degere; i ++) [msg appendString:@"\t"];
+    [msg appendFormat:@"%@", self];
+    
+    [msg appendString:@"("];
+    [self appendProperties:msg];
+    [msg appendString:@")"];
+    
+    if (_children || _fetchers || _downloaders) [msg appendString:@":"];
+    NSLog(@"%@", msg);
+    
     for (LAHFetcher *f in _fetchers) [f log:degere + 1];
     for (LAHDownloader *d in _downloaders) [d log:degere + 1];
+    for (LAHNode *n in _children)  [n log:degere + 1];
 }
 
 @end

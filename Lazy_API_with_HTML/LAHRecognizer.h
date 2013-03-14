@@ -25,8 +25,6 @@
     NSArray *_fetchers;
     NSArray *_downloaders;
 }
-@property(nonatomic, copy)NSString *tagName;
-@property(nonatomic, copy)NSString *text;
 @property(nonatomic, retain)NSDictionary *attributes;
 @property(nonatomic, copy)LAHRule rule;
 @property(nonatomic, assign)BOOL isTextNode;
@@ -44,6 +42,8 @@
 - (id)initWithFirstFetcher:(LAHFetcher *)firstFetcher variadicFetchers:(va_list)fetchers;
 - (id)initWithFetchers:(LAHFetcher *)firstFetcher, ... NS_REQUIRES_NIL_TERMINATION;
 
+- (void)setTagName:(NSString *)tagName;
+- (void)setText:(NSString *)text;
 - (void)setKey:(NSString *)key firstValue:(NSString *)firstValue variadicValues:(va_list)values;
 - (void)setKey:(NSString *)key attributes:(NSString *)firstValue, ... NS_REQUIRES_NIL_TERMINATION;
 
@@ -54,7 +54,6 @@
 - (void)refreshState;
 
 #pragma mark - Interpreter
-- (void)addAsChild:(LAHNode *)child;
 - (void)addFetcher:(LAHFetcher *)fetcher;
 - (void)addDownloader:(LAHDownloader *)downloader;
 - (void)addAttributes:(NSSet *)attributes withKey:(NSString *)key;

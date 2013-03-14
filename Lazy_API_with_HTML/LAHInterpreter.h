@@ -9,5 +9,5 @@
 #import <Foundation/Foundation.h>
 
 @interface LAHInterpreter : NSObject
-
++ (void)interpretFile:(NSString *)path intoDictionary:(NSMutableDictionary *)dictionary;
 @end

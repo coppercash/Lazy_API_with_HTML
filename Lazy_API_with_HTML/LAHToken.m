@@ -6,18 +6,25 @@
 //  Copyright 2011 I.C.N.H. All rights reserved.
 //
 
-#import "Token.h"
+#import "LAHToken.h"
 
 #define RE @"(?m)^ *(?:#.*)?\n|#.*$|(^ +|\n|\\d+|\\w+|[()\\[\\]{}:.,;]|[+\\-*/%<>=]=?|!=|'(?:\\\\[n'\"\\\\]|[^'])*'|\"(?:\\\\[n'\"\\\\]|[^\"])*\")"
 
 
-@implementation Token
+static NSString * const gIndent = @"!INDENT";
+static NSString * const gDedent = @"!DEDENT";
+static NSString * const gEof = @"!EOF";
+
+
+@implementation LAHToken
 
 + (NSArray *)tokenizeString:(NSString *)source {
 	NSMutableArray *tokens = [NSMutableArray array];
 	__block NSInteger cur_indent = 0;
 	__block NSInteger new_indent = 0;
-	
+	LAHToken *indent = [[LAHToken alloc] initAsIndentToken];
+    LAHToken *dedent = [[LAHToken alloc] initAsDedentToken];
+    
 	// combine lines with trailing backslashes with following lines
 	source = [source stringByReplacingOccurrencesOfString:@"\\\n" withString:@""];
 	
@@ -46,53 +53,45 @@
 									 } else {
 										 // found a non-whitespace token, apply new indentation
 										 while (cur_indent < new_indent) {
-											 [tokens addObject:[Token indentToken]];
+											 [tokens addObject:indent];
 											 cur_indent += 1;
 										 }
 										 while (cur_indent > new_indent) {
-											 [tokens addObject:[Token dedentToken]];
+											 [tokens addObject:dedent];
 											 cur_indent -= 1;
 										 }
 									 }
 									 // add newline or non-whitespace token to result
-                                     Token *token = [[Token alloc] initWithSource:source range:range];
+                                     LAHToken *token = [[LAHToken alloc] initWithSource:source range:range];
 									 [tokens addObject:token];
+                                     [token release];
 								 }
 							 }
 						 }];
 	
 	// balance pending INDENTs
 	while (cur_indent > 0) {
-		[tokens addObject:[Token dedentToken]];
+		[tokens addObject:dedent];
 		cur_indent -= 1;
 	}
 	
+    [indent release];
+    [dedent release];
+    
 	// return the tokens
-	return [tokens copy];
+	return tokens;
 }
 
-+ (Token *)indentToken {
-	static Token *indentToken = nil;
-	if (!indentToken) {
-		indentToken = [[Token alloc] initWithSource:@"!INDENT" range:NSMakeRange(0, 7)];
-	}
-	return indentToken;
+- (id)initAsIndentToken{
+    return [self initWithSource:gIndent range:NSMakeRange(0, 7)];
 }
 
-+ (Token *)dedentToken {
-	static Token *dedentToken = nil;
-	if (!dedentToken) {
-		dedentToken = [[Token alloc] initWithSource:@"!DEDENT" range:NSMakeRange(0, 7)];
-	}
-	return dedentToken;
+- (id)initAsDedentToken{
+    return [self initWithSource:gDedent range:NSMakeRange(0, 7)];
 }
 
-+ (Token *)EOFToken {
-	static Token *EOFToken = nil;
-	if (!EOFToken) {
-		EOFToken = [[Token alloc] initWithSource:@"!EOF" range:NSMakeRange(0, 4)];
-	}
-	return EOFToken;
+- (id)initAsEOFToken{
+    return [self initWithSource:gEof range:NSMakeRange(0, 4)];
 }
 
 - (id)initWithSource:(NSString *)source_ range:(NSRange)range_ {

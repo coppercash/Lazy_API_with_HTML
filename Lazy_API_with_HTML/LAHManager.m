@@ -8,6 +8,7 @@
 
 #import "LAHManager.h"
 #import "LAHOperation.h"
+#import "LAHInterpreter.h"
 
 @interface LAHManager ()
 @property(nonatomic, retain)NSMutableArray *operations;
@@ -48,6 +49,27 @@
     LAHOperation *operaton = [self operationWithPath:path rootContainer:rootContainer firstChild:firstChild variadicChildren:children];
     va_end(children);
     return operaton;
+}
+
+- (LAHOperation *)operationWithFile:(NSString *)path key:(NSString *)key dictionary:(NSMutableDictionary *)dictionary{
+    [LAHInterpreter interpretFile:path intoDictionary:dictionary];
+    LAHOperation *operation = [dictionary objectForKey:key];
+    [_operations addObject:operation];
+    operation.delegate = self;
+    
+    [dictionary release];
+    return operation;
+}
+
+- (LAHOperation *)operationWithFile:(NSString *)path key:(NSString *)key{
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [LAHInterpreter interpretFile:path intoDictionary:dictionary];
+    LAHOperation *operation = [dictionary objectForKey:key];
+    [_operations addObject:operation];
+    operation.delegate = self;
+
+    [dictionary release];
+    return operation;
 }
 
 #pragma mark - LAHDelegate

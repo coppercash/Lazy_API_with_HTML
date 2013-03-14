@@ -13,7 +13,8 @@
 @synthesize linker = _linker, symbol = _symbol;
 #pragma mark - Life Cycle
 - (void)dealloc{
-    [_linker release]; _linker = nil;
+    self.linker = nil;
+    self.symbol = nil;
     [super dealloc];
 }
 

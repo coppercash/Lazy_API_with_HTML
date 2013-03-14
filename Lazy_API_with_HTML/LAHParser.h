@@ -7,13 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-@class LAHStmtSuite;
+@class LAHStmtSuite, LAHToken;
 @interface LAHParser : NSObject {
-	NSArray *tokens;
-	NSInteger index;
+	NSArray *_tokens;
+	NSInteger _index;
+    LAHToken *_eof;
 }
 
-- (id)initWithString:(NSString *)source;
+- (id)initWithTokens:(NSArray *)tokens;
 - (LAHStmtSuite *)parse;
 
 @end
