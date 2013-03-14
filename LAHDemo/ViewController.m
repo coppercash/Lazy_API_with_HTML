@@ -37,7 +37,7 @@
     
     _voaNews = [[LAHVoaNews alloc] init];
     LAHOperation *voaHome = [_voaNews homePage];
-    [voaHome log:0];
+    [voaHome log];
     [voaHome addCompletion:^(LAHOperation *operation) {
         NSLog(@"\nvoanews\n%@", operation.container);
     }];

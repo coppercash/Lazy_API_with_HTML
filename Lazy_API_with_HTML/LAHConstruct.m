@@ -81,18 +81,20 @@
     [(NSMutableArray *)_identifiers addObject:identifier];
 }
 
-- (void)appendProperties:(NSMutableString *)msg{
-    if (_key) [msg appendFormat:@"key=%@, ", _key];
+#pragma mark - Log
+- (NSString *)infoProperties{
+    NSMutableString *info = [NSMutableString string];
+    if (_key) [info appendFormat:@"key=%@, ", _key];
     if (_identifiers) {
-        [msg appendString:@"id="];
-        [msg appendString:@"("];
+        [info appendString:@"id=("];
         for (LAHRecognizer *r in _identifiers) {
-            [msg appendFormat:@"%@, ", r];
+            [info appendFormat:@"%@, ", r];
         }
-        [msg appendString:@"), "];
+        [info appendString:@"), "];
     }
+    
+    return info;
 }
-
 @end
 
 NSString * const gKeyLastFatherContainer = @"LFC";

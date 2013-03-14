@@ -160,26 +160,20 @@
     return _rootContainer.container;
 }
 
-- (void)appendProperties:(NSMutableString *)msg{
-    if (_path) [msg appendFormat:@"path=%@", _path];
+#pragma mark - Log
+- (NSString *)infoProperties{
+    NSMutableString *info = [NSMutableString string];
+    if (_path) [info appendFormat:@"path=%@", _path];
+    return info;
 }
 
-- (void)log:(NSUInteger)degere{
-    NSMutableString *msg = [NSMutableString string];
-    for (int i = 0; i < degere; i ++) [msg appendString:@"\t"];
-    [msg appendFormat:@"%@", self];
+- (NSString *)infoChildren:(NSUInteger)degree{
+    NSMutableString *info = [NSMutableString string];
     
-    [msg appendString:@"("];
-    [self appendProperties:msg];
-    [msg appendString:@")"];
+    [info appendString:[_rootContainer info:degree]];
+    [info appendString:[super infoChildren:degree]];
     
-    if (_rootContainer || _children) [msg appendString:@":"];
-    NSLog(@"%@", msg);
-    
-    [_rootContainer log:degere + 1];
-    for (LAHNode *n in _children) {
-        [n log:degere + 1];
-    }
+    return info;
 }
 
 @end

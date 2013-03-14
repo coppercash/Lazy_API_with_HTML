@@ -33,10 +33,6 @@
     [self cancelAllNetworks];
     [_operations removeAllObjects];
 }
-/*
-- (void)downloader:(LAHOperation *)operation didFetch:(id)info{
-    [_operations removeObject:operation];
-}*/
 
 - (id)downloader:(LAHDownloader*)downloader needFileAtPath:(NSString*)path{
     __block MKNetworkOperation *op = [_engine operationWithPath:path];

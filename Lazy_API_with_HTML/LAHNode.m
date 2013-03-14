@@ -100,33 +100,45 @@
     child.father = self;
 }
 
-- (void)appendProperties:(NSMutableString *)msg{
-    
+#pragma mark - Log
+- (void)log{
+    NSLog(@"%@", [self info:0]);
 }
 
-- (void)logSelf{
-    NSMutableString *msg = [NSMutableString string];
-    [msg appendFormat:@"%@", self];
-    [msg appendString:@"("];
-    [self appendProperties:msg];
-    [msg appendString:@")"];
-    NSLog(@"%@", msg);
+- (void)logLonely{
+    NSLog(@"%@", self.infoSelf);
 }
 
-- (void)log:(NSUInteger)degere{
-    NSMutableString *msg = [NSMutableString string];
-    for (int i = 0; i < degere; i ++) [msg appendString:@"\t"];
-    [msg appendFormat:@"%@", self];
+- (NSString *)info:(NSUInteger)degree{
+    NSMutableString *info = [NSMutableString stringWithString:@"\n"];
     
-    [msg appendString:@"("];
-    [self appendProperties:msg];
-    [msg appendString:@")"];
+    for (int i = 0; i < degree; i ++)  [info appendString:@"\t"];
     
-    if (_children) [msg appendString:@":"];
-    NSLog(@"%@", msg);
-    for (LAHNode *n in _children) {
-        [n log:degere + 1];
+    [info appendString:self.infoSelf];
+    
+    NSString *chiInfo = [self infoChildren:degree + 1];
+    if (chiInfo && chiInfo.length != 0) [info appendFormat:@":%@", chiInfo];
+    
+    return info;
+}
+
+- (NSString *)infoSelf{
+    NSMutableString *info = [NSMutableString stringWithFormat:@"%@", self];
+    NSString *proInfo = self.infoProperties;
+    if (proInfo && proInfo.length != 0) {
+        [info appendFormat:@" ( %@)", proInfo];
     }
+    return info;
+}
+
+- (NSString *)infoProperties{
+    return nil;
+}
+
+- (NSString *)infoChildren:(NSUInteger)degree{
+    NSMutableString *info = [NSMutableString string];
+    for (LAHNode *n in _children) [info appendString:[n info:degree]];
+    return info;
 }
 
 @end

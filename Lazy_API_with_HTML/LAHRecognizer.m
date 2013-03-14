@@ -299,37 +299,34 @@
     [(NSMutableDictionary *)_attributes setObject:attributes forKey:key];
 }
 
-- (void)appendProperties:(NSMutableString *)msg{
+#pragma mark - Log
+- (NSString *)infoProperties{
+    NSMutableString *info = [NSMutableString string];
+    
     for (NSString *key in _attributes.allKeys) {
-        [msg appendFormat:@"%@={", key];
+        [info appendFormat:@"%@={", key];
         NSSet *attrs = [_attributes objectForKey:key];
         for (NSString *attr in attrs) {
-            [msg appendFormat:@"%@, ", attr];
+            [info appendFormat:@"%@, ", attr];
         }
-        [msg appendString:@"}, "];
+        [info appendString:@"}, "];
     }
-    
     if (!NSEqualRanges(_range, NSMakeRange(0, NSUIntegerMax))) {
-        [msg appendFormat:@"range=(%d, %d), ", _range.location, _range.length];
+        [info appendFormat:@"range=(%d, %d), ", _range.location, _range.length];
     }
-    if (_isTextNode) [msg appendString:@"isTextNode, "];
+    if (_isTextNode) [info appendString:@"isTextNode, "];
+
+    return info;
 }
 
-- (void)log:(NSUInteger)degere{
-    NSMutableString *msg = [NSMutableString string];
-    for (int i = 0; i < degere; i ++) [msg appendString:@"\t"];
-    [msg appendFormat:@"%@", self];
+- (NSString *)infoChildren:(NSUInteger)degree{
+    NSMutableString *info = [NSMutableString string];
+
+    for (LAHFetcher *f in _fetchers) [info appendString:[f info:degree]];
+    for (LAHDownloader *d in _downloaders) [info appendString:[d info:degree]];
+    [info appendString:[super infoChildren:degree]];
     
-    [msg appendString:@"("];
-    [self appendProperties:msg];
-    [msg appendString:@")"];
-    
-    if (_children || _fetchers || _downloaders) [msg appendString:@":"];
-    NSLog(@"%@", msg);
-    
-    for (LAHFetcher *f in _fetchers) [f log:degere + 1];
-    for (LAHDownloader *d in _downloaders) [d log:degere + 1];
-    for (LAHNode *n in _children)  [n log:degere + 1];
+    return info;
 }
 
 @end

@@ -23,7 +23,11 @@
 - (void)restoreStateForKey:(id)key;
 #pragma mark - Interpreter
 - (void)addChild:(LAHNode *)child;
-- (void)log:(NSUInteger)degere;
-- (void)logSelf;
-- (void)appendProperties:(NSMutableString *)msg;
+#pragma mark - Log
+- (void)log;
+- (void)logLonely;
+- (NSString *)info:(NSUInteger)degree;
+- (NSString *)infoSelf;
+- (NSString *)infoProperties;
+- (NSString *)infoChildren:(NSUInteger)degree;
 @end

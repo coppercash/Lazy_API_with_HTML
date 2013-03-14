@@ -7,16 +7,6 @@
 //
 
 #import "LAHInterface.h"
-
-NSString * const gLAHImg = @"img";
-NSString * const gLAHSrc = @"src";
-NSString * const gLAHP = @"p";
-NSString * const gLAHA = @"a";
-NSString * const gLAHSpan = @"span";
-NSString * const gLAHDiv = @"div";
-NSString * const gLAHHref = @"href";
-
-
 NSString * const LAHEntArr    = @"arr";
 NSString * const LAHEntDic    = @"dic";
 NSString * const LAHEntFet    = @"fet";
@@ -42,4 +32,11 @@ NSString * const LAHValTag   = @"_tag";
 NSString * const LAHValNone  = @"_none";
 NSString * const LAHValAll   = @"_all";
 
+NSString * const gLAHImg = @"img";
+NSString * const gLAHSrc = @"src";
+NSString * const gLAHP = @"p";
+NSString * const gLAHA = @"a";
+NSString * const gLAHSpan = @"span";
+NSString * const gLAHDiv = @"div";
+NSString * const gLAHHref = @"href";
 

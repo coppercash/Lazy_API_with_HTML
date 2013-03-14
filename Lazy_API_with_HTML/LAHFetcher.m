@@ -94,10 +94,13 @@
 - (void)setIdentifiers:(NSArray *)indexes{}
 
 #pragma mark - Interpreter
-- (void)appendProperties:(NSMutableString *)msg{
-    if (_symbol) [msg appendFormat:@"sym=%@, ", _symbol];
-    if (_fetcher) [msg appendFormat:@"sym=%@, ", _fetcher];
-    [super appendProperties:msg];
+- (NSString *)infoProperties{
+    NSMutableString *info = [NSMutableString string];
+    if (_symbol) [info appendFormat:@"sym=%@, ", _symbol];
+    if (_fetcher) [info appendFormat:@"fet=%@, ", _fetcher];
+    [info appendString:[super infoProperties]];
+    
+    return info;
 }
 
 @end

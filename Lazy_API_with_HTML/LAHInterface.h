@@ -26,15 +26,6 @@ typedef id<LAHHTMLElement> LAHEle;
 - (void)downloader:(LAHOperation*)operation didFetch:(id)info;
 @end
 
-extern NSString * const gLAHImg;
-extern NSString * const gLAHSrc;
-extern NSString * const gLAHP;
-extern NSString * const gLAHA;
-extern NSString * const gLAHSpan;
-extern NSString * const gLAHDiv;
-extern NSString * const gLAHHref;
-
-
 extern NSString * const LAHEntArr;
 extern NSString * const LAHEntDic;
 extern NSString * const LAHEntFet;
@@ -59,3 +50,11 @@ extern NSString * const LAHValTag;
 extern NSString * const LAHValNone;
 extern NSString * const LAHValAll;
 extern NSString * const LAHParaDefault;
+
+extern NSString * const gLAHImg;
+extern NSString * const gLAHSrc;
+extern NSString * const gLAHP;
+extern NSString * const gLAHA;
+extern NSString * const gLAHSpan;
+extern NSString * const gLAHDiv;
+extern NSString * const gLAHHref;

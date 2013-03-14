@@ -56,9 +56,11 @@
     return greffier;
 }
 
-#pragma mark - Interpreter
-- (void)appendProperties:(NSMutableString *)msg{
-    if (_symbol) [msg appendFormat:@"sym=%@, ", _symbol];
+#pragma mark - Log
+- (NSString *)infoProperties{
+    NSMutableString *info = [NSMutableString string];
+    if (_symbol) [info appendFormat:@"sym=%@, ", _symbol];
+    return info;
 }
 
 @end
