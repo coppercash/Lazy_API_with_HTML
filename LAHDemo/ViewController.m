@@ -27,12 +27,11 @@
     
     _51voa = [[LAH51voa alloc] init];
     LAHOperation *homePage = [_51voa homePage];
-    
+    [homePage log];
     [homePage addCompletion:^(LAHOperation *operation) {
         NSLog(@"\n51voa\n%@", operation.container);
     }];
     [homePage start];
-     
     
     
     _voaNews = [[LAHVoaNews alloc] init];

@@ -1,141 +1,107 @@
-<LAHOperation: 0x7284a30>(path=):
- 	<LAHArray: 0x7283010>():
- 		<LAHDictionary: 0x7282f40>(id=(<LAHRecognizer: 0x7283950>, <LAHRecognizer: 0x7283e20>, <LAHRecognizer: 0x7284440>, ), ):
- 			<LAHFetcher: 0x72829d0>(sym=_text, key=name, )
- 			<LAHFetcher: 0x7282aa0>(sym=href, key=link, )
- 			<LAHArray: 0x7282d50>(key=imgSrc, ):
- 				<LAHFetcher: 0x7282b00>(sym=src, )
- 				<LAHFetcher: 0x7282b60>(sym=<__NSGlobalBlock__: 0x402d0>, )
- 	<LAHRecognizer: 0x7283950>(tag={div, }, class={columnInner, }, range=(0, 1), ):
- 		<LAHRecognizer: 0x72836c0>(tag={h3, }, ):
- 			<LAHRecognizer: 0x72835d0>(tag={a, }, ):
- 				<LAHFetcher: 0x72829d0>(sym=_text, key=name, )
- 				<LAHFetcher: 0x7282aa0>(sym=href, key=link, )
- 				<LAHRecognizer: 0x7283330>(tag={span, }, class={underlineLink, }, ):
- 					<LAHFetcher: 0x72829d0>(sym=_text, key=name, )
- 		<LAHRecognizer: 0x7283830>(tag={a, }, id={ctl00_ctl00_cpAB_cp1_widgetDeskSection_ctl02_ctl02_ctl00_ImageHyperlink1, }, ):
- 			<LAHRecognizer: 0x7283780>(tag={img, }, ):
- 				<LAHFetcher: 0x7282b00>(sym=src, )
- 	<LAHRecognizer: 0x7283fc0>(tag={div, }, class={content_column2_widgethalf secondcolumn, }, ):
- 		<LAHRecognizer: 0x7283ef0>(tag={div, }, ):
- 			<LAHRecognizer: 0x7283e20>(tag={h4, }, range=(2, 3), ):
- 				<LAHRecognizer: 0x7283d30>(tag={a, }, ):
- 					<LAHFetcher: 0x72829d0>(sym=_text, key=name, )
- 					<LAHFetcher: 0x7282aa0>(sym=href, key=link, )
- 					<LAHDownloader: 0x7283c80>(sym=href, ):
- 						<LAHRecognizer: 0x7283a40>(tag={img, }, class={photo, }, alt={_all, }, ):
- 							<LAHFetcher: 0x7282b00>(sym=src, )
- 					<LAHRecognizer: 0x7283330>(tag={span, }, class={underlineLink, }, ):
- 						<LAHFetcher: 0x72829d0>(sym=_text, key=name, )
- 	<LAHRecognizer: 0x72846b0>(tag={ul, }, class={overview, }, range=(2, 1), ):
- 		<LAHRecognizer: 0x72845e0>(tag={li, }, range=(0, 1), ):
- 			<LAHRecognizer: 0x7284510>(tag={div, }, ):
- 				<LAHRecognizer: 0x7284440>(tag={div, }, range=(0, 5), ):
- 					<LAHRecognizer: 0x7284370>(tag={div, }, ):
- 						<LAHRecognizer: 0x7284140>(tag={h4, }, ):
- 							<LAHRecognizer: 0x72840e0>(tag={a, }, ):
- 								<LAHFetcher: 0x72829d0>(sym=_text, key=name, )
- 								<LAHFetcher: 0x7282aa0>(sym=href, key=link, )
- 								<LAHRecognizer: 0x7283330>(tag={span, }, class={underlineLink, }, ):
- 									<LAHFetcher: 0x72829d0>(sym=_text, key=name, )
- 						<LAHRecognizer: 0x72842a0>(tag={a, }, ):
- 							<LAHRecognizer: 0x72841f0>(tag={img, }, ):
- 								<LAHFetcher: 0x7282b60>(sym=<__NSGlobalBlock__: 0x402d0>, )
+<LAHOperation: 0x80251c0> ( path=):
+	<LAHArray: 0x8024180>:
+		<LAHDictionary: 0x8023ea0> ( id=(<LAHRecognizer: 0x8024cb0>, ), ):
+			<LAHFetcher: 0x8023cf0> ( sym=_text, key=name, )
+			<LAHFetcher: 0x8023d50> ( sym=href, key=link, )
+			<LAHFetcher: 0x8023bc0> ( sym=_text, key=type, )
+			<LAHFetcher: 0x8023c90> ( sym=href, key=typelink, )
+			<LAHFetcher: 0x8023db0> ( sym=src, key=imgSrc, )
+	<LAHRecognizer: 0x8024e60> ( tag={span, }, id={list, }, ):
+		<LAHRecognizer: 0x8024d90> ( tag={ul, }, ):
+			<LAHRecognizer: 0x8024cb0> ( tag={li, }, range=(10, 7), ):
+				<LAHRecognizer: 0x8024990> ( tag={a, }, range=(0, 1), ):
+					<LAHFetcher: 0x8023c90> ( sym=href, key=typelink, )
+					<LAHRecognizer: 0x8024ab0> ( tag={font, }, ):
+						<LAHFetcher: 0x8023bc0> ( sym=_text, key=type, )
+				<LAHRecognizer: 0x8024bd0> ( tag={a, }, hasRule):
+					<LAHFetcher: 0x8023cf0> ( sym=_text, key=name, )
+					<LAHFetcher: 0x8023d50> ( sym=href, key=link, )
+					<LAHDownloader: 0x8024a00> ( sym=href, ):
+						<LAHRecognizer: 0x80246c0> ( tag={div, }, class={contentImage, }, ):
+							<LAHRecognizer: 0x8024490> ( tag={img, }, ):
+								<LAHFetcher: 0x8023db0> ( sym=src, key=imgSrc, )
+                                
+<LAHOperation: 0x8b4c270> ( path=):
+	<LAHArray: 0x8b4a9d0>:
+		<LAHDictionary: 0x8b4b150> ( id=(<LAHRecognizer: 0x8b4ca90>, ), ):
+			<LAHFetcher: 0x8b4b590> ( sym=_text, key=name, )
+			<LAHFetcher: 0x8b4bbd0> ( sym=href, key=link, )
+			<LAHFetcher: 0x8b4bc90> ( sym=_text, key=type, )
+			<LAHFetcher: 0x8b4b9f0> ( sym=src, key=imgSrc, )
+			<LAHFetcher: 0x8b4bd80> ( sym=href, key=typeLink, )
+	<LAHRecognizer: 0x8b4c770> ( tag={span, }, id={list, }, ):
+		<LAHRecognizer: 0x8b4c920> ( tag={ul, }, ):
+			<LAHRecognizer: 0x8b4ca90> ( tag={li, }, range=(10, 7), ):
+				<LAHRecognizer: 0x8b4cda0> ( tag={a, }, range=(0, 1), ):
+					<LAHFetcher: 0x8b4bd80> ( sym=href, key=typeLink, )
+					<LAHRecognizer: 0x8b4cf20> ( tag={font, }, ):
+						<LAHFetcher: 0x8b4bc90> ( sym=_text, key=type, )
+				<LAHRecognizer: 0x8b4d110> ( tag={a, }, hasRule):
+					<LAHFetcher: 0x8b4bbd0> ( sym=href, key=link, )
+					<LAHFetcher: 0x8b4b590> ( sym=_text, key=name, )
+					<LAHDownloader: 0x8b4d260> ( sym=href, ):
+						<LAHRecognizer: 0x8b4d310> ( tag={div, }, class={contentImage, }, ):
+							<LAHRecognizer: 0x8b4d480> ( tag={img, }, ):
+								<LAHFetcher: 0x8b4b9f0> ( sym=src, key=imgSrc, )
                                 
                                 
-                                
-                                
- <LAHOperation: 0x755cec0>(path=):
- 	<LAHArray: 0x755b3e0>():
- 		<LAHDictionary: 0x755b300>(id=(<LAHRecognizer: 0x755bdc0>, <LAHRecognizer: 0x755c2b0>, <LAHRecognizer: 0x755c8d0>, ), ):
- 			<LAHFetcher: 0x755ae50>(sym=_text, key=name, )
- 			<LAHFetcher: 0x755af20>(sym=href, key=link, )
- 			<LAHArray: 0x755b160>(key=imgSrc, ):
- 				<LAHFetcher: 0x755af80>(sym=src, )
- 				<LAHFetcher: 0x755afe0>()
- 	<LAHRecognizer: 0x755bdc0>(tag={div, }, class={columnInner, }, range=(0, 1), ):
- 		<LAHRecognizer: 0x755bb20>(tag={h3, }, ):
- 			<LAHRecognizer: 0x755b9e0>(tag={a, }, ):
- 				<LAHFetcher: 0x755ae50>(sym=_text, key=name, )
- 				<LAHFetcher: 0x755af20>(sym=href, key=link, )
- 				<LAHRecognizer: 0x755b780>(tag={span, }, class={underlineLink, }, ):
- 					<LAHFetcher: 0x755ae50>(sym=_text, key=name, )
- 		<LAHRecognizer: 0x755bca0>(tag={a, }, id={ctl00_ctl00_cpAB_cp1_widgetDeskSection_ctl02_ctl02_ctl00_ImageHyperlink1, }, ):
- 			<LAHRecognizer: 0x755bbf0>(tag={img, }, ):
- 				<LAHFetcher: 0x755af80>(sym=src, )
- 	<LAHRecognizer: 0x755c450>(tag={div, }, class={content_column2_widgethalf secondcolumn, }, ):
- 		<LAHRecognizer: 0x755c380>(tag={div, }, ):
- 			<LAHRecognizer: 0x755c2b0>(tag={h4, }, range=(2, 3), ):
- 				<LAHRecognizer: 0x755c1c0>(tag={a, }, ):
- 					<LAHFetcher: 0x755ae50>(sym=_text, key=name, )
- 					<LAHFetcher: 0x755af20>(sym=href, key=link, )
- 					<LAHDownloader: 0x755c110>(sym=href, ):
- 						<LAHRecognizer: 0x755beb0>(tag={img, }, class={photo, }, alt={_all, }, ):
- 							<LAHFetcher: 0x755af80>(sym=src, )
- 					<LAHRecognizer: 0x755b780>(tag={span, }, class={underlineLink, }, ):
- 						<LAHFetcher: 0x755ae50>(sym=_text, key=name, )
- 	<LAHRecognizer: 0x755cb40>(tag={ul, }, class={overview, }, range=(2, 1), ):
- 		<LAHRecognizer: 0x755ca70>(tag={li, }, range=(0, 1), ):
- 			<LAHRecognizer: 0x755c9a0>(tag={div, }, ):
- 				<LAHRecognizer: 0x755c8d0>(tag={div, }, range=(0, 5), ):
- 					<LAHRecognizer: 0x755c800>(tag={div, }, ):
- 						<LAHRecognizer: 0x755c5d0>(tag={h4, }, ):
- 							<LAHRecognizer: 0x755c570>(tag={a, }, ):
- 								<LAHFetcher: 0x755ae50>(sym=_text, key=name, )
- 								<LAHFetcher: 0x755af20>(sym=href, key=link, )
- 								<LAHRecognizer: 0x755b780>(tag={span, }, class={underlineLink, }, ):
- 									<LAHFetcher: 0x755ae50>(sym=_text, key=name, )
- 						<LAHRecognizer: 0x755c730>(tag={a, }, ):
- 							<LAHRecognizer: 0x755c680>(tag={img, }, ):
- 								<LAHFetcher: 0x755afe0>()
- 
- voanews
-(
-        {
-        imgSrc =         (
-            "http://gdb.voanews.com/D585CC64-1831-49FE-995C-4E10ADB75445_w443_r1_s.jpg"
-        );
-        link = "/content/black-smoke-seen-on-sistine-chapel/1620532.html";
-        name = "Black Smoke Rises from Sistine Chapel";
-    },
-        {
-        link = "/content/kurdish-rebels-release-8-turkish-captives/1620536.html";
-        name = "Kurdish Rebels Release 8 Turkish Captives";
-    },
-        {
-        imgSrc =         (
-            "http://gdb.voanews.com/5BC7E446-6985-4493-8700-0D4F46944849_w640_r1_s.jpg",
-            "http://gdb.voanews.com/F49AEAE4-F06A-48C3-A7FA-6145BAEEBC67_w268_r1.png",
-            "http://gdb.voanews.com/F49AEAE4-F06A-48C3-A7FA-6145BAEEBC67_w640_r1_s.png"
-        );
-        link = "/content/seven-dead-in-kashmir-attack/1620511.html";
-        name = "7 Dead in Kashmir Attack ";
-    },
-        {
-        imgSrc =         (
-            "http://gdb.voanews.com/FF19FF01-AFC0-428B-8691-D76D4FDB2FC1_w640_r1_s_cx0_cy4_cw0.jpg"
-        );
-        link = "/content/united-nations-iran-tehran-human-rights-violations-increasing/1620078.html";
-        name = "UN Expert Says Iranian Rights Abuses Increasing";
-    },
-        {
-        link = "/content/gun-control-debate-firing-up-local-communities/1620547.html";
-        name = "Local Communities Debate Gun Control";
-    },
-        {
-        link = "/content/chavez-latin-america-legacy/1620386.html";
-        name = "Cuba Was Major Beneficiary";
-    },
-        {
-        link = "/content/iran-armenia-find-solidarity-in-isolation/1619833.html";
-        name = "Iran, Armenia Find Solidarity in Isolation";
-    },
-        {
-        link = "/content/kenyatt-follows-father-to-win-kenya-top-job/1618472.html";
-        name = "Kenyatta Wins Kenya's Top Job";
-    },
-        {
-        link = "/content/cardinals_debate_qualifications_for_pope_vatican/1617323.html";
-        name = "Cardinals Debate Qualifications for Pope";
-    }
-)
+ <LAHRecognizer: 0x754dd40> ( tag={span, }, id={list, }, )
+ <LAHRecognizer: 0x754def0> ( tag={ul, }, )
+ <LAHRecognizer: 0x754e060> ( tag={li, }, range=(10, 7), )
+ <LAHRecognizer: 0x754e370> ( tag={a, }, range=(0, 1), )
+ <LAHRecognizer: 0x754e4f0> ( tag={font, }, )
+ <LAHRecognizer: 0x754e6e0> ( tag={a, }, hasRule)
+ <LAHRecognizer: 0x754e060> ( tag={li, }, range=(10, 7), )
+ <LAHRecognizer: 0x754e6e0> ( tag={a, }, hasRule)
+ <LAHRecognizer: 0x754e060> ( tag={li, }, range=(10, 7), )
+ <LAHRecognizer: 0x754e6e0> ( tag={a, }, hasRule)
+ <LAHRecognizer: 0x754e060> ( tag={li, }, range=(10, 7), )
+ <LAHRecognizer: 0x754e6e0> ( tag={a, }, hasRule)
+ <LAHRecognizer: 0x754e060> ( tag={li, }, range=(10, 7), )
+ <LAHRecognizer: 0x754e6e0> ( tag={a, }, hasRule)
+ <LAHRecognizer: 0x754e060> ( tag={li, }, range=(10, 7), )
+ <LAHRecognizer: 0x754e6e0> ( tag={a, }, hasRule)
+ <LAHRecognizer: 0x754e060> ( tag={li, }, range=(10, 7), )
+ <LAHRecognizer: 0x754e6e0> ( tag={a, }, hasRule)
+
+
+ <LAHRecognizer: 0x7246bd0> ( tag={span, }, id={list, }, )
+ <LAHRecognizer: 0x7246b00> ( tag={ul, }, )
+ <LAHRecognizer: 0x7246a20> ( tag={li, }, range=(10, 7), )
+ <LAHRecognizer: 0x7246710> ( tag={a, }, range=(0, 1), )
+ <LAHRecognizer: 0x7246820> ( tag={font, }, )
+ <LAHRecognizer: 0x7246710> ( tag={a, }, range=(0, 1), )
+ <LAHRecognizer: 0x7246940> ( tag={a, }, hasRule)
+ <LAHRecognizer: 0x7246a20> ( tag={li, }, range=(10, 7), )
+ <LAHRecognizer: 0x7246710> ( tag={a, }, range=(0, 1), )
+ <LAHRecognizer: 0x7246820> ( tag={font, }, )
+ <LAHRecognizer: 0x7246710> ( tag={a, }, range=(0, 1), )
+ <LAHRecognizer: 0x7246940> ( tag={a, }, hasRule)
+ <LAHRecognizer: 0x7246a20> ( tag={li, }, range=(10, 7), )
+ <LAHRecognizer: 0x7246710> ( tag={a, }, range=(0, 1), )
+ <LAHRecognizer: 0x7246820> ( tag={font, }, )
+ <LAHRecognizer: 0x7246710> ( tag={a, }, range=(0, 1), )
+ <LAHRecognizer: 0x7246940> ( tag={a, }, hasRule)
+ <LAHRecognizer: 0x7246a20> ( tag={li, }, range=(10, 7), )
+ <LAHRecognizer: 0x7246710> ( tag={a, }, range=(0, 1), )
+ <LAHRecognizer: 0x7246820> ( tag={font, }, )
+ <LAHRecognizer: 0x7246710> ( tag={a, }, range=(0, 1), )
+ <LAHRecognizer: 0x7246940> ( tag={a, }, hasRule)
+ <LAHRecognizer: 0x7246a20> ( tag={li, }, range=(10, 7), )
+ <LAHRecognizer: 0x7246710> ( tag={a, }, range=(0, 1), )
+ <LAHRecognizer: 0x7246820> ( tag={font, }, )
+ <LAHRecognizer: 0x7246710> ( tag={a, }, range=(0, 1), )
+ <LAHRecognizer: 0x7246940> ( tag={a, }, hasRule)
+ <LAHRecognizer: 0x7246a20> ( tag={li, }, range=(10, 7), )
+ <LAHRecognizer: 0x7246710> ( tag={a, }, range=(0, 1), )
+ <LAHRecognizer: 0x7246820> ( tag={font, }, )
+ <LAHRecognizer: 0x7246710> ( tag={a, }, range=(0, 1), )
+ <LAHRecognizer: 0x7246940> ( tag={a, }, hasRule)
+ <LAHRecognizer: 0x7246a20> ( tag={li, }, range=(10, 7), )
+ <LAHRecognizer: 0x7246710> ( tag={a, }, range=(0, 1), )
+ <LAHRecognizer: 0x7246820> ( tag={font, }, )
+ <LAHRecognizer: 0x7246710> ( tag={a, }, range=(0, 1), )
+ <LAHRecognizer: 0x7246940> ( tag={a, }, hasRule)
+ <LAHRecognizer: 0x7246450> ( tag={div, }, class={contentImage, }, )
+ <LAHRecognizer: 0x7246220> ( tag={img, }, )
+

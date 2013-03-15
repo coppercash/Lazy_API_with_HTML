@@ -315,7 +315,7 @@
         [info appendFormat:@"range=(%d, %d), ", _range.location, _range.length];
     }
     if (_isTextNode) [info appendString:@"isTextNode, "];
-
+    if (_rule) [info appendString:@"hasRule"];
     return info;
 }
 

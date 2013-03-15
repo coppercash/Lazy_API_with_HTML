@@ -39,6 +39,7 @@
 		BE98178316EB16E100FE93DE /* voa.lah in Resources */ = {isa = PBXBuildFile; fileRef = BE98178216EB16E100FE93DE /* voa.lah */; };
 		BE98178616EB21DA00FE93DE /* LAHParser.m in Sources */ = {isa = PBXBuildFile; fileRef = BE98178516EB21DA00FE93DE /* LAHParser.m */; };
 		BE98178916EB2AD500FE93DE /* LAHStmt.m in Sources */ = {isa = PBXBuildFile; fileRef = BE98178816EB2AD500FE93DE /* LAHStmt.m */; };
+		BE9ABC0F16F32BB7001B0465 /* 51VOA.lah in Resources */ = {isa = PBXBuildFile; fileRef = BE9ABC0E16F32BB7001B0465 /* 51VOA.lah */; };
 		BE9C96CF16CE79A8000BC31F /* LAHConstruct.m in Sources */ = {isa = PBXBuildFile; fileRef = BE9C96CE16CE79A8000BC31F /* LAHConstruct.m */; };
 		BE9E221616C528D9004EF814 /* libMKNetworkKit-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BE9E221516C528D9004EF814 /* libMKNetworkKit-iOS.a */; };
 		BE9F6A4A16EABBD6007C7EBB /* LAHToken.m in Sources */ = {isa = PBXBuildFile; fileRef = BE9F6A4216EABBD6007C7EBB /* LAHToken.m */; };
@@ -140,6 +141,7 @@
 		BE98178516EB21DA00FE93DE /* LAHParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LAHParser.m; sourceTree = "<group>"; };
 		BE98178716EB2AD500FE93DE /* LAHStmt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LAHStmt.h; sourceTree = "<group>"; };
 		BE98178816EB2AD500FE93DE /* LAHStmt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LAHStmt.m; sourceTree = "<group>"; };
+		BE9ABC0E16F32BB7001B0465 /* 51VOA.lah */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 51VOA.lah; sourceTree = "<group>"; };
 		BE9C96CD16CE79A8000BC31F /* LAHConstruct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LAHConstruct.h; sourceTree = "<group>"; };
 		BE9C96CE16CE79A8000BC31F /* LAHConstruct.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LAHConstruct.m; sourceTree = "<group>"; };
 		BE9E221516C528D9004EF814 /* libMKNetworkKit-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libMKNetworkKit-iOS.a"; sourceTree = "<group>"; };
@@ -237,6 +239,7 @@
 				BE98178216EB16E100FE93DE /* voa.lah */,
 				BEA0A60916EDE96D0057FCB6 /* voa.log */,
 				BEA2725F16F0232200CE9B8E /* bbc.lah */,
+				BE9ABC0E16F32BB7001B0465 /* 51VOA.lah */,
 				BE71B26416C1F9D4005AD9D7 /* Supporting Files */,
 			);
 			path = LAHDemo;
@@ -573,6 +576,7 @@
 				BE98178316EB16E100FE93DE /* voa.lah in Resources */,
 				BEA0A60A16EDE96D0057FCB6 /* voa.log in Resources */,
 				BEA2726016F0232200CE9B8E /* bbc.lah in Resources */,
+				BE9ABC0F16F32BB7001B0465 /* 51VOA.lah in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

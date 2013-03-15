@@ -53,21 +53,20 @@
 
 - (LAHOperation *)operationWithFile:(NSString *)path key:(NSString *)key dictionary:(NSMutableDictionary *)dictionary{
     [LAHInterpreter interpretFile:path intoDictionary:dictionary];
-    LAHOperation *operation = [dictionary objectForKey:key];
-    [_operations addObject:operation];
-    operation.delegate = self;
     
-    [dictionary release];
+    LAHOperation *operation = [dictionary objectForKey:key];
+    NSAssert(operation != nil, @"Can't find LAOperation named \"%@\".", key);
+    if (operation) {
+        [_operations addObject:operation];
+        operation.delegate = self;
+    }
+    
     return operation;
 }
 
 - (LAHOperation *)operationWithFile:(NSString *)path key:(NSString *)key{
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    [LAHInterpreter interpretFile:path intoDictionary:dictionary];
-    LAHOperation *operation = [dictionary objectForKey:key];
-    [_operations addObject:operation];
-    operation.delegate = self;
-
+    LAHOperation *operation = [self operationWithFile:path key:key dictionary:dictionary];
     [dictionary release];
     return operation;
 }

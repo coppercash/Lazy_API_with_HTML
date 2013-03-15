@@ -79,6 +79,8 @@
 - (void)addIdentifier:(LAHRecognizer *)identifier{
     if (_identifiers == nil) [self.identifiers = [[NSMutableArray alloc] init] release];
     [(NSMutableArray *)_identifiers addObject:identifier];
+    identifier.isIndex = YES;
+    [identifier logLonely];
 }
 
 #pragma mark - Log
@@ -86,11 +88,11 @@
     NSMutableString *info = [NSMutableString string];
     if (_key) [info appendFormat:@"key=%@, ", _key];
     if (_identifiers) {
-        [info appendString:@"id=("];
+        [info appendString:@"id={"];
         for (LAHRecognizer *r in _identifiers) {
             [info appendFormat:@"%@, ", r];
         }
-        [info appendString:@"), "];
+        [info appendString:@"}, "];
     }
     
     return info;

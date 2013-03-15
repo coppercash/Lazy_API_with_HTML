@@ -66,10 +66,12 @@
 @end
 
 @interface LAHStmtTuple : LAHStmtValue
+- (id)evaluate:(LAHFrame *)frame gainTarget:(LAHNode *)target;
 @property(nonatomic, retain)NSArray *values;
 @end
 
 @interface LAHStmtSet : LAHStmtValue
+- (id)evaluate:(LAHFrame *)frame gainTarget:(LAHNode *)target;
 @property(nonatomic, retain)NSArray *values;
 @end
 

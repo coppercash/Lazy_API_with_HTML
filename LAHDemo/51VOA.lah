@@ -1,0 +1,24 @@
+arr'root':
+    dic(id='id'):
+        fet'name'(_text, key="name")
+        fet'link'("href", key="link")
+        fet'type'(_text, key="type")
+        fet'imgSrc'("src", key="imgSrc")
+        fet'typeLink'("href", key="typeLink")
+
+ope'ope'('root'):
+    rec("span", "id"="list"):
+        rec("ul"):
+            rec'id'("li", range=(10,7)):
+                rec("a", index=0):
+                    'typeLink'
+                    rec("font"):
+                        'type'
+                rec'a'("a"):
+                    'name'
+                    'link'
+                    dow("href"):
+                        rec("div", "contentImage"):
+                            rec("img"):
+                                'imgSrc'
+

@@ -60,6 +60,10 @@
             return @selector(addDownloader:);
         }
         return @selector(addChild:);
+    }else if ([target isKindOfClass:[LAHConstruct class]]){
+        if ([value isKindOfClass:[LAHRecognizer class]]) {
+            return @selector(addIdentifier:);
+        }
     }
     return nil;
 }
@@ -137,11 +141,10 @@
             object.key = pV;
         } else if ([pN isEqualToString:LAHParaId]) {
             if ([pV isKindOfClass:[NSSet class]]) {
-                object.identifiers = pV;
+                object.identifiers = [((LAHStmtSet *)p.value) evaluate:frame gainTarget:object];
             } else if ([pV isKindOfClass:[LAHStmtGain class]]) {
-                object.identifiers = [NSMutableSet set];
                 LAHStmtGain *gain = (LAHStmtGain *)pV;
-                [gain evaluate:frame target:object.identifiers method:@selector(addObject:)];
+                [gain evaluate:frame target:object method:@selector(addIdentifier:)];
             } else {
                 [frame error:@"LAHConstruct expects Tuple/Gain as IDENTIFIERS."];
             }
@@ -394,7 +397,7 @@
 
 @implementation LAHStmtGain
 - (id)evaluate:(LAHFrame *)frame{
-    return nil;
+    return self;
 }
 
 - (id)evaluate:(LAHFrame *)frame target:(id)target method:(SEL)method{
@@ -458,12 +461,24 @@
 
 
 @implementation LAHStmtTuple
+- (id)evaluate:(LAHFrame *)frame gainTarget:(LAHNode *)target{
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    for (LAHStmtValue *v in _values) {
+        if ([v isKindOfClass:[LAHStmtGain class]]) {
+            LAHStmtGain *gain = (LAHStmtGain *)v;
+            [gain evaluate:frame target:target method:nil];
+        }else{
+            [array addObject:[v evaluate:frame]];
+        }
+    }
+    
+    return [array autorelease];
+}
+
 - (id)evaluate:(LAHFrame *)frame{
     NSMutableArray *set = [[NSMutableArray alloc] init];
     for (LAHStmtValue *v in _values) {
-        if ([v isKindOfClass:[LAHStmtGain class]]) {
-            [(LAHStmtGain *)v evaluate:frame target:set method:@selector(addObject:)];
-        }else{
+        if (![v isKindOfClass:[LAHStmtGain class]]) {
             [set addObject:[v evaluate:frame]];
         }
     }
@@ -478,13 +493,24 @@
 @end
 
 @implementation LAHStmtSet
-- (id)evaluate:(LAHFrame *)frame{
+- (id)evaluate:(LAHFrame *)frame gainTarget:(LAHNode *)target{
     NSMutableSet *set = [[NSMutableSet alloc] init];
     for (LAHStmtValue *v in _values) {
         if ([v isKindOfClass:[LAHStmtGain class]]) {
             LAHStmtGain *gain = (LAHStmtGain *)v;
-            [gain evaluate:frame target:set method:@selector(addObject:)];
+            [gain evaluate:frame target:target method:nil];
         }else{
+            [set addObject:[v evaluate:frame]];
+        }
+    }
+    
+    return [set autorelease];
+}
+
+- (id)evaluate:(LAHFrame *)frame{
+    NSMutableSet *set = [[NSMutableSet alloc] init];
+    for (LAHStmtValue *v in _values) {
+        if (![v isKindOfClass:[LAHStmtGain class]]) {
             [set addObject:[v evaluate:frame]];
         }
     }

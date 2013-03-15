@@ -34,33 +34,33 @@
     [_operations removeAllObjects];
 }
 
+- (void)cancelAllNetworks{
+    [_networks makeObjectsPerformSelector:@selector(cancel)];
+    [super cancelAllNetworks];
+}
+
 - (id)downloader:(LAHDownloader*)downloader needFileAtPath:(NSString*)path{
     __block MKNetworkOperation *op = [_engine operationWithPath:path];
     __block LAH_MKNetworkKit_Hpple *bSelf = self;
     __block LAHOperation *operation = downloader.recursiveOperation;
     
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
-        [bSelf removeNetwork:op];
         NSData *rd = [completedOperation responseData];
         TFHpple * doc = [[TFHpple alloc] initWithHTMLData:rd];
         TFHppleElement<LAHHTMLElement> *root = (TFHppleElement<LAHHTMLElement>*)[doc peekAtSearchWithXPathQuery:@"/html/body"];
         [operation awakeDownloaderForKey:op withElement:root];
         
+        [bSelf removeNetwork:op];
         [doc release];
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
-        [bSelf removeNetwork:op];
         [operation handleError:error];
+        [bSelf removeNetwork:op];
     }];
     
     [_engine enqueueOperation:op];
     [self addNetwork:op];
     
     return op;  //op is a key for dictionary
-}
-
-- (void)cancelAllNetworks{
-    [_networks makeObjectsPerformSelector:@selector(cancel)];
-    [super cancelAllNetworks];
 }
 
 #pragma mark - Enhance

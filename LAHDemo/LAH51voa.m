@@ -14,20 +14,24 @@
     self = [super initWithHostName:@"www.51voa.com"];
     return self;
 }
-/*
+
 - (LAHOperation*)homePage{
-    LAHRecognizer *span = [[LAHRecognizer alloc] init]; span.tagName = @"span";
-    [span setKey:@"id" attributes:@"list", nil];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"51VOA" ofType:@"lah"];
     
-    LAHOperation *op = [self operationWithPath:@"" rootContainer:nil children:span, nil];
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    LAHOperation *operation = [self operationWithFile:path key:@"ope" dictionary:dic];
+    LAHRecognizer *a = [dic objectForKey:@"a"];
+    a.rule = ^BOOL(id<LAHHTMLElement> element){
+        id<LAHHTMLElement> fC = [element.children objectAtIndex:0]; //first child
+        if (![fC.tagName isEqualToString:@"text"]) return NO;
+        return YES;
+    };
     
-    [span release];
-    
-    return op;
-}*/
+    [dic release];
+    return operation;
+}
 
-
-
+/*
 - (LAHOperation*)homePage{
     LAHFetcher *type = [[LAHFetcher alloc] initWithSymbol:LAHValText]; type.key = @"type";
     LAHFetcher *typeLink = [[LAHFetcher alloc] initWithSymbol:@"href"];  typeLink.key = @"typelink";
@@ -58,7 +62,7 @@
         if (![fC.tagName isEqualToString:@"text"]) return NO;
         return YES;
     };
-    //a1.downloaders = @[d];
+    a1.downloaders = @[d];
 
     LAHRecognizer *li = [[LAHRecognizer alloc] initWithChildren:a0, a1, nil]; li.tagName = @"li"; li.range = NSMakeRange(10, 7); //item.indexSource = li;
     item.identifiers = @[li];
@@ -76,5 +80,5 @@
     
     return op;
 }
- 
+*/
 @end
