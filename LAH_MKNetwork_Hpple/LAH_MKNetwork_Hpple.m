@@ -39,6 +39,11 @@
     [super cancelAllNetworks];
 }
 
+- (void)downloader:(LAHOperation *)operation didFetch:(id)info{
+    [self cancelAllNetworks];
+    [super downloader:operation didFetch:info];
+}
+
 - (id)downloader:(LAHDownloader*)downloader needFileAtPath:(NSString*)path{
     __block MKNetworkOperation *op = [_engine operationWithPath:path];
     __block LAH_MKNetworkKit_Hpple *bSelf = self;
@@ -50,14 +55,15 @@
         TFHppleElement<LAHHTMLElement> *root = (TFHppleElement<LAHHTMLElement>*)[doc peekAtSearchWithXPathQuery:@"/html/body"];
         [operation awakeDownloaderForKey:op withElement:root];
         
-        [bSelf removeNetwork:op];
+        if (!completedOperation.isCachedResponse) [bSelf removeNetwork:op];
         [doc release];
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
         [operation handleError:error];
-        [bSelf removeNetwork:op];
+        if (!completedOperation.isCachedResponse) [bSelf removeNetwork:op];
     }];
     
     [_engine enqueueOperation:op];
+    NSLog(@"path=%@", path);
     [self addNetwork:op];
     
     return op;  //op is a key for dictionary
@@ -67,16 +73,18 @@
 - (void)fetchImage:(NSString *)path completion:(LAHImage)completion corrector:(LAHError)corrector{
     MKNetworkOperation *op = [_engine operationWithURLString:path];
     op.shouldCacheResponseEvenIfProtocolIsHTTPS = YES;
+    
+    __block LAH_MKNetworkKit_Hpple *bSelf = self;
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
-        [self removeNetwork:op];
         if (completion){
             completion(completedOperation.responseImage);
         }
+        if (!completedOperation.isCachedResponse) [bSelf removeNetwork:op];
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
-        [self removeNetwork:op];
         if (corrector) {
             corrector(error);
         }
+        if (!completedOperation.isCachedResponse) [bSelf removeNetwork:op];
     }];
 
     [_engine enqueueOperation:op];
@@ -85,9 +93,9 @@
 
 - (void)downloadData:(NSString *)path toLocal:(NSString *)localPath completion:(LAHDownload)completion corrector:(LAHError)corrector{
     MKNetworkOperation *op = [_engine operationWithURLString:path];
+    
+    __block LAH_MKNetworkKit_Hpple *bSelf = self;
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
-        [self removeNetwork:op];
-        
         NSData *data = completedOperation.responseData;
         NSError *dataErr = nil;
         BOOL success = [data writeToFile:localPath options:NSDataWritingAtomic error:&dataErr];
@@ -97,9 +105,12 @@
         }else{
             if (corrector)  corrector(dataErr);
         }
+        
+        if (!completedOperation.isCachedResponse) [bSelf removeNetwork:op];
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
-        [self removeNetwork:op];
         if (corrector) corrector(error);
+        
+        if (!completedOperation.isCachedResponse) [bSelf removeNetwork:op];
     }];
     
     [_engine enqueueOperation:op];

@@ -91,8 +91,10 @@
 
 #pragma mark - Queue
 - (void)saveDownloader:(LAHDownloader*)downloader forKey:(id)key{
+    NSUInteger c =  _theDownloading.count;
     [_theDownloading setObject:downloader forKey:key];
-    
+    NSLog(@"+_theDownloading<%p>:\t%d\t->\t%d",key , c, _theDownloading.count);
+
     [_rootContainer saveStateForKey:key];
     for (LAHConstruct *c in _children) {
         [c saveStateForKey:key];
@@ -104,6 +106,10 @@
     if (downloader == nil) return;
     
     [self addSeeker:downloader];
+    NSUInteger c =  _theDownloading.count;
+    [_theDownloading removeObjectForKey:key];
+    NSLog(@"-_theDownloading<%p>:\t%d\t->\t%d",key , c, _theDownloading.count);
+
     
     [_rootContainer restoreStateForKey:key];
     for (LAHConstruct *c in _children) {
@@ -111,16 +117,19 @@
     }
     [downloader seekWithRoot:element];
     
-    [_theDownloading removeObjectForKey:key];
     [self removeSeeker:downloader];
 }
 
 - (void)addSeeker:(LAHDownloader*)fetcher{
+    NSUInteger c =  _theSeeking.count;
     [_theSeeking addObject:fetcher];
+    NSLog(@"+_theSeeking%@:\t%d\t->\t%d",fetcher , c, _theSeeking.count);
 }
 
 - (void)removeSeeker:(LAHDownloader*)fetcher{
+    NSUInteger c =  _theSeeking.count;
     [_theSeeking removeObject:fetcher];
+    NSLog(@"-_theSeeking%@:\t%d\t->\t%d",fetcher , c, _theSeeking.count);
     if (_theSeeking.count + _theDownloading.count == 0) {
         __block LAHOperation *bSelf = self;
         for (LAHCompletion completion in _completions) {

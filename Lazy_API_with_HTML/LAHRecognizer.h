@@ -17,7 +17,7 @@
     NSRange _range;
     
     //States
-    BOOL _isIndex;
+    BOOL _isIdentifier;
     NSUInteger _numberOfMatched;
     LAHEle _matchingElement;
     
@@ -31,7 +31,7 @@
 @property(nonatomic, assign)NSRange range;
 @property(nonatomic, assign)NSUInteger index;
 
-@property(nonatomic, assign)BOOL isIndex;
+@property(nonatomic, assign)BOOL isIdentifier;
 @property(nonatomic, readonly)NSUInteger numberOfMatched;
 @property(nonatomic, readonly)NSUInteger numberInRange; //Elements in range, must be matched first.
 @property(nonatomic, readonly)LAHEle matchingElement;

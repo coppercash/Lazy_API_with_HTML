@@ -14,7 +14,7 @@
 @implementation LAHRecognizer
 @synthesize attributes = _attributes, isTextNode = _isTextNode, rule = _rule;
 @synthesize range = _range;
-@synthesize isIndex = _isIndex, numberOfMatched = _numberOfMatched, matchingElement = _matchingElement;
+@synthesize isIdentifier = _isIdentifier, numberOfMatched = _numberOfMatched, matchingElement = _matchingElement;
 @synthesize fetchers = _fetchers, downloaders = _downloaders;
 
 #pragma mark - Life Cycle
@@ -22,7 +22,7 @@
     self = [super init];
     if (self) {
         self.isTextNode = NO;
-        self.isIndex = NO;
+        self.isIdentifier = NO;
         self.range = NSMakeRange(0, NSUIntegerMax);
     }
     return self;
@@ -53,7 +53,7 @@
     self = [super initWithFirstChild:firstChild variadicChildren:children];
     if (self) {
         self.isTextNode = NO;
-        self.isIndex = NO;
+        self.isIdentifier = NO;
         self.range = NSMakeRange(0, NSUIntegerMax);
     }
     return self;
@@ -107,7 +107,7 @@
     [texts release];
 }
 
-- (void)setIndex:(NSUInteger)index{
+- (void)setIdentifier:(NSUInteger)index{
     _range = NSMakeRange(index, 1);
 }
 
@@ -127,7 +127,7 @@
     return iR.length;
 }
 
-- (NSUInteger)index{
+- (NSUInteger)identifier{
     return _range.location;
 }
 
@@ -178,7 +178,7 @@
     //Two iteration in this order, so that the fetcher's fetching sequence depends on the sequence in the HTML.
     for (LAHEle e in element.children) {
         for (LAHRecognizer *node in _children) {
-            if (_isIndex) [node refreshState];
+            if (_isIdentifier) [node refreshState];
             [node handleElement:e];
         }
     }

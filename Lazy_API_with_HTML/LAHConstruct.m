@@ -25,7 +25,7 @@
     _identifiers = [indexes retain];
     
     for (LAHRecognizer *r in _identifiers) {
-        r.isIndex = YES;
+        r.isIdentifier = YES;
     }
 }
 
@@ -79,8 +79,7 @@
 - (void)addIdentifier:(LAHRecognizer *)identifier{
     if (_identifiers == nil) [self.identifiers = [[NSMutableArray alloc] init] release];
     [(NSMutableArray *)_identifiers addObject:identifier];
-    identifier.isIndex = YES;
-    [identifier logLonely];
+    identifier.isIdentifier = YES;
 }
 
 #pragma mark - Log

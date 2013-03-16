@@ -73,7 +73,11 @@
 
 #pragma mark - LAHDelegate
 - (void)downloader:(LAHOperation *)operation didFetch:(id)info{
+    
+    NSUInteger c =  _operations.count;
     [_operations removeObject:operation];
+    NSLog(@"+operations:\t%d\t->\t%d", c, _operations.count);
+     
 }
 
 - (id)downloader:(LAHDownloader*)downloader needFileAtPath:(NSString*)path{
@@ -86,11 +90,15 @@
         && [_delegate respondsToSelector:@selector(managerStartRunning:)]){
         [_delegate managerStartRunning:self];
     }
+    NSUInteger c =  _networks.count;
     [_networks addObject:network];
+    NSLog(@"+networks<%p>:\t%d\t->\t%d",network, c, _networks.count);
 }
 
 - (void)removeNetwork:(id)network{
+    NSUInteger c =  _networks.count;
     [_networks removeObject:network];
+    NSLog(@"-networks<%p>:\t%d\t->\t%d",network, c, _networks.count);
     if (_networks.count == 0
         && _delegate && [_delegate respondsToSelector:@selector(managerStopRunnning:finish:)]){
         [_delegate managerStopRunnning:self finish:YES];
