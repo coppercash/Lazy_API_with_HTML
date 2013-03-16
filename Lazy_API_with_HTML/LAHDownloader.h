@@ -7,7 +7,7 @@
 //
 
 #import "LAHRecognizer.h"
-#import "LAHInterface.h"
+
 @interface LAHDownloader : LAHNode {
     LAHPropertyFetcher _linker;
     NSString *_symbol;

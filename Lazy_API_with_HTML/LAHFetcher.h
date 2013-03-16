@@ -7,7 +7,6 @@
 //
 
 #import "LAHConstruct.h"
-#import "LAHInterface.h"
 
 @interface LAHFetcher : LAHConstruct <NSCopying> {
     LAHPropertyFetcher _fetcher;

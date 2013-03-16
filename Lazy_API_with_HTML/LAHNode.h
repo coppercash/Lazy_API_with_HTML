@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+
 @class LAHOperation;
 @protocol LAHHTMLElement, LAHDownloaderDataSource, LAHDownloaderDelegate;
 @interface LAHNode : NSObject {

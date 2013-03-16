@@ -7,7 +7,6 @@
 //
 
 #import "LAHNode.h"
-#import "LAHInterface.h"
 
 typedef enum {
     LAHConstructTypeAbstract = 0,

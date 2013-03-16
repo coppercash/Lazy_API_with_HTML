@@ -8,7 +8,6 @@
 
 #import "LAHParser.h"
 #import "LAHStmt.h"
-#import "LAHInterface.h"
 #import "LAHToken.h"
 
 @interface LAHParser ()

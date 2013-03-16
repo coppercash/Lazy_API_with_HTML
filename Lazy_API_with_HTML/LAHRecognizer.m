@@ -163,7 +163,11 @@
     va_end(values);
 }
 
+
 #pragma mark - Recursive
+#ifdef LAH_DEBUG
+static NSUInteger gRecLogDegree = 0;
+#endif
 - (BOOL)handleElement:(LAHEle)element{
     //Step 0, check matching.
     if (![self isElementMatched:element]) return NO;
@@ -174,6 +178,9 @@
         [f fetchProperty:element];
     }
     
+#ifdef LAH_DEBUG
+    gRecLogDegree += 1;
+#endif
     //Step 2, recursion
     //Two iteration in this order, so that the fetcher's fetching sequence depends on the sequence in the HTML.
     for (LAHEle e in element.children) {
@@ -183,7 +190,10 @@
         }
     }
     _matchingElement = nil;
-
+#ifdef LAH_DEBUG
+    gRecLogDegree -= 1;
+#endif
+    
     //Step 3, download with the property.
     for (LAHDownloader *d in _downloaders) {
         [d download:element];
@@ -193,37 +203,45 @@
 }
 
 - (BOOL)isElementMatched:(LAHEle)element{
+#ifdef LAH_DEBUG
+    NSMutableString *space = [NSMutableString string];
+    for (int i = 0; i < gRecLogDegree; i ++) [space appendString:@"\t"];
+    NSMutableString *info = [NSMutableString stringWithFormat:@"\n%@%@", space, self];
+    BOOL logVisible = NO;
+    void (^logOut)(BOOL) = ^(BOOL condition){
+        if (condition)
+            printf("%s\n", [info cStringUsingEncoding:NSASCIIStringEncoding]);
+    };
+#endif
     for (NSString *key in _attributes) {
-        NSSet *lVs = [_attributes objectForKey:key];    //legal values
-        NSAssert([lVs isKindOfClass:[NSSet class]], @"LAHRecognizer: legal values should be a NSSet.");
+        NSSet *recVs = [_attributes objectForKey:key];    //recognizer values
+        NSAssert([recVs isKindOfClass:[NSSet class]], @"LAHRecognizer: legal values should be a NSSet.");
 
-        NSString *value = nil;
+        NSString *eleV = nil;   //element value
         if ([key isEqualToString:LAHParaTag]) {
-            value = element.tagName;
+            eleV = element.tagName;
         }else if ([key isEqualToString:LAHParaText]){
-            value = element.text;
+            eleV = element.text;
         }else{
-            value = [element.attributes objectForKey:key];
+            eleV = [element.attributes objectForKey:key];
         }
         
         BOOL isMatched = NO;
-        
-        if (value) {
-            for (NSString *lV in lVs) {
-                if ([lV isEqualToString:LAHValAll]) {
+        if (eleV) { //matching value
+            for (NSString *recV in recVs) {
+                if ([recV isEqualToString:LAHValAll]) {
                     isMatched = YES;
                     break;
                 }
-                isMatched |= [lV isEqualToString:value];
+                isMatched |= [recV isEqualToString:eleV];
             }
         }else {
-            for (NSString *lV in lVs)
-                isMatched |= [lV isEqualToString:LAHValNone];
+            for (NSString *recV in recVs)  //matching value
+                isMatched |= [recV isEqualToString:LAHValNone];
         }
-        //if (!isMatched) return NO;
         
-        //Statement below has same logic with the above one.But in each step of loop, it do [value isEqualToString:gRWNone].So its performance is worse.
         /*
+        //Statement below has same logic with the above one.But in each step of loop, it do [value isEqualToString:gRWNone].So its performance is worse.
         value = value ? value : gRWNone;
         for (NSString *lV in lVs) {
             if ([lV isEqualToString:gRWNotNone] && ![value isEqualToString:gRWNone]) {
@@ -233,20 +251,66 @@
             isMatched |= [lV isEqualToString:value];
         }*/
         
+#ifdef LAH_DEBUG
+        if (!logVisible) {
+            logVisible = ([key isEqualToString:LAHParaTag] && isMatched);
+        }
+        
+        NSMutableString *matchingSet = [NSMutableString string];
+        for (NSString *matchingV in recVs) [matchingSet appendFormat:@"%@, ", matchingV];
+        [info appendFormat:@"\n%@%@\tkey=%@\t{ %@}\t%@", space,
+         isMatched ? @"PASS" : @"FAIL",
+         key, matchingSet, eleV];
+        
+        logOut(!isMatched && logVisible);
+#endif
         if (!isMatched) return NO;
     }
     
-    if (_isTextNode != element.isTextNode) {
-        return NO;
-    }
+    
+    BOOL isTextMatched = _isTextNode == element.isTextNode;
+#ifdef LAH_DEBUG
+    [info appendFormat:@"\n%@%@\trec %@\tele %@", space,
+     isTextMatched ? @"PASS" : @"FAIL",
+     _isTextNode ? @"isTextNode" : @"isNotTextNode",
+     element.isTextNode ? @"isTextNode" : @"isNotTextNode"];
+    
+    logOut(!isTextMatched && logVisible);
+#endif
+    if (!isTextMatched) return NO;
+    
+    
     if (_rule != nil) {
-        if (!_rule(element)) return NO;
+        BOOL isRuled = _rule(element);
+#ifdef LAH_DEBUG
+        [info appendFormat:@"\n%@%@\ton Rule", space, isRuled ? @"PASS" : @"FAIL"];
+        
+        logOut(!isRuled && logVisible);
+#endif
+        if (!isRuled) return NO;
     }
+    
     
     //range indicates range of elements matched by above rules,
     //so before using it, _numberOfMatched should increase.
     _numberOfMatched ++;
-    if (!NSLocationInRange(_numberOfMatched - 1, _range)) return NO;
+    BOOL isInRange = NSLocationInRange(_numberOfMatched - 1, _range);
+#ifdef LAH_DEBUG
+    [info appendFormat:@"\n%@%@\trange(%d, %d)(%d...%d)\t%d", space,
+     isInRange ? @"PASS" : @"FAIL",
+     _range.location,
+     _range.length,
+     _range.location,
+     NSMaxRange(_range), _numberOfMatched - 1];
+    
+    logOut(!isInRange && logVisible);
+#endif
+    if (!isInRange) return NO;
+    
+#ifdef LAH_DEBUG
+    [info appendFormat:@"\n%@PASS\tALL", space];
+    logOut(logVisible);
+#endif
     
     return YES;
 }

@@ -7,7 +7,6 @@
 //
 
 #import "LAHNode.h"
-#import "LAHInterface.h"
 
 @interface LAHNode ()
 @property(nonatomic, retain)NSMutableDictionary* states;

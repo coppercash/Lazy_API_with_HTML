@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Coder Dreamer. All rights reserved.
 //
 
+//#define LAH_DEBUG
+
 @protocol LAHHTMLElement <NSObject>
 - (NSString*)tagName;
 - (NSString*)text;

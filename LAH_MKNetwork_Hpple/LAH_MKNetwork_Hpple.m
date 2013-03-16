@@ -63,7 +63,6 @@
     }];
     
     [_engine enqueueOperation:op];
-    NSLog(@"path=%@", path);
     [self addNetwork:op];
     
     return op;  //op is a key for dictionary
