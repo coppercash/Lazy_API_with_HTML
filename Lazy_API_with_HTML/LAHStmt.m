@@ -290,7 +290,7 @@
     NSUInteger index = 0;
     LAHRecognizer *rec = (LAHRecognizer *)object;
 
-    void (^addAsAttributes)(id, NSString *) = ^(id value, NSString *key){
+    void (^addAsAttributes)(id, NSString *) =  ^(id value, NSString *key){
         if ([value isKindOfClass:[NSSet class]]) {
             [rec addAttributes:value withKey:key];
         } else if ([value isKindOfClass:[NSString class]]) {
@@ -299,6 +299,16 @@
         } else {
             [frame error:@"LAHRecognizer expects set/string as ATTIBUTES"];
         }
+    };
+    BOOL (^boolValue)(NSString *) = ^(NSString *value){
+        if ([value isEqualToString:@"YES"]) {
+            return YES;
+        }else if ([value isEqualToString:@"NO"]){
+            return NO;
+        }else{
+            [frame error:@"BOOL must be YES or NO."];
+        }
+        return NO;
     };
     
     for (LAHStmtProperty *p in self.properties) {
@@ -329,7 +339,16 @@
             NSUInteger index = [(NSString *)pV integerValue];
             rec.index = index;
             
-        } else {
+        } else if ([pN isEqualToString:LAHParaIsText]) {
+            [frame assert:![pV isKindOfClass:[NSString class]] error:@"LAHRecognizer expects BOOL as isText."];
+            rec.isTextNode = boolValue(pV);
+            
+        } else if ([pN isEqualToString:LAHParaIsDemocratic]) {
+            [frame assert:![pV isKindOfClass:[NSString class]] error:@"LAHRecognizer expects BOOL as isDemocratic."];
+            rec.isDemocratic = boolValue(pV);
+            
+        }
+        else {
             addAsAttributes(pV, pN);
         }
         

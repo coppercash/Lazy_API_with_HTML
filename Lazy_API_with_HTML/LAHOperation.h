@@ -12,7 +12,8 @@
 @interface LAHOperation : LAHDownloader {
     NSMutableDictionary *_theDownloading;
     NSMutableArray *_theSeeking;
-
+    NSMutableArray *_networks;
+    
     LAHConstruct *_rootContainer;
     NSString *_path;
     
@@ -36,8 +37,11 @@
 - (void)saveDownloader:(LAHDownloader*)downloader forKey:(id)key;
 - (void)awakeDownloaderForKey:(id)key withElement:(LAHEle)element;
 
-- (void)addSeeker:(LAHDownloader*)fetcher;
-- (void)removeSeeker:(LAHDownloader*)fetcher;
+- (void)addSeeker:(LAHDownloader*)downloader;
+- (void)removeSeeker:(LAHDownloader*)downloader;
 
+- (void)addNetwork:(id)object;
+- (void)removeNetwork:(id)object;
+- (void)cancel;
 @end
 

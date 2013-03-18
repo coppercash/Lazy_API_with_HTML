@@ -12,7 +12,7 @@
 #import "LAHDownloader.h"
 
 @implementation LAHRecognizer
-@synthesize attributes = _attributes, isTextNode = _isTextNode, rule = _rule;
+@synthesize attributes = _attributes, isTextNode = _isTextNode, rule = _rule, isDemocratic = _isDemocratic;
 @synthesize range = _range;
 @synthesize isIdentifier = _isIdentifier, numberOfMatched = _numberOfMatched, matchingElement = _matchingElement;
 @synthesize fetchers = _fetchers, downloaders = _downloaders;
@@ -24,6 +24,7 @@
         self.isTextNode = NO;
         self.isIdentifier = NO;
         self.range = NSMakeRange(0, NSUIntegerMax);
+        self.isDemocratic = NO;
     }
     return self;
 }
@@ -55,6 +56,7 @@
         self.isTextNode = NO;
         self.isIdentifier = NO;
         self.range = NSMakeRange(0, NSUIntegerMax);
+        self.isDemocratic = YES;
     }
     return self;
 }
@@ -165,48 +167,57 @@
 
 
 #pragma mark - Recursive
-#ifdef LAH_DEBUG
-static NSUInteger gRecLogDegree = 0;
-#endif
 - (BOOL)handleElement:(LAHEle)element{
     //Step 0, check matching.
     if (![self isElementMatched:element]) return NO;
-    
     _matchingElement = element;
-    //Step 1, fetch linked properties.
-    for (LAHFetcher *f in _fetchers) {
-        [f fetchProperty:element];
-    }
     
-#ifdef LAH_DEBUG
+#ifdef LAH_RULES_DEBUG
     gRecLogDegree += 1;
 #endif
-    //Step 2, recursion
+    
+    BOOL isChildrenPass = (_children == nil || _children.count == 0) ? YES : NO;
+    //Step 1, recursion
     //Two iteration in this order, so that the fetcher's fetching sequence depends on the sequence in the HTML.
     for (LAHEle e in element.children) {
         for (LAHRecognizer *node in _children) {
             if (_isIdentifier) [node refreshState];
-            [node handleElement:e];
+            isChildrenPass |= [node handleElement:e];
         }
     }
-    _matchingElement = nil;
-#ifdef LAH_DEBUG
-    gRecLogDegree -= 1;
+
+    if (_isDemocratic && !isChildrenPass) {
+#ifdef LAH_RULES_DEBUG
+        gRecLogDegree -= 1;
 #endif
+        return NO;
+    }
     
+    //Step 2, fetch linked properties.
+    for (LAHFetcher *f in _fetchers) {
+        [f fetchProperty:element];
+    }
+
     //Step 3, download with the property.
     for (LAHDownloader *d in _downloaders) {
         [d download:element];
     }
     
+    _matchingElement = nil;
+#ifdef LAH_RULES_DEBUG
+    gRecLogDegree -= 1;
+#endif
     return YES;
 }
 
 - (BOOL)isElementMatched:(LAHEle)element{
-#ifdef LAH_DEBUG
+#ifdef LAH_RULES_DEBUG
     NSMutableString *space = [NSMutableString string];
     for (int i = 0; i < gRecLogDegree; i ++) [space appendString:@"\t"];
     NSMutableString *info = [NSMutableString stringWithFormat:@"\n%@%@", space, self];
+    if (_fetchers && _fetchers.count != 0) [info appendFormat:@"\tFetchers:%d", _fetchers.count];
+    if (_downloaders && _downloaders.count != 0) [info appendFormat:@"\tDownloaders:%d", _downloaders.count];
+
     BOOL logVisible = NO;
     void (^logOut)(BOOL) = ^(BOOL condition){
         if (condition)
@@ -251,7 +262,7 @@ static NSUInteger gRecLogDegree = 0;
             isMatched |= [lV isEqualToString:value];
         }*/
         
-#ifdef LAH_DEBUG
+#ifdef LAH_RULES_DEBUG
         if (!logVisible) {
             logVisible = ([key isEqualToString:LAHParaTag] && isMatched);
         }
@@ -269,7 +280,7 @@ static NSUInteger gRecLogDegree = 0;
     
     
     BOOL isTextMatched = _isTextNode == element.isTextNode;
-#ifdef LAH_DEBUG
+#ifdef LAH_RULES_DEBUG
     [info appendFormat:@"\n%@%@\trec %@\tele %@", space,
      isTextMatched ? @"PASS" : @"FAIL",
      _isTextNode ? @"isTextNode" : @"isNotTextNode",
@@ -282,7 +293,7 @@ static NSUInteger gRecLogDegree = 0;
     
     if (_rule != nil) {
         BOOL isRuled = _rule(element);
-#ifdef LAH_DEBUG
+#ifdef LAH_RULES_DEBUG
         [info appendFormat:@"\n%@%@\ton Rule", space, isRuled ? @"PASS" : @"FAIL"];
         
         logOut(!isRuled && logVisible);
@@ -295,7 +306,7 @@ static NSUInteger gRecLogDegree = 0;
     //so before using it, _numberOfMatched should increase.
     _numberOfMatched ++;
     BOOL isInRange = NSLocationInRange(_numberOfMatched - 1, _range);
-#ifdef LAH_DEBUG
+#ifdef LAH_RULES_DEBUG
     [info appendFormat:@"\n%@%@\trange(%d, %d)(%d...%d)\t%d", space,
      isInRange ? @"PASS" : @"FAIL",
      _range.location,
@@ -307,7 +318,8 @@ static NSUInteger gRecLogDegree = 0;
 #endif
     if (!isInRange) return NO;
     
-#ifdef LAH_DEBUG
+#ifdef LAH_RULES_DEBUG
+    logVisible = YES;
     [info appendFormat:@"\n%@PASS\tALL", space];
     logOut(logVisible);
 #endif

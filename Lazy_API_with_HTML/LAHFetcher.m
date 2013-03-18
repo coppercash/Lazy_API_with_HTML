@@ -70,10 +70,19 @@
     }else if (_symbol){
         if ([_symbol isEqualToString:LAHValTag])  self.property = element.tagName;
         else if ([_symbol isEqualToString:LAHValText]) self.property = element.text;
+        else if ([_symbol isEqualToString:LAHValContent]) self.property = element.content;
         else self.property = [element.attributes objectForKey:_symbol];
     }else{
         return;
     }
+#ifdef LAH_RULES_DEBUG
+    NSMutableString *space = [NSMutableString string];
+    for (int i = 0; i < gRecLogDegree; i ++) [space appendString:@"\t"];
+    NSMutableString *info = [NSMutableString stringWithFormat:@"%@%@\n%@%@=%@",
+                             space, self,
+                             space, _symbol, _property];
+    printf("\n%s\n", [info cStringUsingEncoding:NSASCIIStringEncoding]);
+#endif
     if (_property == nil) return;
     
     LAHConstruct *father = (LAHConstruct *)_father;

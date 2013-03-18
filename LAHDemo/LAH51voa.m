@@ -15,19 +15,25 @@
     return self;
 }
 
-- (LAHOperation*)homePage{
+- (LAHOperation *)homePage{
     NSString *path = [[NSBundle mainBundle] pathForResource:@"51VOA" ofType:@"lah"];
     
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     LAHOperation *operation = [self operationWithFile:path key:@"ope" dictionary:dic];
-    LAHRecognizer *a = [dic objectForKey:@"a"];
-    a.rule = ^BOOL(id<LAHHTMLElement> element){
-        id<LAHHTMLElement> fC = [element.children objectAtIndex:0]; //first child
-        if (![fC.tagName isEqualToString:@"text"]) return NO;
-        return YES;
-    };
-    
     [dic release];
+    
+    return operation;
+}
+
+- (LAHOperation *)itemAtPath:(NSString *)path{
+    NSString *lahPath = [[NSBundle mainBundle] pathForResource:@"51VOAItem" ofType:@"lah"];
+
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    LAHOperation *operation = [self operationWithFile:lahPath key:@"ope" dictionary:dic];
+    [dic release];
+    
+    operation.path = path;
+    
     return operation;
 }
 

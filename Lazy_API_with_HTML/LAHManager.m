@@ -12,7 +12,8 @@
 
 @interface LAHManager ()
 @property(nonatomic, retain)NSMutableArray *operations;
-@property(nonatomic, retain)NSMutableArray *networks;
+- (void)addOperation:(LAHOperation *)operation;
+- (void)removeOperation:(LAHOperation *)operation;
 @end
 
 @implementation LAHManager
@@ -22,28 +23,27 @@
     self = [super init];
     if (self) {
         [self.operations = [[NSMutableArray alloc] init] release];
-        [self.networks = [[NSMutableArray alloc] init] release];
     }
     return self;
 }
 
 - (void)dealloc{
+    [self cancel];
     self.operations = nil;
-    self.networks = nil;
     [super dealloc];
 }
 
 #pragma mark - Operation
 - (LAHOperation*)operationWithPath:(NSString*)path rootContainer:(LAHConstruct*)rootContainer firstChild:(LAHRecognizer*)firstChild variadicChildren:(va_list)children{
     LAHOperation *operation = [[LAHOperation alloc] initWithPath:path rootContainer:rootContainer firstChild:firstChild variadicChildren:children];
-    [_operations addObject:operation];
+    [self addOperation:operation];
     operation.delegate = self;
     
     [operation release];
     return operation;
 }
 
-- (LAHOperation*)operationWithPath:(NSString*)path rootContainer:(LAHConstruct*)rootContainer children:(LAHRecognizer*)firstChild, ... NS_REQUIRES_NIL_TERMINATION{
+- (LAHOperation*)operationWithPath:(NSString*)path rootContainer:(LAHConstruct*)rootContainer children:(LAHRecognizer*)firstChild, ...{
     va_list children;
     va_start(children, firstChild);
     LAHOperation *operaton = [self operationWithPath:path rootContainer:rootContainer firstChild:firstChild variadicChildren:children];
@@ -57,7 +57,7 @@
     LAHOperation *operation = [dictionary objectForKey:key];
     NSAssert(operation != nil, @"Can't find LAOperation named \"%@\".", key);
     if (operation) {
-        [_operations addObject:operation];
+        [self addOperation:operation];
         operation.delegate = self;
     }
     
@@ -71,16 +71,67 @@
     return operation;
 }
 
-#pragma mark - LAHDelegate
-- (void)downloader:(LAHOperation *)operation didFetch:(id)info{
+#pragma mark - Operations Management
+- (void)addOperation:(LAHOperation *)operation{
+    if (_delegate && [_delegate respondsToSelector:@selector(managerStartRunning:)] &&
+        self.numberOfOperations == 0) {
+        [_delegate managerStartRunning:self];
+    }
+    
+#ifdef LAH_OPERATION_DEBUG
+    NSUInteger c = _operations.count;
+#endif
+    [_operations addObject:operation];
+#ifdef LAH_OPERATION_DEBUG
+    NSString *opeInfo = [NSString stringWithFormat:@"%@\tOperations %d -> %d ADD %@",
+                         self, c, _operations.count, operation];
+    printf("\n%s\n", [opeInfo cStringUsingEncoding:NSASCIIStringEncoding]);
+#endif
+}
+
+- (void)removeOperation:(LAHOperation *)operation{
+    [operation retain];
+    
+#ifdef LAH_OPERATION_DEBUG
+    NSUInteger c = _operations.count;
+#endif
     [_operations removeObject:operation];
+#ifdef LAH_OPERATION_DEBUG
+    NSString *opeInfo = [NSString stringWithFormat:@"%@\tOperations %d -> %d REM %@",
+                         self, c, _operations.count, operation];
+    printf("\n%s\n", [opeInfo cStringUsingEncoding:NSASCIIStringEncoding]);
+#endif
+    
+    if (_delegate && [_delegate respondsToSelector:@selector(managerStopRunnning:finish:)] &&
+        self.numberOfOperations == 0) {
+        [_delegate managerStopRunnning:self finish:YES];
+    }
+    [operation release];
+}
+
+- (NSUInteger)numberOfOperations{
+    return _operations.count;
+}
+
+- (void)cancel{
+    if (_delegate && [_delegate respondsToSelector:@selector(managerStopRunnning:finish:)] &&
+        self.numberOfOperations != 0) {
+        [_delegate managerStopRunnning:self finish:NO];
+    }
+    [_operations makeObjectsPerformSelector:@selector(cancel)];
+    [_operations removeAllObjects];
+}
+
+#pragma mark - LAHDelegate
+- (void)operation:(LAHOperation *)operation didFetch:(id)info{
+    [self removeOperation:operation];
 }
 
 - (id)downloader:(LAHDownloader*)downloader needFileAtPath:(NSString*)path{
     return nil;
 }
 
-#pragma mark - Network Management
+/*
 - (void)addNetwork:(id)network{
     if (_networks.count == 0 && _delegate
         && [_delegate respondsToSelector:@selector(managerStartRunning:)]){
@@ -103,6 +154,6 @@
     if (_delegate && [_delegate respondsToSelector:@selector(managerStopRunnning:finish:)]){
         [_delegate managerStopRunnning:self finish:NO];
     }
-}
+}*/
 
 @end

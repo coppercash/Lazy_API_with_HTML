@@ -9,12 +9,12 @@ arr'root':
 ope'ope'('root'):
     rec("span", "id"="list"):
         rec("ul"):
-            rec'id'("li", range=(10,7)):
-                rec("a", index=0):
+            rec'id'("li", range=(0,7)):
+                rec("a", isDem="YES"):
                     'typeLink'
                     rec("font"):
                         'type'
-                rec'a'("a"):
+                rec("a", text=_all):
                     'name'
                     'link'
                     dow("href"):

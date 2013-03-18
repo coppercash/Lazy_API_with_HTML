@@ -10,4 +10,5 @@
 
 @interface LAH51voa : LAH_MKNetworkKit_Hpple
 - (LAHOperation*)homePage;
+- (LAHOperation *)itemAtPath:(NSString *)path;
 @end

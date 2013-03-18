@@ -14,6 +14,7 @@
     NSDictionary *_attributes;
     LAHRule _rule;
     BOOL _isTextNode;
+    BOOL _isDemocratic;
     NSRange _range;
     
     //States
@@ -28,6 +29,7 @@
 @property(nonatomic, retain)NSDictionary *attributes;
 @property(nonatomic, copy)LAHRule rule;
 @property(nonatomic, assign)BOOL isTextNode;
+@property(nonatomic, assign)BOOL isDemocratic;
 @property(nonatomic, assign)NSRange range;
 @property(nonatomic, assign)NSUInteger index;
 

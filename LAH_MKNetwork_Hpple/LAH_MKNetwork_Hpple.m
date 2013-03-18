@@ -10,13 +10,18 @@
 #import "LAHOperation.h"
 @interface LAH_MKNetworkKit_Hpple ()
 @property(nonatomic, retain)MKNetworkEngine *engine;
+@property(nonatomic, retain)NSMutableArray *networks;
+- (void)addNetwork:(id)network;
+- (void)removeNetwork:(id)network;
 @end
 
 @implementation LAH_MKNetworkKit_Hpple
 @synthesize engine = _engine;
+#pragma mark - Life Cycle
 - (id)initWithHostName:(NSString *)hostName{
     self = [super init];
     if (self) {
+        [self.networks = [[NSMutableArray alloc] init] release];
         [self.engine = [[MKNetworkEngine alloc] initWithHostName:hostName] release];
         [_engine useCache];
     }
@@ -26,46 +31,69 @@
 - (void)dealloc{
     [self cancel];
     self.engine = nil;
+    self.networks = nil;
     [super dealloc];
 }
 
+#pragma mark - Operations Management
 - (void)cancel{
-    [self cancelAllNetworks];
-    [_operations removeAllObjects];
-}
-
-- (void)cancelAllNetworks{
+    [super cancel];
     [_networks makeObjectsPerformSelector:@selector(cancel)];
-    [super cancelAllNetworks];
+    [_networks removeAllObjects];
 }
 
-- (void)downloader:(LAHOperation *)operation didFetch:(id)info{
-    [self cancelAllNetworks];
-    [super downloader:operation didFetch:info];
+- (NSUInteger)numberOfOperations{
+    NSUInteger number = _operations.count + _networks.count;
+    return number;
 }
 
-- (id)downloader:(LAHDownloader*)downloader needFileAtPath:(NSString*)path{
+- (void)addNetwork:(id)network{
+    if (_delegate && [_delegate respondsToSelector:@selector(managerStartRunning:)]
+        && self.numberOfOperations == 0){
+        [_delegate managerStartRunning:self];
+    }
+    [_networks addObject:network];
+}
+
+- (void)removeNetwork:(id)network{
+    [_networks removeObject:network];
+    if (_delegate && [_delegate respondsToSelector:@selector(managerStopRunnning:finish:)]
+        && self.numberOfOperations == 0){
+        [_delegate managerStopRunnning:self finish:YES];
+    }
+}
+
+#pragma mark - LAHDelegate
+- (void)operation:(LAHOperation *)operation didFetch:(id)info{
+    [super operation:operation didFetch:info];
+}
+
+- (id)downloader:(LAHDownloader* )operation needFileAtPath:(NSString*)path{
     __block MKNetworkOperation *op = [_engine operationWithPath:path];
-    __block LAH_MKNetworkKit_Hpple *bSelf = self;
-    __block LAHOperation *operation = downloader.recursiveOperation;
+    __block LAHOperation *bOperation = operation.recursiveOperation;
     
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
         NSData *rd = [completedOperation responseData];
         TFHpple * doc = [[TFHpple alloc] initWithHTMLData:rd];
         TFHppleElement<LAHHTMLElement> *root = (TFHppleElement<LAHHTMLElement>*)[doc peekAtSearchWithXPathQuery:@"/html/body"];
-        [operation awakeDownloaderForKey:op withElement:root];
+        [bOperation awakeDownloaderForKey:op withElement:root];
         
-        if (!completedOperation.isCachedResponse) [bSelf removeNetwork:op];
         [doc release];
+        if (!completedOperation.isCachedResponse) [bOperation removeNetwork:op];
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
-        [operation handleError:error];
-        if (!completedOperation.isCachedResponse) [bSelf removeNetwork:op];
+        [bOperation handleError:error];
+        if (!completedOperation.isCachedResponse) [bOperation removeNetwork:op];
     }];
     
-    [_engine enqueueOperation:op];
-    [self addNetwork:op];
+    [_engine enqueueOperation:op forceReload:YES];
+    [bOperation addNetwork:op];
     
+    [super downloader:operation needFileAtPath:path];
     return op;  //op is a key for dictionary
+}
+
+- (void)operation:(LAHOperation *)operation willCancelNetworks:(NSArray *)networks{
+    [networks makeObjectsPerformSelector:@selector(cancel)];
 }
 
 #pragma mark - Enhance

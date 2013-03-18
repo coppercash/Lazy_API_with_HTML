@@ -12,7 +12,9 @@
 @class MKNetworkEngine;
 @interface LAH_MKNetworkKit_Hpple : LAHManager {
     MKNetworkEngine *_engine;
+    NSMutableArray* _networks;
 }
+@property(nonatomic, readonly)NSMutableArray *networks;
 - (id)initWithHostName:(NSString*)hostName;
 - (void)cancel;
 @end

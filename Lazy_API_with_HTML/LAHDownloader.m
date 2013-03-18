@@ -26,10 +26,21 @@
     }else if (_symbol){
         if ([_symbol isEqualToString:LAHParaTag])  link = element.tagName;
         else if ([_symbol isEqualToString:LAHParaText]) link = element.text;
+        else if ([_symbol isEqualToString:LAHValContent]) link = element.content;
         else link = [element.attributes objectForKey:_symbol];
     }else{
         return;
     }
+    
+#ifdef LAH_RULES_DEBUG
+    NSMutableString *space = [NSMutableString string];
+    for (int i = 0; i < gRecLogDegree; i ++) [space appendString:@"\t"];
+    NSMutableString *info = [NSMutableString stringWithFormat:@"%@%@\n%@%@=%@",
+                             space, self,
+                             space, _symbol, link];
+    printf("\n%s\n", [info cStringUsingEncoding:NSASCIIStringEncoding]);
+#endif
+    
     if (link == nil) return;
 
     LAHOperation *operation = self.recursiveOperation;

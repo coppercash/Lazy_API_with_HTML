@@ -218,6 +218,8 @@
                     LAHParaText,
                     LAHParaRange,
                     LAHParaIndex,
+                    LAHParaIsText,
+                    LAHParaIsDemocratic,
                     nil];
     }
     return [keywords containsObject:name];

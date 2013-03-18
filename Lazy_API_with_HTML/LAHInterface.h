@@ -6,11 +6,17 @@
 //  Copyright (c) 2013 Coder Dreamer. All rights reserved.
 //
 
-//#define LAH_DEBUG
+//#define LAH_RULES_DEBUG
+//#define LAH_OPERATION_DEBUG
+
+#ifdef LAH_RULES_DEBUG
+extern NSUInteger gRecLogDegree;
+#endif
 
 @protocol LAHHTMLElement <NSObject>
 - (NSString*)tagName;
 - (NSString*)text;
+- (NSString*)content;
 - (NSDictionary*)attributes;
 - (NSArray*)children;
 - (BOOL)isTextNode;
@@ -24,8 +30,9 @@ typedef void(^LAHCorrector)(LAHOperation *operation, NSError* error);
 typedef id<LAHHTMLElement> LAHEle;
 
 @protocol LAHDelegate <NSObject>
-- (id)downloader:(LAHDownloader*)downloader needFileAtPath:(NSString*)path;
-- (void)downloader:(LAHOperation*)operation didFetch:(id)info;
+- (id)downloader:(LAHDownloader *)operation needFileAtPath:(NSString*)path;
+- (void)operation:(LAHOperation *)operation didFetch:(id)info;
+- (void)operation:(LAHOperation *)operation willCancelNetworks:(NSArray *)networks;
 @end
 
 extern NSString * const LAHEntArr;
@@ -45,8 +52,10 @@ extern NSString * const LAHParaClass;
 extern NSString * const LAHParaText;
 extern NSString * const LAHParaRange;
 extern NSString * const LAHParaIndex;
+extern NSString * const LAHParaIsDemocratic;
 extern NSString * const LAHParaIsText;
 
+extern NSString * const LAHValContent;
 extern NSString * const LAHValText;
 extern NSString * const LAHValTag;
 extern NSString * const LAHValNone;

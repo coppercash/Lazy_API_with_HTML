@@ -7,6 +7,10 @@
 //
 
 #import "LAHInterface.h"
+#ifdef LAH_RULES_DEBUG
+NSUInteger gRecLogDegree = 0;
+#endif
+
 NSString * const LAHEntArr    = @"arr";
 NSString * const LAHEntDic    = @"dic";
 NSString * const LAHEntFet    = @"fet";
@@ -25,8 +29,10 @@ NSString * const LAHParaText    = @"text";
 NSString * const LAHParaRange   = @"range";
 NSString * const LAHParaIndex   = @"index";
 NSString * const LAHParaIsText  = @"isText";
+NSString * const LAHParaIsDemocratic  = @"isDem";
 NSString * const LAHParaDefault = @"_def";
 
+NSString * const LAHValContent  = @"_content";
 NSString * const LAHValText  = @"_text";
 NSString * const LAHValTag   = @"_tag";
 NSString * const LAHValNone  = @"_none";
