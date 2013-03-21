@@ -63,10 +63,6 @@
 }
 
 #pragma mark - Recursive
-- (LAHOperation*)recursiveGreffier{
-    return _father.recursiveGreffier;
-}
-
 - (void)handleElement:(LAHEle)element atIndex:(NSUInteger)index{
     NSArray *fakeChildren = [[NSArray alloc] initWithArray:_children];
     for (LAHNode *node in fakeChildren) {
@@ -77,6 +73,10 @@
         }
     }
     [fakeChildren release];
+}
+
+- (LAHOperation*)recursiveOperation{
+    return _father.recursiveOperation;
 }
 
 - (void)releaseChild:(LAHNode*)child{

@@ -1,8 +1,8 @@
 dic'root':
-    arr(key="text"):
+    arr(key="content"):
         fet'text'(_content)
-    arr(key="imgSrc"):
-        fet'imgSrc'("src")
+        dic(id={'id0', 'id1'}):
+            fet'imgSrc'("src", key="imgSrc")
     fet'audio'("href", key="audio")
     fet'lrc'("href", key="lrc")
     fet'title'(_text, key="title")
@@ -45,10 +45,10 @@ ope'ope'('root'):
                 rec(isText="YES"):
                     'text'
 
-            rec("div", "boxout"):
+            rec'id0'("div", "boxout"):
                 rec("img"):
                     'imgSrc'
-            rec("div", "contentImage"):
+            rec'id1'("div", "contentImage"):
                 rec("img"):
                     'imgSrc'
 

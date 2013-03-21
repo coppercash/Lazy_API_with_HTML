@@ -19,6 +19,7 @@
 @property(nonatomic, retain)NSMutableArray *children;
 - (id)initWithFirstChild:(LAHNode*)firstChild variadicChildren:(va_list)children;
 - (id)initWithChildren:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
+- (LAHOperation *)recursiveOperation;
 - (void)releaseChild:(LAHNode*)child;
 - (void)saveStateForKey:(id)key;
 - (void)restoreStateForKey:(id)key;

@@ -256,7 +256,7 @@
         if ([pN isEqualToString:LAHParaDefault]) {
             switch (index) {
                 case 0:
-                    [(LAHStmtGain *)p.value evaluate:frame target:ope method:@selector(setRootContainer:)];
+                    [(LAHStmtGain *)p.value evaluate:frame target:ope method:@selector(setConstruct:)];
                     break;
                 case 1:
                     ope.path = [p.value evaluate:frame];
@@ -265,7 +265,7 @@
                     break;
             }
         } else if ([pN isEqualToString:LAHParaRoot]) {
-            [(LAHStmtGain *)p.value evaluate:frame target:ope method:@selector(setRootContainer:)];
+            [(LAHStmtGain *)p.value evaluate:frame target:ope method:@selector(setConstruct:)];
         } else if ([pN isEqualToString:LAHParaPath]) {
             ope.path = [p.value evaluate:frame];
         } else {

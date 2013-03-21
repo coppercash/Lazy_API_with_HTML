@@ -35,7 +35,7 @@
 
 #pragma mark - Operation
 - (LAHOperation*)operationWithPath:(NSString*)path rootContainer:(LAHConstruct*)rootContainer firstChild:(LAHRecognizer*)firstChild variadicChildren:(va_list)children{
-    LAHOperation *operation = [[LAHOperation alloc] initWithPath:path rootContainer:rootContainer firstChild:firstChild variadicChildren:children];
+    LAHOperation *operation = [[LAHOperation alloc] initWithPath:path construct:rootContainer firstChild:firstChild variadicChildren:children];
     [self addOperation:operation];
     operation.delegate = self;
     

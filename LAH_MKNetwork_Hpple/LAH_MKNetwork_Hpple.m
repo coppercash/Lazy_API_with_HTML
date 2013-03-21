@@ -96,6 +96,10 @@
     [networks makeObjectsPerformSelector:@selector(cancel)];
 }
 
+- (NSString *)operationNeedsHostName:(LAHOperation *)operation{
+    return _engine.readonlyHostName;
+}
+
 #pragma mark - Enhance
 - (void)fetchImage:(NSString *)path completion:(LAHImage)completion corrector:(LAHError)corrector{
     MKNetworkOperation *op = [_engine operationWithURLString:path];

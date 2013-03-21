@@ -16,11 +16,12 @@
 @property(nonatomic, retain)NSMutableArray *networks;
 @property(nonatomic, retain)NSMutableArray *completions;
 @property(nonatomic, retain)NSMutableArray *correctors;
+- (BOOL)checkUpate:(LAHConstruct *)object;
 - (void)checkFinishing;
 @end
 
 @implementation LAHOperation
-@synthesize rootContainer = _rootContainer, path = _path;
+@synthesize construct = _construct, path = _path;
 @synthesize theDownloading = _theDownloading, theSeeking = _theSeeking, networks = _networks, completions = _completions, correctors = _correctors;
 @synthesize delegate = _delegate;
 
@@ -41,21 +42,21 @@
     return self;
 }
 
-- (id)initWithPath:(NSString*)path rootContainer:(LAHConstruct*)rootContainer firstChild:(LAHRecognizer*)firstChild variadicChildren:(va_list)children{
+- (id)initWithPath:(NSString*)path construct:(LAHConstruct*)rootContainer firstChild:(LAHRecognizer*)firstChild variadicChildren:(va_list)children{
     self = [super initWithFirstChild:firstChild variadicChildren:children];
     if (self) {
         [self initialize];
         self.path = path;
-        self.rootContainer = rootContainer;
+        self.construct = rootContainer;
     }
     return self;
 }
 
-- (id)initWithPath:(NSString*)path rootContainer:(LAHConstruct*)rootContainer children:(LAHRecognizer*)firstChild, ... NS_REQUIRES_NIL_TERMINATION{
+- (id)initWithPath:(NSString*)path construct:(LAHConstruct*)rootContainer children:(LAHRecognizer*)firstChild, ... NS_REQUIRES_NIL_TERMINATION{
     va_list children;
     va_start(children, firstChild);
     
-    self = [self initWithPath:path rootContainer:rootContainer firstChild:firstChild variadicChildren:children];
+    self = [self initWithPath:path construct:rootContainer firstChild:firstChild variadicChildren:children];
     
     va_end(children);
     return self;
@@ -69,7 +70,7 @@
     self.correctors = nil;
     self.path = nil;
     
-    self.rootContainer = nil;
+    self.construct = nil;
     
     self.delegate = nil;
     
@@ -88,7 +89,24 @@
     }
 }
 
+#pragma mark - Fake LAHConstruct
+- (BOOL)checkUpate:(LAHConstruct *)object{
+    return NO;
+}
+
+- (void)update{
+}
+
+- (void)recieve:(LAHConstruct*)object{
+}
+
 #pragma mark - Recursive
+- (void)setConstruct:(LAHConstruct *)construct{
+    [_construct release];
+    _construct = [construct retain];
+    construct.father = self;
+}
+
 - (LAHOperation*)recursiveOperation{
     return self;
 }
@@ -105,7 +123,7 @@
     printf("\n%s\n", [opeInfo cStringUsingEncoding:NSASCIIStringEncoding]);
 #endif
 
-    [_rootContainer saveStateForKey:key];
+    [_construct saveStateForKey:key];
     for (LAHConstruct *c in _children) {
         [c saveStateForKey:key];
     }
@@ -127,7 +145,7 @@
     printf("\n%s\n", [opeInfo cStringUsingEncoding:NSASCIIStringEncoding]);
 #endif
     
-    [_rootContainer restoreStateForKey:key];
+    [_construct restoreStateForKey:key];
     for (LAHConstruct *c in _children) {
         [c restoreStateForKey:key];
     }
@@ -216,7 +234,7 @@
         for (LAHCompletion completion in _completions) {
             completion(bSelf);
         }
-        [_delegate operation:self didFetch:_rootContainer.container];
+        [_delegate operation:self didFetch:_construct.container];
     }
 }
 
@@ -247,7 +265,22 @@
 
 #pragma mark - Getter
 - (id)container{
-    return _rootContainer.container;
+    return _construct.container;
+}
+
+- (NSString *)absolutePath{
+    NSString *http = @"http://";
+    NSString *protocol = [_path substringWithRange:NSMakeRange(0, 7)];
+    if ([protocol isEqualToString:http]) {
+        return _path;
+    }else{
+        if (_delegate && [_delegate respondsToSelector:@selector(operationNeedsHostName:)]) {
+            NSString *host = [_delegate operationNeedsHostName:self];
+            NSString *path = [[http stringByAppendingString:host] stringByAppendingString:_path];
+            return path;
+        }
+    }
+    return nil;
 }
 
 #pragma mark - Log
@@ -260,7 +293,7 @@
 - (NSString *)infoChildren:(NSUInteger)degree{
     NSMutableString *info = [NSMutableString string];
     
-    [info appendString:[_rootContainer info:degree]];
+    [info appendString:[_construct info:degree]];
     [info appendString:[super infoChildren:degree]];
     
     return info;

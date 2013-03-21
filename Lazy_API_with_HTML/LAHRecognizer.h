@@ -52,7 +52,6 @@
 - (BOOL)handleElement:(LAHEle)element;
 - (BOOL)isElementMatched:(LAHEle)element;
 
-- (LAHOperation*)recursiveOperation;
 - (void)refreshState;
 
 #pragma mark - Interpreter

@@ -327,11 +327,6 @@
     return YES;
 }
 
-- (LAHOperation*)recursiveOperation{
-    LAHRecognizer *father = (LAHRecognizer *)_father;
-    return father.recursiveOperation;
-}
-
 #pragma mark - State
 - (void)saveStateForKey:(id)key{
     //NSNumber *count = [[NSNumber alloc] initWithUnsignedInteger:_numberOfMatched];

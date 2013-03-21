@@ -33,6 +33,7 @@ typedef id<LAHHTMLElement> LAHEle;
 - (id)downloader:(LAHDownloader *)operation needFileAtPath:(NSString*)path;
 - (void)operation:(LAHOperation *)operation didFetch:(id)info;
 - (void)operation:(LAHOperation *)operation willCancelNetworks:(NSArray *)networks;
+- (NSString *)operationNeedsHostName:(LAHOperation *)operation;
 @end
 
 extern NSString * const LAHEntArr;
