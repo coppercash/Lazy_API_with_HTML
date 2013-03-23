@@ -32,7 +32,7 @@
     LAHOperation *operation = [self operationWithFile:lahPath key:@"ope" dictionary:dic];
     [dic release];
     
-    operation.path = path;
+    operation.link = path;
     
     return operation;
 }

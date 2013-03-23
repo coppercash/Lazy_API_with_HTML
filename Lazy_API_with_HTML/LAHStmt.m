@@ -60,10 +60,15 @@
             return @selector(addDownloader:);
         }
         return @selector(addChild:);
-    }else if ([target isKindOfClass:[LAHConstruct class]]){
+    } else if ([target isKindOfClass:[LAHConstruct class]]){
         if ([value isKindOfClass:[LAHRecognizer class]]) {
             return @selector(addIdentifier:);
         }
+    } else if ([target isKindOfClass:[LAHDownloader class]]){
+        if ([value isKindOfClass:[LAHFetcher class]]) {
+            return @selector(addFetcher:);
+        }
+        return @selector(addChild:);
     }
     return nil;
 }
@@ -115,7 +120,7 @@
             [object addChild:con];
         }else if ([s isKindOfClass:[LAHStmtGain class]]) {
             LAHStmtGain *gain  = (LAHStmtGain *)s;
-            [gain evaluate:frame target:object method:@selector(addChild:)];
+            [gain evaluate:frame target:object method:nil];
         }
     }
 }
@@ -259,7 +264,7 @@
                     [(LAHStmtGain *)p.value evaluate:frame target:ope method:@selector(setConstruct:)];
                     break;
                 case 1:
-                    ope.path = [p.value evaluate:frame];
+                    ope.link = [p.value evaluate:frame];
                     break;
                 default:
                     break;
@@ -267,7 +272,7 @@
         } else if ([pN isEqualToString:LAHParaRoot]) {
             [(LAHStmtGain *)p.value evaluate:frame target:ope method:@selector(setConstruct:)];
         } else if ([pN isEqualToString:LAHParaPath]) {
-            ope.path = [p.value evaluate:frame];
+            ope.link = [p.value evaluate:frame];
         } else {
             [frame error:@"LAHOperation can' accept PROPERTY"];
         }

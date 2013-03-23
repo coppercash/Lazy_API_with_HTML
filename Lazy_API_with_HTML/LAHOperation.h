@@ -15,14 +15,12 @@
     NSMutableArray *_networks;
     
     LAHConstruct *_construct;
-    NSString *_path;
     
     id<LAHDelegate> _delegate;
     NSMutableArray *_completions;
     NSMutableArray *_correctors;
 }
 @property(nonatomic, retain)LAHConstruct *construct;
-@property(nonatomic, copy)NSString *path;
 @property(nonatomic, assign)id<LAHDelegate> delegate;
 @property(nonatomic, readonly)id container;
 
@@ -45,7 +43,7 @@
 - (void)cancel;
 
 #pragma mark - Info
-- (NSString *)absolutePath;
+- (NSString *)absolutePathWith:(NSString *)subpath;
 
 @end
 

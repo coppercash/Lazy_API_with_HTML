@@ -5,6 +5,7 @@ arr'root':
         fet'type'(_text, key="type")
         fet'imgSrc'("src", key="imgSrc")
         fet'typeLink'("href", key="typeLink")
+        fet'url'("_url", key="url")
 
 ope'ope'('root'):
     rec("span", "id"="list"):
@@ -18,6 +19,7 @@ ope'ope'('root'):
                     'name'
                     'link'
                     dow("href"):
+                        'url'
                         rec("div", "contentImage"):
                             rec("img"):
                                 'imgSrc'

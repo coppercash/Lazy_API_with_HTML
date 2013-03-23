@@ -9,6 +9,7 @@
 #import "LAHOperation.h"
 #import "LAHDownloader.h"
 #import "LAHConstruct.h"
+#import "LAHFetcher.h"
 
 @interface LAHOperation ()
 @property(nonatomic, retain)NSMutableDictionary *theDownloading;
@@ -21,7 +22,7 @@
 @end
 
 @implementation LAHOperation
-@synthesize construct = _construct, path = _path;
+@synthesize construct = _construct;
 @synthesize theDownloading = _theDownloading, theSeeking = _theSeeking, networks = _networks, completions = _completions, correctors = _correctors;
 @synthesize delegate = _delegate;
 
@@ -37,7 +38,7 @@
     self = [super init];
     if (self) {
         [self initialize];
-        self.path = @"";
+        self.link = @"";
     }
     return self;
 }
@@ -46,7 +47,7 @@
     self = [super initWithFirstChild:firstChild variadicChildren:children];
     if (self) {
         [self initialize];
-        self.path = path;
+        self.link = path;
         self.construct = rootContainer;
     }
     return self;
@@ -68,7 +69,6 @@
     self.networks = nil;
     self.completions = nil;
     self.correctors = nil;
-    self.path = nil;
     
     self.construct = nil;
     
@@ -78,16 +78,21 @@
 }
 
 #pragma mark - Download
+/*
 - (void)download:(LAHEle)element{
-    NSString *link = _path;
+    if (_link == nil) return;
     
+    for (LAHFetcher *f in _fetchers) {
+        [f fetchSystemInfo:self];
+    }
+
     LAHOperation *operation = self.recursiveOperation;
     id<LAHDelegate> delegate = operation.delegate;
     if (delegate && [delegate respondsToSelector:@selector(downloader:needFileAtPath:)]) {
-        id key = [delegate downloader:self needFileAtPath:link];
+        id key = [delegate downloader:self needFileAtPath:_link];
         [operation saveDownloader:self forKey:key];
     }
-}
+}*/
 
 #pragma mark - Fake LAHConstruct
 - (BOOL)checkUpate:(LAHConstruct *)object{
@@ -268,15 +273,14 @@
     return _construct.container;
 }
 
-- (NSString *)absolutePath{
-    NSString *http = @"http://";
-    NSString *protocol = [_path substringWithRange:NSMakeRange(0, 7)];
-    if ([protocol isEqualToString:http]) {
-        return _path;
+- (NSString *)absolutePathWith:(NSString *)subpath{
+    NSString *protocol = @"http://";
+    if ([subpath hasPrefix:protocol]) {
+        return subpath;
     }else{
         if (_delegate && [_delegate respondsToSelector:@selector(operationNeedsHostName:)]) {
             NSString *host = [_delegate operationNeedsHostName:self];
-            NSString *path = [[http stringByAppendingString:host] stringByAppendingString:_path];
+            NSString *path = [protocol stringByAppendingString:[host stringByAppendingPathComponent:subpath]];
             return path;
         }
     }
@@ -286,7 +290,7 @@
 #pragma mark - Log
 - (NSString *)infoProperties{
     NSMutableString *info = [NSMutableString string];
-    if (_path) [info appendFormat:@"path=%@", _path];
+    if (_link) [info appendFormat:@"path=%@", _link];
     return info;
 }
 

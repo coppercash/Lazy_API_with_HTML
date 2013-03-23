@@ -8,9 +8,11 @@
 
 #import "LAHFetcher.h"
 #import "LAHRecognizer.h"
+#import "LAHDownloader.h"
 
 @interface LAHFetcher ()
 @property(nonatomic, copy)NSString *property;
+- (void)doFetch;
 @end
 
 @implementation LAHFetcher
@@ -75,6 +77,21 @@
     }else{
         return;
     }
+    [self doFetch];
+}
+
+- (void)fetchSystemInfo:(LAHNode *)node{
+    if ([_symbol isEqualToString:LAHValPath]) {
+        LAHDownloader *downloader = (LAHDownloader *)node;
+        self.property = downloader.path;
+    }else if ([_symbol isEqualToString:LAHValURL]) {
+        LAHDownloader *downloader = (LAHDownloader *)node;
+        self.property = downloader.absolutePath;
+    }
+    [self doFetch];
+}
+
+- (void)doFetch{
 #ifdef LAH_RULES_DEBUG
     NSMutableString *space = [NSMutableString string];
     for (int i = 0; i < gRecLogDegree; i ++) [space appendString:@"\t"];

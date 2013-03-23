@@ -18,4 +18,5 @@
 - (id)initWithFetcher:(LAHPropertyFetcher)property;
 - (id)initWithSymbol:(NSString *)symbol;
 - (void)fetchProperty:(LAHEle)element;
+- (void)fetchSystemInfo:(LAHNode *)node;
 @end

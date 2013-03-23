@@ -37,6 +37,9 @@ NSString * const LAHValText  = @"_text";
 NSString * const LAHValTag   = @"_tag";
 NSString * const LAHValNone  = @"_none";
 NSString * const LAHValAll   = @"_all";
+NSString * const LAHValPath   = @"_path";
+NSString * const LAHValURL   = @"_url";
+
 
 NSString * const gLAHImg = @"img";
 NSString * const gLAHSrc = @"src";
