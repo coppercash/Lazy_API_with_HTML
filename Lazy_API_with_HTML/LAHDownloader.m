@@ -25,14 +25,15 @@
 }
 
 #pragma mark - Info
-- (NSString *)path{
-    return _link;
-}
-
 - (NSString *)absolutePath{
     LAHOperation *ope = self.recursiveOperation;
     NSString * abP = [ope absolutePathWith:_link];  //absolute path
     return abP;
+}
+
+- (NSString *)hostName{
+    NSString *host = self.recursiveOperation.hostName;
+    return host;
 }
 
 #pragma mark - Seek
@@ -65,6 +66,7 @@
     gRecLogDegree -= 1;
 #endif
     
+    if (_children.count == 0) return;   //If do not have recognizers, no necessary to download.
     LAHOperation *operation = self.recursiveOperation;
     id<LAHDelegate> delegate = operation.delegate;
     if (delegate && [delegate respondsToSelector:@selector(downloader:needFileAtPath:)]) {

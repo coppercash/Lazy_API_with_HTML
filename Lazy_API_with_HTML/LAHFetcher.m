@@ -87,6 +87,9 @@
     }else if ([_symbol isEqualToString:LAHValURL]) {
         LAHDownloader *downloader = (LAHDownloader *)node;
         self.property = downloader.absolutePath;
+    }else if ([_symbol isEqualToString:LAHValHost]) {
+        LAHDownloader *downloader = (LAHDownloader *)node;
+        self.property = downloader.hostName;
     }
     [self doFetch];
 }

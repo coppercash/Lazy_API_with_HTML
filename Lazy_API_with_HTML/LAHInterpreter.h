@@ -10,4 +10,6 @@
 
 @interface LAHInterpreter : NSObject
 + (void)interpretFile:(NSString *)path intoDictionary:(NSMutableDictionary *)dictionary;
++ (void)interpretString:(NSString *)string intoDictionary:(NSMutableDictionary *)dictionary;
++ (void)interpretIntoDictionary:(NSMutableDictionary *)dictionary fromFiles:(NSString *)firstFile, ... NS_REQUIRES_NIL_TERMINATION;
 @end

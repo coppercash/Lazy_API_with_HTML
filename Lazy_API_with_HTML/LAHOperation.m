@@ -278,11 +278,17 @@
     if ([subpath hasPrefix:protocol]) {
         return subpath;
     }else{
-        if (_delegate && [_delegate respondsToSelector:@selector(operationNeedsHostName:)]) {
-            NSString *host = [_delegate operationNeedsHostName:self];
-            NSString *path = [protocol stringByAppendingString:[host stringByAppendingPathComponent:subpath]];
-            return path;
-        }
+        NSString *host = self.hostName;
+        NSString *path = [protocol stringByAppendingString:[host stringByAppendingPathComponent:subpath]];
+        return path;
+    }
+    return nil;
+}
+
+- (NSString *)hostName{
+    if (_delegate && [_delegate respondsToSelector:@selector(operationNeedsHostName:)]) {
+        NSString *host = [_delegate operationNeedsHostName:self];
+        return host;
     }
     return nil;
 }

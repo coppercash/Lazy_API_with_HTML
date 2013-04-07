@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Coder Dreamer. All rights reserved.
 //
 
-#define LAH_RULES_DEBUG
+//#define LAH_RULES_DEBUG
 //#define LAH_OPERATION_DEBUG
 
 #ifdef LAH_RULES_DEBUG
@@ -64,6 +64,7 @@ extern NSString * const LAHValNone;
 extern NSString * const LAHValAll;
 extern NSString * const LAHValPath;
 extern NSString * const LAHValURL;
+extern NSString * const LAHValHost;
 
 extern NSString * const gLAHImg;
 extern NSString * const gLAHSrc;

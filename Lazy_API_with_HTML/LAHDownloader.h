@@ -18,12 +18,13 @@
 @property(nonatomic, copy)NSString *symbol;
 @property(nonatomic, copy)NSString *link;
 @property(nonatomic, retain)NSArray *fetchers;
+@property(nonatomic, readonly, getter = link)NSString *path;
+@property(nonatomic, readonly, getter = hostName)NSString *hostName;
+@property(nonatomic, readonly, getter = absolutePath)NSString *absolutePath;
 
 - (LAHOperation*)recursiveOperation;
 - (void)download:(LAHEle)element;
 - (void)seekWithRoot:(LAHEle)element;
-- (NSString *)path;
-- (NSString *)absolutePath;
 
 #pragma mark - Interpreter
 - (void)addFetcher:(LAHFetcher *)fetcher;
