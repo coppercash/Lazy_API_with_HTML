@@ -15,8 +15,8 @@
 }
 @property(nonatomic, readonly)NSMutableArray *operations;
 @property(nonatomic, assign)id<LAHManagerDelegate> delegate;
-- (LAHOperation*)operationWithPath:(NSString*)path rootContainer:(LAHConstruct*)rootContainer firstChild:(LAHRecognizer*)firstChild variadicChildren:(va_list)children;
-- (LAHOperation*)operationWithPath:(NSString*)path rootContainer:(LAHConstruct*)rootContainer children:(LAHRecognizer*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
+- (LAHOperation *)operationWithPath:(NSString *)path rootContainer:(LAHConstruct *)rootContainer firstChild:(LAHRecognizer *)firstChild variadicChildren:(va_list)children;
+- (LAHOperation *)operationWithPath:(NSString *)path rootContainer:(LAHConstruct *)rootContainer children:(LAHRecognizer*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
 - (LAHOperation *)operationWithFile:(NSString *)path key:(NSString *)key;
 - (LAHOperation *)operationWithFile:(NSString *)path key:(NSString *)key dictionary:(NSMutableDictionary *)dictionary;
 

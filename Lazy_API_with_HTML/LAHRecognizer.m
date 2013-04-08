@@ -11,6 +11,12 @@
 #import "LAHFetcher.h"
 #import "LAHDownloader.h"
 
+@interface LAHRecognizer ()
+@property(nonatomic, assign)NSUInteger numberOfMatched;
+@property(nonatomic, assign)NSUInteger numberInRange; //Elements in range, must be matched first.
+@property(nonatomic, assign)LAHEle matchingElement;
+@end
+
 @implementation LAHRecognizer
 @synthesize attributes = _attributes, isTextNode = _isTextNode, rule = _rule, isDemocratic = _isDemocratic;
 @synthesize range = _range;
@@ -68,6 +74,37 @@
     self.downloaders = nil;
  
     [super dealloc];
+}
+
+- (id)copyWithZone:(NSZone *)zone{
+    //LAHRecognizer *copy = [super copyWithZone:zone];
+    
+    LAHRecognizer *copy = [[[self class] allocWithZone:zone] init];
+
+    if (_children) copy.children = _children;
+    if (_states) copy.states = [[NSMutableDictionary alloc] initWithDictionary:_states copyItems:YES];
+    
+    [copy.children release];
+    [copy.states release];
+    
+    if (_attributes) copy.attributes = [[NSDictionary alloc] initWithDictionary:_attributes copyItems:YES];
+    copy.rule = _rule;
+    copy.isTextNode = _isTextNode;
+    copy.isDemocratic = _isDemocratic;
+    copy.range = _range;
+    
+    copy.isIdentifier = _isIdentifier;
+    copy.numberInRange = _numberOfMatched;
+    copy.matchingElement = _matchingElement;
+    
+    //if (_fetchers) copy.fetchers = [[NSArray alloc] initWithArray:_fetchers copyItems:YES];
+    if (_downloaders) copy.downloaders = [[NSArray alloc] initWithArray:_downloaders copyItems:YES];
+    
+    [copy.attributes release];
+    [copy.fetchers release];
+    [copy.downloaders release];
+    
+    return copy;
 }
 
 #pragma mark - Setter

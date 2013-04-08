@@ -9,7 +9,6 @@
 #import "LAHNode.h"
 
 @interface LAHNode ()
-@property(nonatomic, retain)NSMutableDictionary* states;
 @end
 
 @implementation LAHNode
@@ -51,6 +50,22 @@
     self.children = nil;
     self.states = nil;
     [super dealloc];
+}
+
+- (id)copyWithZone:(NSZone *)zone{
+    LAHNode *copy = [[[self class] allocWithZone:zone] init];
+    
+    if (_children) copy.children = [[NSMutableArray alloc] initWithArray:_children copyItems:YES];
+    for (LAHNode *node in copy.children) {
+        node.father = copy;
+    }
+    
+    if (_states) copy.states = [[NSMutableDictionary alloc] initWithDictionary:_states copyItems:YES];
+
+    [copy.children release];
+    [copy.states release];
+    
+    return copy;
 }
 
 #pragma mark - Setter

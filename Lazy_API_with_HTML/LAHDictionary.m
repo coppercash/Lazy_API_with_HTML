@@ -16,6 +16,14 @@
 @implementation LAHDictionary
 @synthesize dictionary = _dictionary;
 
+- (id)init{
+    self = [super init];
+    if (self) {
+        self.type = LAHConstructTypeDictionary;
+    }
+    return self;
+}
+
 - (id)initWithObjectsAndKeys:(LAHConstruct *)firstObj , ... NS_REQUIRES_NIL_TERMINATION{
     va_list other; va_start(other, firstObj);
     self = [self initWithFirstObject:firstObj variadicObjectsAndKeys:other];
@@ -24,7 +32,7 @@
 }
 
 - (id)initWithFirstObject:(LAHConstruct *)firstObj variadicObjectsAndKeys:(va_list)OtherObjsAndKeys{
-    self = [super init];
+    self = [self init];
     if (self) {
         self.type = LAHConstructTypeDictionary;
         
@@ -51,7 +59,7 @@
 }
 
 - (id)initWithFirstChild:(LAHNode *)firstChild variadicChildren:(va_list)children{
-    self = [super initWithFirstChild:firstChild variadicChildren:children];
+    self = [self initWithFirstChild:firstChild variadicChildren:children];
     if (self) {
         self.type = LAHConstructTypeDictionary;
     }
@@ -63,6 +71,17 @@
     [super dealloc];
 }
 
+- (id)copyWithZone:(NSZone *)zone{
+    LAHDictionary *copy = [super copyWithZone:zone];
+    
+    if (_dictionary) copy.dictionary = [[NSMutableDictionary alloc] initWithDictionary:_dictionary copyItems:YES];
+    
+    [copy.dictionary release];
+    
+    return copy;
+}
+
+#pragma mark - recursion
 - (void)update{
     [self.dictionary = [[NSMutableDictionary alloc] init] release];
     [(LAHConstruct *)_father recieve:self];
@@ -76,6 +95,7 @@
     return _dictionary;
 }
 
+#pragma mark - States
 - (void)saveStateForKey:(id)key{
     NSMutableDictionary *collector = [[NSMutableDictionary alloc] initWithCapacity:3];
     if (_lastFatherContainer) [collector setObject:_lastFatherContainer forKey:gKeyLastFatherContainer];

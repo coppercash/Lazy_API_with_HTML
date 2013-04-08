@@ -10,8 +10,14 @@
 #import "LAHRecognizer.h"
 #import "LAHOperation.h"
 
+@interface LAHConstruct ()
+@property(nonatomic, assign)id lastFatherContainer;
+@property(nonatomic, assign)LAHEle lastIdentifierElement;
+@end
+
 @implementation LAHConstruct
 @synthesize type = _type, key = _key, identifiers = _identifiers;
+@synthesize lastFatherContainer = _lastFatherContainer, lastIdentifierElement = _lastIdentifierElement;
 
 - (void)dealloc{
     self.key = nil;
@@ -20,13 +26,27 @@
     [super dealloc];
 }
 
-- (void)setIdentifiers:(NSArray *)indexes{
+- (void)setIdentifiers:(NSSet *)indexes{
     [_identifiers release];
     _identifiers = [indexes retain];
     
     for (LAHRecognizer *r in _identifiers) {
         r.isIdentifier = YES;
     }
+}
+
+- (id)copyWithZone:(NSZone *)zone{
+    LAHConstruct *copy = [super copyWithZone:zone];
+    
+    copy.type = _type;
+    copy.key = _key;
+    //if (_identifiers) copy.identifiers = [[NSSet alloc] initWithSet:_identifiers copyItems:YES];
+    
+    copy.lastFatherContainer = _lastFatherContainer;
+    copy.lastIdentifierElement = _lastIdentifierElement;
+    
+    [copy.identifiers release];
+    return copy;
 }
 
 #pragma mark - States
@@ -77,8 +97,8 @@
 
 #pragma mark - Interpreter
 - (void)addIdentifier:(LAHRecognizer *)identifier{
-    if (_identifiers == nil) [self.identifiers = [[NSMutableArray alloc] init] release];
-    [(NSMutableArray *)_identifiers addObject:identifier];
+    if (_identifiers == nil) [self.identifiers = [[NSMutableSet alloc] init] release];
+    [(NSMutableSet *)_identifiers addObject:identifier];
     identifier.isIdentifier = YES;
 }
 

@@ -77,22 +77,29 @@
     [super dealloc];
 }
 
-#pragma mark - Download
-/*
-- (void)download:(LAHEle)element{
-    if (_link == nil) return;
+- (id)copyWithZone:(NSZone *)zone{
+    LAHOperation *copy = [super copyWithZone:zone];
     
-    for (LAHFetcher *f in _fetchers) {
-        [f fetchSystemInfo:self];
-    }
-
-    LAHOperation *operation = self.recursiveOperation;
-    id<LAHDelegate> delegate = operation.delegate;
-    if (delegate && [delegate respondsToSelector:@selector(downloader:needFileAtPath:)]) {
-        id key = [delegate downloader:self needFileAtPath:_link];
-        [operation saveDownloader:self forKey:key];
-    }
-}*/
+    copy.construct = [_construct copy];
+    copy.construct.father = copy;
+    
+    if (_theDownloading) copy.theDownloading = [[NSMutableDictionary alloc] initWithDictionary:_theDownloading copyItems:YES];
+    if (_theSeeking) copy.theSeeking = [[NSMutableArray alloc] initWithArray:_theSeeking copyItems:YES];
+    if (_networks) copy.networks = [[NSMutableArray alloc] initWithArray:_networks copyItems:YES];
+    
+    copy.delegate = _delegate;
+    if (_completions) copy.completions = [[NSMutableArray alloc] initWithArray:_completions copyItems:YES];
+    if (_correctors) copy.correctors = [[NSMutableArray alloc] initWithArray:_correctors copyItems:YES];
+    
+    [copy.construct release];
+    [copy.theDownloading release];
+    [copy.theSeeking release];
+    [copy.networks release];
+    [copy.completions release];
+    [copy.correctors release];
+    
+    return copy;
+}
 
 #pragma mark - Fake LAHConstruct
 - (BOOL)checkUpate:(LAHConstruct *)object{
@@ -234,7 +241,7 @@
 }
 
 - (void)checkFinishing{
-    if (_theSeeking.count + _theDownloading.count + _networks.count  == 0) {
+    if (_theSeeking.count + _theDownloading.count + _networks.count == 0) {
         __block LAHOperation *bSelf = self;
         for (LAHCompletion completion in _completions) {
             completion(bSelf);

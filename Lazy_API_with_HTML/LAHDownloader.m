@@ -24,6 +24,18 @@
     [super dealloc];
 }
 
+- (id)copyWithZone:(NSZone *)zone{
+    LAHDownloader *copy = [super copyWithZone:zone];
+    copy.linker = _linker;
+    copy.link = _link;
+    copy.symbol = _symbol;
+    if (_fetchers) copy.fetchers = [[NSArray alloc] initWithArray:_fetchers copyItems:YES];
+    
+    [copy.fetchers release];
+    
+    return copy;
+}
+
 #pragma mark - Info
 - (NSString *)absolutePath{
     LAHOperation *ope = self.recursiveOperation;
@@ -38,6 +50,8 @@
 
 #pragma mark - Seek
 - (void)download:(LAHEle)element{
+    NSAssert(_link != nil || _linker != nil || _symbol != nil, @"Can't get link.");
+
     if (_linker) {
         self.link = _linker(element);
     }else if (_symbol){
@@ -52,23 +66,27 @@
 #ifdef LAH_RULES_DEBUG
     NSMutableString *space = [NSMutableString string];
     for (int i = 0; i < gRecLogDegree; i ++) [space appendString:@"\t"];
-    NSMutableString *info = [NSMutableString stringWithFormat:@"%@%@\n%@%@=%@",
+    NSMutableString *info = [NSMutableString stringWithFormat:@"%@%@\n%@'symbol'=%@\n'link'=%@",
                              space, self,
                              space, _symbol, _link];
     printf("\n%s\n", [info cStringUsingEncoding:NSASCIIStringEncoding]);
     
     gRecLogDegree += 1;
 #endif
+    
     for (LAHFetcher *f in _fetchers) {
         [f fetchSystemInfo:self];
     }
+
 #ifdef LAH_RULES_DEBUG
     gRecLogDegree -= 1;
 #endif
     
     if (_children.count == 0) return;   //If do not have recognizers, no necessary to download.
     LAHOperation *operation = self.recursiveOperation;
+    NSAssert(operation != nil, @"Can't get recursiveOperation");
     id<LAHDelegate> delegate = operation.delegate;
+    NSAssert(delegate != nil, @"Can't work without download delegate.");
     if (delegate && [delegate respondsToSelector:@selector(downloader:needFileAtPath:)]) {
         id key = [delegate downloader:self needFileAtPath:_link];
         [operation saveDownloader:self forKey:key];

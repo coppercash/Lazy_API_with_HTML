@@ -10,12 +10,12 @@
 @protocol LAHDataSource, LAHDelegate;
 @class LAHConstruct;
 @interface LAHOperation : LAHDownloader {
+    LAHConstruct *_construct;
+    
     NSMutableDictionary *_theDownloading;
     NSMutableArray *_theSeeking;
     NSMutableArray *_networks;
-    
-    LAHConstruct *_construct;
-    
+
     id<LAHDelegate> _delegate;
     NSMutableArray *_completions;
     NSMutableArray *_correctors;

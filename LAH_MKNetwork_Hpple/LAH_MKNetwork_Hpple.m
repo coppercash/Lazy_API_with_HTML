@@ -82,6 +82,7 @@
         if (!completedOperation.isCachedResponse) [bOperation removeNetwork:op];
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
         [bOperation handleError:error];
+        NSAssert(error == nil, @"%@", error.userInfo);
         if (!completedOperation.isCachedResponse) [bOperation removeNetwork:op];
     }];
     

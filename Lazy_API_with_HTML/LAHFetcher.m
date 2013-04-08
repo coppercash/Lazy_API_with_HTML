@@ -52,15 +52,11 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone{
-    LAHFetcher *copy = [[[self class] allocWithZone:zone] init];
+    LAHFetcher *copy = [super copyWithZone:zone];
     
-    copy.father = self.father;
-    copy.children = self.children;
-    
-    copy.type = self.type;
-    copy.key = self.key;
-    copy.identifiers = self.identifiers;
-    copy.fetcher = self.fetcher;
+    copy.fetcher = _fetcher;
+    copy.symbol = _symbol;
+    copy.property = _property;
     
     return copy;
 }
@@ -83,7 +79,7 @@
 - (void)fetchSystemInfo:(LAHNode *)node{
     if ([_symbol isEqualToString:LAHValPath]) {
         LAHDownloader *downloader = (LAHDownloader *)node;
-        self.property = downloader.path;
+        self.property = downloader.link;
     }else if ([_symbol isEqualToString:LAHValURL]) {
         LAHDownloader *downloader = (LAHDownloader *)node;
         self.property = downloader.absolutePath;
@@ -118,9 +114,6 @@
     if (_property == nil) return [NSNull null];
     return _property;
 }
-
-#pragma mark - Index
-- (void)setIdentifiers:(NSArray *)indexes{}
 
 #pragma mark - Interpreter
 - (NSString *)infoProperties{

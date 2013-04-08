@@ -20,14 +20,14 @@ typedef enum {
     LAHConstructType _type;
     
     NSString *_key;
-    NSArray *_identifiers;
+    NSSet *_identifiers;
     
     id _lastFatherContainer;
     LAHEle _lastIdentifierElement;
 }
 @property(nonatomic, assign)LAHConstructType type;
 @property(nonatomic, copy)NSString *key;
-@property(nonatomic, retain)NSArray *identifiers;
+@property(nonatomic, retain)NSSet *identifiers;
 @property(nonatomic, readonly)id container;
 
 - (BOOL)isIdentifierElementChanged;

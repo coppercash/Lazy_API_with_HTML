@@ -71,7 +71,7 @@
     else if ([self at:LAHEntRec]) entity = [[LAHStmtRecgnizer alloc] init];
     else if ([self at:LAHEntDow]) entity = [[LAHStmtDownloader alloc] init];
     else {
-        NSString *expStr = [NSString stringWithFormat:@"expected: %@, %@, %@, %@, %@, %@,", LAHEntArr, LAHEntDic, LAHEntFet, LAHEntOpe, LAHEntRec, LAHEntDow];
+        NSString *expStr = [NSString stringWithFormat:@"expected: %@, %@, %@, %@, %@, %@, but find %@", LAHEntArr, LAHEntDic, LAHEntFet, LAHEntOpe, LAHEntRec, LAHEntDow, [[self token] stringValue]];
         [self error:expStr];
     }
     

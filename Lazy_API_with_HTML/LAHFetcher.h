@@ -8,10 +8,10 @@
 
 #import "LAHConstruct.h"
 
-@interface LAHFetcher : LAHConstruct <NSCopying> {
+@interface LAHFetcher : LAHConstruct {
     LAHPropertyFetcher _fetcher;
-    NSString *_property;
     NSString *_symbol;
+    NSString *_property;
 }
 @property(nonatomic, copy)LAHPropertyFetcher fetcher;
 @property(nonatomic, copy)NSString *symbol;

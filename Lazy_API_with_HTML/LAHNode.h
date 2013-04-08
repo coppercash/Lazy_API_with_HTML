@@ -10,13 +10,15 @@
 
 @class LAHOperation;
 @protocol LAHHTMLElement, LAHDownloaderDataSource, LAHDownloaderDelegate;
-@interface LAHNode : NSObject {
+@interface LAHNode : NSObject <NSCopying> {
     LAHNode *_father;
     NSMutableArray *_children;
     NSMutableDictionary *_states;
 }
 @property(nonatomic, assign)LAHNode *father;
 @property(nonatomic, retain)NSMutableArray *children;
+@property(nonatomic, retain)NSMutableDictionary* states;
+
 - (id)initWithFirstChild:(LAHNode*)firstChild variadicChildren:(va_list)children;
 - (id)initWithChildren:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
 - (LAHOperation *)recursiveOperation;
