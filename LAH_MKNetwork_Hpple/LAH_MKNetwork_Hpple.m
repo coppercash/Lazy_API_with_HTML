@@ -64,10 +64,6 @@
 }
 
 #pragma mark - LAHDelegate
-- (void)operation:(LAHOperation *)operation didFetch:(id)info{
-    [super operation:operation didFetch:info];
-}
-
 - (id)downloader:(LAHDownloader* )operation needFileAtPath:(NSString*)path{
     __block MKNetworkOperation *op = [_engine operationWithPath:path];
     __block LAHOperation *bOperation = operation.recursiveOperation;
@@ -91,6 +87,10 @@
     
     [super downloader:operation needFileAtPath:path];
     return op;  //op is a key for dictionary
+}
+
+- (void)operation:(LAHOperation *)operation didFetch:(id)info{
+    [super operation:operation didFetch:info];
 }
 
 - (void)operation:(LAHOperation *)operation willCancelNetworks:(NSArray *)networks{

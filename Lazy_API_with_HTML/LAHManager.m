@@ -12,6 +12,7 @@
 
 @interface LAHManager ()
 @property(nonatomic, retain)NSMutableArray *operations;
+- (LAHOperation *)operationWithPath:(NSString *)path rootContainer:(LAHConstruct *)rootContainer firstChild:(LAHRecognizer *)firstChild variadicChildren:(va_list)children;
 - (void)addOperation:(LAHOperation *)operation;
 - (void)removeOperation:(LAHOperation *)operation;
 @end
@@ -130,30 +131,5 @@
 - (id)downloader:(LAHDownloader*)downloader needFileAtPath:(NSString*)path{
     return nil;
 }
-
-/*
-- (void)addNetwork:(id)network{
-    if (_networks.count == 0 && _delegate
-        && [_delegate respondsToSelector:@selector(managerStartRunning:)]){
-        [_delegate managerStartRunning:self];
-    }
-    [_networks addObject:network];
-}
-
-- (void)removeNetwork:(id)network{
-    [_networks removeObject:network];
-    if (_networks.count == 0
-        && _delegate && [_delegate respondsToSelector:@selector(managerStopRunnning:finish:)]){
-        [_delegate managerStopRunnning:self finish:YES];
-    }
-}
-
-- (void)cancelAllNetworks{
-    //Do cancel to every network
-    [_networks removeAllObjects];
-    if (_delegate && [_delegate respondsToSelector:@selector(managerStopRunnning:finish:)]){
-        [_delegate managerStopRunnning:self finish:NO];
-    }
-}*/
 
 @end

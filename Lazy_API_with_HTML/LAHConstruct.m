@@ -62,6 +62,12 @@
     }
 }
 
+- (void)refresh{
+    self.lastIdentifierElement = nil;
+    self.lastFatherContainer = nil;
+    [super refresh];
+}
+
 #pragma mark - Identifier
 - (LAHEle)currentIdentifierElement{
     for (LAHRecognizer *r in _identifiers) {

@@ -196,12 +196,11 @@
     [collector release]; [set release];
 }
 
-- (void)setKey:(NSString *)key attributes:(NSString *)firstValue, ... NS_REQUIRES_NIL_TERMINATION{
+- (void)setKey:(NSString *)key attributes:(NSString *)firstValue, ... {
     va_list values; va_start(values, firstValue);
     [self setKey:key firstValue:firstValue variadicValues:values];
     va_end(values);
 }
-
 
 #pragma mark - Recursive
 - (BOOL)handleElement:(LAHEle)element{
@@ -218,7 +217,7 @@
     //Two iteration in this order, so that the fetcher's fetching sequence depends on the sequence in the HTML.
     for (LAHEle e in element.children) {
         for (LAHRecognizer *node in _children) {
-            if (_isIdentifier) [node refreshState];
+            if (_isIdentifier) [node refresh];
             isChildrenPass |= [node handleElement:e];
         }
     }
@@ -383,12 +382,18 @@
     }
 }
 
+- (void)refresh{
+    self.numberOfMatched = 0;
+    self.matchingElement = nil;
+    [super refresh];
+}
+/*
 - (void)refreshState{
     _numberOfMatched = 0;
     for (LAHRecognizer *r in _children) {
         [r refreshState];
     }
-}
+}*/
 
 #pragma mark - Interpreter
 - (void)addFetcher:(LAHFetcher *)fetcher{

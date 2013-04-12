@@ -118,5 +118,10 @@
     [super restoreStateForKey:key];
 }
 
+- (void)refresh{
+    self.dictionary = nil;
+    [super refresh];
+}
+
 @end
 

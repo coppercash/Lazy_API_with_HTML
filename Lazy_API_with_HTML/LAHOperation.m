@@ -53,7 +53,7 @@
     return self;
 }
 
-- (id)initWithPath:(NSString*)path construct:(LAHConstruct*)rootContainer children:(LAHRecognizer*)firstChild, ... NS_REQUIRES_NIL_TERMINATION{
+- (id)initWithPath:(NSString*)path construct:(LAHConstruct*)rootContainer children:(LAHRecognizer*)firstChild, ... {
     va_list children;
     va_start(children, firstChild);
     
@@ -99,6 +99,12 @@
     [copy.correctors release];
     
     return copy;
+}
+
+#pragma mark - Status
+- (void)refresh{
+    [_construct refresh];
+    [super refresh];
 }
 
 #pragma mark - Fake LAHConstruct

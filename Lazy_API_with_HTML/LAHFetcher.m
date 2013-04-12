@@ -115,6 +115,11 @@
     return _property;
 }
 
+- (void)refresh{
+    self.property = nil;
+    [super refresh];
+}
+
 #pragma mark - Interpreter
 - (NSString *)infoProperties{
     NSMutableString *info = [NSMutableString string];

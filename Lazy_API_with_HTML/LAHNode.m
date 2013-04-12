@@ -107,6 +107,13 @@
 - (void)saveStateForKey:(id)key{}
 - (void)restoreStateForKey:(id)key{}
 
+- (void)refresh{
+    [_states removeAllObjects];
+    for (LAHNode *c in _children) {
+        [c refresh];
+    }
+}
+
 #pragma mark - Interpreter
 - (void)addChild:(LAHNode *)child{
     if (_children == nil) [self.children = [[NSMutableArray alloc] init] release];
