@@ -109,6 +109,11 @@
     return greffier;
 }
 
+#pragma mark - Status
+- (void)refresh{
+    [super refresh];
+}
+
 #pragma mark - Interpreter
 - (void)addFetcher:(LAHFetcher *)fetcher{
     if (_fetchers == nil) [self.fetchers = [[NSMutableArray alloc] init] release];

@@ -53,7 +53,7 @@
     return self;
 }
 
-- (id)initWithPath:(NSString*)path construct:(LAHConstruct*)rootContainer children:(LAHRecognizer*)firstChild, ... NS_REQUIRES_NIL_TERMINATION{
+- (id)initWithPath:(NSString*)path construct:(LAHConstruct*)rootContainer children:(LAHRecognizer*)firstChild, ... {
     va_list children;
     va_start(children, firstChild);
     
@@ -99,6 +99,17 @@
     [copy.correctors release];
     
     return copy;
+}
+
+#pragma mark - Status
+- (void)refresh{
+    [_construct refresh];
+    [_theDownloading removeAllObjects];
+    [_theSeeking removeAllObjects];
+    [_networks removeAllObjects];
+    [_completions removeAllObjects];
+    [_correctors removeAllObjects];
+    [super refresh];
 }
 
 #pragma mark - Fake LAHConstruct
@@ -246,7 +257,9 @@
         for (LAHCompletion completion in _completions) {
             completion(bSelf);
         }
-        [_delegate operation:self didFetch:_construct.container];
+        if (_delegate && [_delegate respondsToSelector:@selector(operation:didFetch:)]) {
+            [_delegate operation:self didFetch:_construct.container];
+        }
     }
 }
 

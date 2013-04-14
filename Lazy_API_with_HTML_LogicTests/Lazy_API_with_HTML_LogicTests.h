@@ -7,11 +7,10 @@
 //
 
 #import <SenTestingKit/SenTestingKit.h>
-@class LAHElementFetcher;
+
 @interface Lazy_API_with_HTML_LogicTests : SenTestCase{
     NSBundle *_bundle;
     
-    LAHElementFetcher *_fetcher;
 }
 
 @end

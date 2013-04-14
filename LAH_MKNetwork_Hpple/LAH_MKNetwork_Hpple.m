@@ -64,26 +64,30 @@
 }
 
 #pragma mark - LAHDelegate
-- (void)operation:(LAHOperation *)operation didFetch:(id)info{
-    [super operation:operation didFetch:info];
-}
-
 - (id)downloader:(LAHDownloader* )operation needFileAtPath:(NSString*)path{
     __block MKNetworkOperation *op = [_engine operationWithPath:path];
     __block LAHOperation *bOperation = operation.recursiveOperation;
     
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+        
         NSData *rd = [completedOperation responseData];
         TFHpple * doc = [[TFHpple alloc] initWithHTMLData:rd];
         TFHppleElement<LAHHTMLElement> *root = (TFHppleElement<LAHHTMLElement>*)[doc peekAtSearchWithXPathQuery:@"/html/body"];
+        
         [bOperation awakeDownloaderForKey:op withElement:root];
         
+        if (!completedOperation.isCachedResponse) [bOperation removeNetwork:op];
+    
         [doc release];
-        if (!completedOperation.isCachedResponse) [bOperation removeNetwork:op];
+
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
-        [bOperation handleError:error];
+        
         NSAssert(error == nil, @"%@", error.userInfo);
+        
+        [bOperation handleError:error];
+        
         if (!completedOperation.isCachedResponse) [bOperation removeNetwork:op];
+    
     }];
     
     [_engine enqueueOperation:op forceReload:YES];
@@ -91,6 +95,10 @@
     
     [super downloader:operation needFileAtPath:path];
     return op;  //op is a key for dictionary
+}
+
+- (void)operation:(LAHOperation *)operation didFetch:(id)info{
+    [super operation:operation didFetch:info];
 }
 
 - (void)operation:(LAHOperation *)operation willCancelNetworks:(NSArray *)networks{

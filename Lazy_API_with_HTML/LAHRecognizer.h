@@ -22,7 +22,7 @@
     NSUInteger _numberOfMatched;
     LAHEle _matchingElement;
     
-    //Even handlers
+    //Events handlers
     NSArray *_fetchers;
     NSArray *_downloaders;
 }
@@ -52,7 +52,7 @@
 - (BOOL)handleElement:(LAHEle)element;
 - (BOOL)isElementMatched:(LAHEle)element;
 
-- (void)refreshState;
+//- (void)refreshState;
 
 #pragma mark - Interpreter
 - (void)addFetcher:(LAHFetcher *)fetcher;

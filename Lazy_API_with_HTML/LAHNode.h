@@ -23,8 +23,10 @@
 - (id)initWithChildren:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
 - (LAHOperation *)recursiveOperation;
 - (void)releaseChild:(LAHNode*)child;
+#pragma mark - Status
 - (void)saveStateForKey:(id)key;
 - (void)restoreStateForKey:(id)key;
+- (void)refresh;
 #pragma mark - Interpreter
 - (void)addChild:(LAHNode *)child;
 #pragma mark - Log

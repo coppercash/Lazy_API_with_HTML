@@ -24,7 +24,7 @@
     return self;
 }
 
-- (id)initWithObjects:(LAHConstruct *)firstObj, ... NS_REQUIRES_NIL_TERMINATION{
+- (id)initWithObjects:(LAHConstruct *)firstObj, ... {
     va_list objs; va_start(objs, firstObj);
     self = [self initWithFirstChild:firstObj variadicChildren:objs];
     va_end(objs);
@@ -94,6 +94,11 @@
     [_states removeObjectForKey:key];
     
     [super restoreStateForKey:key];
+}
+
+- (void)refresh{
+    self.array = nil;
+    [super refresh];
 }
 
 @end
