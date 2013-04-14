@@ -3,7 +3,7 @@ arr'con0':
         fet'title0'(_text, key="title")
         fet'link0'("href", key="link")
         
-ope'ope'('con0', path="/VOA_Special_English/"):
+ope'ope0'('con0', path="/VOA_Special_English/"):
     rec("div", "id"="leftNav"):
         rec("ul"):
             rec'id0'("li", range=(0, 17)):
@@ -18,7 +18,7 @@ arr'con1':
         fet'link1'("href", key="link")
         fet'url1'(_url, key="url")
         
-ope'ope0'('con1'):
+ope'ope1'('con1'):
     rec("span", "id"={"blist", "list"}):
         rec("ul"):
             rec'id1'("li"):
@@ -39,7 +39,7 @@ dic'con2':
         dic(id={'id2_0', 'id2_1'}):
             fet'imgSrc'("src", key="imgSrc")
     
-ope'ope'('con2'):
+ope'ope2'('con2'):
     'url2'
     rec("div", "id"="rightContainer"):
         rec("div", "id"="title"):

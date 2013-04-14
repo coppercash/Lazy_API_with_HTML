@@ -69,17 +69,25 @@
     __block LAHOperation *bOperation = operation.recursiveOperation;
     
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+        
         NSData *rd = [completedOperation responseData];
         TFHpple * doc = [[TFHpple alloc] initWithHTMLData:rd];
         TFHppleElement<LAHHTMLElement> *root = (TFHppleElement<LAHHTMLElement>*)[doc peekAtSearchWithXPathQuery:@"/html/body"];
+        
         [bOperation awakeDownloaderForKey:op withElement:root];
         
+        if (!completedOperation.isCachedResponse) [bOperation removeNetwork:op];
+    
         [doc release];
-        if (!completedOperation.isCachedResponse) [bOperation removeNetwork:op];
+
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
-        [bOperation handleError:error];
+        
         NSAssert(error == nil, @"%@", error.userInfo);
+        
+        [bOperation handleError:error];
+        
         if (!completedOperation.isCachedResponse) [bOperation removeNetwork:op];
+    
     }];
     
     [_engine enqueueOperation:op forceReload:YES];

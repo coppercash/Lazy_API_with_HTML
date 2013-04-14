@@ -33,7 +33,7 @@
 		<key>Lazy_API_with_HTML_LogicTests.xcscheme</key>
 		<dict>
 			<key>isShown</key>
-			<false/>
+			<true/>
 			<key>orderHint</key>
 			<integer>6</integer>
 		</dict>

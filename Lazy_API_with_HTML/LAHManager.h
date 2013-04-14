@@ -15,12 +15,17 @@
 }
 @property(nonatomic, readonly)NSMutableArray *operations;
 @property(nonatomic, assign)id<LAHManagerDelegate> delegate;
+
+#pragma mark - Operation
 - (LAHOperation *)operationWithPath:(NSString *)path rootContainer:(LAHConstruct *)rootContainer children:(LAHRecognizer*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
 - (LAHOperation *)operationWithFile:(NSString *)path key:(NSString *)key dictionary:(NSMutableDictionary *)dictionary;
 - (LAHOperation *)operationWithFile:(NSString *)path key:(NSString *)key;
 
-- (NSUInteger)numberOfOperations;
+#pragma mark - Operations Management
 - (void)cancel;
+
+#pragma mark - Info
+- (NSUInteger)numberOfOperations;
 
 @end
 

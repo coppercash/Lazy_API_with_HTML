@@ -104,6 +104,11 @@
 #pragma mark - Status
 - (void)refresh{
     [_construct refresh];
+    [_theDownloading removeAllObjects];
+    [_theSeeking removeAllObjects];
+    [_networks removeAllObjects];
+    [_completions removeAllObjects];
+    [_correctors removeAllObjects];
     [super refresh];
 }
 
@@ -252,7 +257,9 @@
         for (LAHCompletion completion in _completions) {
             completion(bSelf);
         }
-        [_delegate operation:self didFetch:_construct.container];
+        if (_delegate && [_delegate respondsToSelector:@selector(operation:didFetch:)]) {
+            [_delegate operation:self didFetch:_construct.container];
+        }
     }
 }
 

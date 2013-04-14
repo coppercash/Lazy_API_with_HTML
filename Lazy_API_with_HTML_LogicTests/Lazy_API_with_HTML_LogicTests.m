@@ -7,11 +7,8 @@
 //
 
 #import "Lazy_API_with_HTML_LogicTests.h"
-#import "LAHElementFetcher.h"
-#import "LAHElementRecognizer.h"
-#import "LAHHTMLProtocols.h"
-#import "TFHpple.h"
-
+#import "LAHHeaders.h"
+#import "LMHModelsGroup.h"
 @implementation Lazy_API_with_HTML_LogicTests
 
 - (void)setUp
@@ -21,19 +18,20 @@
     // Set-up code here.
     _bundle = [NSBundle bundleForClass: [self class]];
     
-    _fetcher = [[LAHElementFetcher alloc] init];
 }
 
 - (void)tearDown
 {
-    [_fetcher release];
     // Tear-down code here.
     
     [super tearDown];
 }
 
-- (void)testFetcher{
-
+- (void)testLMHModelsGroup{
+    NSString *path = [_bundle pathForResource:@"51VOA" ofType:@"lah"];
+    NSString *string = [NSString stringWithContentsOfFile:path encoding:NSASCIIStringEncoding error:nil];
+    LMHModelsGroup *group = [[LMHModelsGroup alloc] initWithCommand:string key:@"ope"];
+    NSLog(@"%@", group);
 }
 
 @end

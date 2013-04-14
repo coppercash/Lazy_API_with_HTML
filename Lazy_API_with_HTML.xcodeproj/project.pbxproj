@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BE10E7711717EECE00CDB057 /* LAHModelsGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = BE10E7701717EECE00CDB057 /* LAHModelsGroup.m */; };
+		BE10E7741718046600CDB057 /* LMHModelsGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = BE10E7731718046600CDB057 /* LMHModelsGroup.m */; };
+		BE10E78017180E9200CDB057 /* 51VOA.lah in Resources */ = {isa = PBXBuildFile; fileRef = BE10E77F17180E9200CDB057 /* 51VOA.lah */; };
+		BE10E7811718106600CDB057 /* libLAH_MKNetwork_Hpple.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BE93F0C416C502DE008C3B3F /* libLAH_MKNetwork_Hpple.a */; };
+		BE10E7821718107B00CDB057 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BEE351E616C5096E0013C3AD /* libxml2.2.dylib */; };
+		BE10E7831718108600CDB057 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE93F11716C507B9008C3B3F /* Security.framework */; };
+		BE10E7841718108A00CDB057 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE93F0FE16C5074C008C3B3F /* CFNetwork.framework */; };
+		BE10E7851718109000CDB057 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE93F10116C50764008C3B3F /* SystemConfiguration.framework */; };
+		BE10E786171810B500CDB057 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE71B26116C1F9D4005AD9D7 /* CoreGraphics.framework */; };
+		BE10E787171810CD00CDB057 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE71B25E16C1F9D4005AD9D7 /* UIKit.framework */; };
 		BE21217F16C4B782007ED374 /* LAHManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BE21217E16C4B782007ED374 /* LAHManager.m */; };
 		BE71B25F16C1F9D4005AD9D7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE71B25E16C1F9D4005AD9D7 /* UIKit.framework */; };
 		BE71B26016C1F9D4005AD9D7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEDD18CD16BF976F009825E8 /* Foundation.framework */; };
@@ -19,7 +29,6 @@
 		BE71B27416C1F9D4005AD9D7 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BE71B27316C1F9D4005AD9D7 /* Default-568h@2x.png */; };
 		BE71B27716C1F9D4005AD9D7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE71B27616C1F9D4005AD9D7 /* ViewController.m */; };
 		BE71B27A16C1F9D4005AD9D7 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE71B27816C1F9D4005AD9D7 /* ViewController.xib */; };
-		BE8E785116BFC73800FAE32B /* libLazy_API_with_HTML.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BEDD18CA16BF976F009825E8 /* libLazy_API_with_HTML.a */; };
 		BE93F0BE16C4FCDB008C3B3F /* LAH51voa.m in Sources */ = {isa = PBXBuildFile; fileRef = BE93F0BD16C4FCDB008C3B3F /* LAH51voa.m */; };
 		BE93F0C516C502DE008C3B3F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEDD18CD16BF976F009825E8 /* Foundation.framework */; };
 		BE93F0CA16C502DF008C3B3F /* LAH_MKNetwork_Hpple.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BE93F0C916C502DF008C3B3F /* LAH_MKNetwork_Hpple.h */; };
@@ -87,6 +96,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BE10E76F1717EECE00CDB057 /* LAHModelsGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LAHModelsGroup.h; sourceTree = "<group>"; };
+		BE10E7701717EECE00CDB057 /* LAHModelsGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LAHModelsGroup.m; sourceTree = "<group>"; };
+		BE10E7721718046600CDB057 /* LMHModelsGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMHModelsGroup.h; sourceTree = "<group>"; };
+		BE10E7731718046600CDB057 /* LMHModelsGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMHModelsGroup.m; sourceTree = "<group>"; };
+		BE10E77F17180E9200CDB057 /* 51VOA.lah */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 51VOA.lah; sourceTree = "<group>"; };
 		BE21217D16C4B782007ED374 /* LAHManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LAHManager.h; sourceTree = "<group>"; };
 		BE21217E16C4B782007ED374 /* LAHManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LAHManager.m; sourceTree = "<group>"; };
 		BE71B25C16C1F9D4005AD9D7 /* LAHDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LAHDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -209,7 +223,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE8E785116BFC73800FAE32B /* libLazy_API_with_HTML.a in Frameworks */,
+				BE10E787171810CD00CDB057 /* UIKit.framework in Frameworks */,
+				BE10E786171810B500CDB057 /* CoreGraphics.framework in Frameworks */,
+				BE10E7851718109000CDB057 /* SystemConfiguration.framework in Frameworks */,
+				BE10E7841718108A00CDB057 /* CFNetwork.framework in Frameworks */,
+				BE10E7831718108600CDB057 /* Security.framework in Frameworks */,
+				BE10E7821718107B00CDB057 /* libxml2.2.dylib in Frameworks */,
+				BE10E7811718106600CDB057 /* libLAH_MKNetwork_Hpple.a in Frameworks */,
 				BED8CFF616BFAE5A001D819C /* SenTestingKit.framework in Frameworks */,
 				BED8CFF816BFAE5A001D819C /* Foundation.framework in Frameworks */,
 			);
@@ -271,6 +291,8 @@
 				BE95AE8B16E57A6E008D5A88 /* LAHManagerEnhance.m */,
 				BE93F0C916C502DF008C3B3F /* LAH_MKNetwork_Hpple.h */,
 				BE93F0CB16C502DF008C3B3F /* LAH_MKNetwork_Hpple.m */,
+				BE10E7721718046600CDB057 /* LMHModelsGroup.h */,
+				BE10E7731718046600CDB057 /* LMHModelsGroup.m */,
 				BE93F0C716C502DF008C3B3F /* Supporting Files */,
 			);
 			path = LAH_MKNetwork_Hpple;
@@ -376,6 +398,7 @@
 			isa = PBXGroup;
 			children = (
 				BED8D00616BFB1CB001D819C /* voa.html */,
+				BE10E77F17180E9200CDB057 /* 51VOA.lah */,
 				BED8CFFF16BFAE5A001D819C /* Lazy_API_with_HTML_LogicTests.h */,
 				BED8D00016BFAE5A001D819C /* Lazy_API_with_HTML_LogicTests.m */,
 				BED8CFFA16BFAE5A001D819C /* Supporting Files */,
@@ -439,6 +462,8 @@
 				BEA0533E16E9CD7F000A7958 /* LAHInterface.m */,
 				BE21217D16C4B782007ED374 /* LAHManager.h */,
 				BE21217E16C4B782007ED374 /* LAHManager.m */,
+				BE10E76F1717EECE00CDB057 /* LAHModelsGroup.h */,
+				BE10E7701717EECE00CDB057 /* LAHModelsGroup.m */,
 				BEE2183E16F074A600276040 /* LAHEntity */,
 				BE9F6A3E16EABBB4007C7EBB /* LAHInterpreter */,
 				BEDD18D016BF976F009825E8 /* Supporting Files */,
@@ -590,6 +615,7 @@
 			files = (
 				BED8CFFE16BFAE5A001D819C /* InfoPlist.strings in Resources */,
 				BED8D00716BFB1CB001D819C /* voa.html in Resources */,
+				BE10E78017180E9200CDB057 /* 51VOA.lah in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -630,6 +656,7 @@
 			files = (
 				BE93F0CC16C502DF008C3B3F /* LAH_MKNetwork_Hpple.m in Sources */,
 				BE95AE8C16E57A6E008D5A88 /* LAHManagerEnhance.m in Sources */,
+				BE10E7741718046600CDB057 /* LMHModelsGroup.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -663,6 +690,7 @@
 				BE9F6A4A16EABBD6007C7EBB /* LAHToken.m in Sources */,
 				BE98178616EB21DA00FE93DE /* LAHParser.m in Sources */,
 				BE98178916EB2AD500FE93DE /* LAHStmt.m in Sources */,
+				BE10E7711717EECE00CDB057 /* LAHModelsGroup.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

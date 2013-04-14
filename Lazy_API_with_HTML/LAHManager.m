@@ -19,7 +19,7 @@
 
 @implementation LAHManager
 @synthesize operations = _operations, delegate = _delegate;
-#pragma mark - Life Cycle
+#pragma mark - Class Basic
 - (id)init{
     self = [super init];
     if (self) {
@@ -110,10 +110,6 @@
     [operation release];
 }
 
-- (NSUInteger)numberOfOperations{
-    return _operations.count;
-}
-
 - (void)cancel{
     if (_delegate && [_delegate respondsToSelector:@selector(managerStopRunnning:finish:)] &&
         self.numberOfOperations != 0) {
@@ -121,6 +117,11 @@
     }
     [_operations makeObjectsPerformSelector:@selector(cancel)];
     [_operations removeAllObjects];
+}
+
+#pragma mark - Info
+- (NSUInteger)numberOfOperations{
+    return _operations.count;
 }
 
 #pragma mark - LAHDelegate
