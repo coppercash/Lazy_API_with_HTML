@@ -212,6 +212,7 @@
                     LAHParaId,
                     LAHParaKey,
                     LAHParaSym,
+                    LAHParaReg,
                     LAHParaRoot,
                     LAHParaPath,
                     LAHParaTag,

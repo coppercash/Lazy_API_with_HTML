@@ -16,7 +16,7 @@
 @end
 
 @implementation LAHFetcher
-@synthesize fetcher = _fetcher, property = _property, symbol = _symbol;
+@synthesize fetcher = _fetcher, property = _property, symbol = _symbol, reg = _reg;
 #pragma mark - Life Cycle
 
 - (id)init{
@@ -65,12 +65,40 @@
 - (void)fetchProperty:(LAHEle)element{
     if (_fetcher) {
         self.property = _fetcher(element);
-    }else if (_symbol){
-        if ([_symbol isEqualToString:LAHValTag])  self.property = element.tagName;
-        else if ([_symbol isEqualToString:LAHValText]) self.property = element.text;
-        else if ([_symbol isEqualToString:LAHValContent]) self.property = element.content;
-        else self.property = [element.attributes objectForKey:_symbol];
-    }else{
+    } else if (_symbol) {
+        NSString *property = nil;
+        
+        if ([_symbol isEqualToString:LAHValTag]) {
+            property = element.tagName;
+        } else if ([_symbol isEqualToString:LAHValText]) {
+            property = element.text;
+        } else if ([_symbol isEqualToString:LAHValContent]) {
+            property = element.content;
+        } else {
+            property = [element.attributes objectForKey:_symbol];
+        }
+        
+        if (property && _reg) {
+            
+            NSError *regError = nil;
+            NSRegularExpression *regExp = [[NSRegularExpression alloc] initWithPattern:_reg options:0 error:&regError];
+            NSTextCheckingResult *match = [regExp firstMatchInString:property options:0 range:NSMakeRange(0, property.length)];
+            [regExp release];
+            NSAssert(regError == nil, @"%@", regError.userInfo);
+
+            if (match) {
+                NSRange resultRange = [match rangeAtIndex:1];
+                NSString *result = [property substringWithRange:resultRange];
+                self.property = result;
+            }
+        
+        } else {
+            
+            self.property = property;
+        
+        }
+        
+    } else {
         return;
     }
     [self doFetch];

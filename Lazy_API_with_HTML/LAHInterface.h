@@ -46,6 +46,7 @@ extern NSString * const LAHEntDow;
 extern NSString * const LAHParaId;
 extern NSString * const LAHParaKey;
 extern NSString * const LAHParaSym;
+extern NSString * const LAHParaReg;
 extern NSString * const LAHParaRoot;
 extern NSString * const LAHParaPath;
 extern NSString * const LAHParaTag;

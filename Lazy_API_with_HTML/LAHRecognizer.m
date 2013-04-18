@@ -365,16 +365,13 @@
 
 #pragma mark - State
 - (void)saveStateForKey:(id)key{
-    //NSNumber *count = [[NSNumber alloc] initWithUnsignedInteger:_numberOfMatched];
     if (_matchingElement) [_states setObject:_matchingElement forKey:key];
-    //[count release];
     for (LAHConstruct *c in _children) {
         [c saveStateForKey:key];
     }
 }
 
 - (void)restoreStateForKey:(id)key{
-    //NSNumber *count = [_states objectForKey:key];
     _matchingElement = [_states objectForKey:key];
     [_states removeObjectForKey:key];
     for (LAHConstruct *c in _children) {
@@ -387,13 +384,6 @@
     self.matchingElement = nil;
     [super refresh];
 }
-/*
-- (void)refreshState{
-    _numberOfMatched = 0;
-    for (LAHRecognizer *r in _children) {
-        [r refreshState];
-    }
-}*/
 
 #pragma mark - Interpreter
 - (void)addFetcher:(LAHFetcher *)fetcher{
