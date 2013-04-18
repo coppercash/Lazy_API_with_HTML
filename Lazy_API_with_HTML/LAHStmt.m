@@ -220,20 +220,25 @@
         
         } else if ([pN isEqualToString:LAHParaSym]) {
             [frame assert:![pV isKindOfClass:[NSString class]]
-                    error:@"LAHConstruct expects String as SYMBOL."];
+                    error:@"LAHFetcher expects String as SYMBOL."];
             fetcher.symbol = pV;
         
         } else if ([pN isEqualToString:LAHParaKey]) {
             [frame assert:![pV isKindOfClass:[NSString class]]
-                    error:@"LAHConstruct expects String as KEY."];
+                    error:@"LAHFetcher expects String as KEY."];
             fetcher.key = pV;
         
+        } else if ([pN isEqualToString:LAHParaReg]) {
+            [frame assert:![pV isKindOfClass:[NSString class]]
+                    error:@"LAHFetcher expects String as REG."];
+            fetcher.reg = pV;
+            
         } else if ([pN isEqualToString:LAHParaId]) {
             [frame assert:![pV isKindOfClass:[NSArray class]]
-                    error:@"LAHConstruct expects Tuple as identifiers."];
+                    error:@"LAHFetcher expects Tuple as IDENTIFIERS."];
             fetcher.identifiers = pV;
         
-        }else{
+        } else{
             [frame error:@"LAHConstruct can't accept parameter."];
         }
         index ++;

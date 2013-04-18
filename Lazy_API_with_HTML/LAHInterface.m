@@ -21,6 +21,7 @@ NSString * const LAHEntDow    = @"dow";
 NSString * const LAHParaId      = @"id";
 NSString * const LAHParaKey     = @"key";
 NSString * const LAHParaSym     = @"sym";
+NSString * const LAHParaReg     = @"reg";
 NSString * const LAHParaRoot    = @"root";
 NSString * const LAHParaPath    = @"path";
 NSString * const LAHParaTag     = @"tag";

@@ -122,7 +122,7 @@
 }
 
 #pragma mark - Log
-- (NSString *)description{
+- (NSString *)debugDescription{
     return [self info:0];
 }
 

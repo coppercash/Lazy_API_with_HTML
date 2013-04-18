@@ -9,12 +9,15 @@
 #import "LAHConstruct.h"
 
 @interface LAHFetcher : LAHConstruct {
-    LAHPropertyFetcher _fetcher;
-    NSString *_symbol;
     NSString *_property;
+
+    NSString *_symbol;
+    NSString *_reg;
+    LAHPropertyFetcher _fetcher;
 }
-@property(nonatomic, copy)LAHPropertyFetcher fetcher;
 @property(nonatomic, copy)NSString *symbol;
+@property(nonatomic, copy)NSString *reg;
+@property(nonatomic, copy)LAHPropertyFetcher fetcher;
 - (id)initWithFetcher:(LAHPropertyFetcher)property;
 - (id)initWithSymbol:(NSString *)symbol;
 - (void)fetchProperty:(LAHEle)element;
