@@ -74,7 +74,9 @@
 }
 
 - (LAHOperation *)operationAtIndex:(NSInteger)index{
-    if (index < 0 || _operations.count <= index) return nil;
+    NSAssert(NSLocationInRange(index, NSMakeRange(0, _operations.count)), @"Operation at %d out of range.", index);
+    if ( !NSLocationInRange(index, NSMakeRange(0, _operations.count)) ) return nil;
+
     LAHOperation *ope = [_operations objectAtIndex:index];
     [ope refresh];
     return ope;

@@ -7,7 +7,9 @@
 //
 
 #import "LAH_MKNetwork_Hpple.h"
-#import "LAHOperation.h"
+#import "MKNetworkEngine.h"
+#import "Hpple/TFHpple.h"
+
 @interface LAH_MKNetworkKit_Hpple ()
 @property(nonatomic, retain)MKNetworkEngine *engine;
 @property(nonatomic, retain)NSMutableArray *networks;
