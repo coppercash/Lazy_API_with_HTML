@@ -12,8 +12,8 @@
 @interface LAHOperation : LAHDownloader {
     LAHConstruct *_construct;
     
-    NSMutableDictionary *_theDownloading;
-    NSMutableArray *_theSeeking;
+    NSMutableDictionary *_downloadings;
+    NSMutableArray *_seekings;
     NSMutableArray *_networks;
 
     id<LAHDelegate> _delegate;
@@ -29,17 +29,16 @@
 
 #pragma mark - Event
 - (void)start;
-- (void)handleError:(NSError*)error;
 - (void)addCompletion:(LAHCompletion)completion;
 - (void)addCorrector:(LAHCorrector)corrector;
 
 #pragma mark - Queue
 - (void)saveDownloader:(LAHDownloader*)downloader forKey:(id)key;
 - (void)awakeDownloaderForKey:(id)key withElement:(LAHEle)element;
-- (void)addSeeker:(LAHDownloader*)downloader;
-- (void)removeSeeker:(LAHDownloader*)downloader;
+- (void)handleError:(NSError*)error withKey:(id)key;
+
+#pragma mark - Network
 - (void)addNetwork:(id)object;
-- (void)removeNetwork:(id)object;
 - (void)cancel;
 
 #pragma mark - Info

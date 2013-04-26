@@ -18,6 +18,7 @@
 @property(nonatomic, copy)NSString *symbol;
 @property(nonatomic, copy)NSString *link;
 @property(nonatomic, retain)NSArray *fetchers;
+@property(nonatomic, readonly, getter = identifier)NSString *identifier;
 @property(nonatomic, readonly, getter = hostName)NSString *hostName;
 @property(nonatomic, readonly, getter = absolutePath)NSString *absolutePath;
 
