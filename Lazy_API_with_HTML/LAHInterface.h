@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Coder Dreamer. All rights reserved.
 //
 
-//#define LAH_RULES_DEBUG
-//#define LAH_OPERATION_DEBUG
+#define LAH_RULES_DEBUG
+#define LAH_OPERATION_DEBUG
 
 #ifdef LAH_RULES_DEBUG
 extern NSUInteger gRecLogDegree;

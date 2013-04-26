@@ -7,6 +7,8 @@
 //
 
 #import "LMHModelsGroup.h"
+#import "MKNetworkEngine.h"
+#import "Hpple/TFHpple.h"
 
 @interface LMHModelsGroup ()
 @property(nonatomic, retain)MKNetworkEngine *engine;
@@ -24,48 +26,55 @@
         NSString *hostName = url.host;
         
         [self.engine = [[MKNetworkEngine alloc] initWithHostName:hostName] release];
-        [_engine useCache];
         
         [url release];
     }
     return self;
 }
 
+- (NSURL *)resourceURLWithOfLink:(NSString *)link{
+    NSURL *url = [[NSURL alloc] initWithString:link];
+    if (!url.host) {
+        //NSString *scheme = @"http";
+        NSString *host = _engine.readonlyHostName;
+        NSString *path = [host stringByAppendingPathComponent:link];
+        url = [[NSURL alloc] initWithString:path];
+
+        //url = [[NSURL alloc] initWithScheme:scheme host:host path:link];
+    }
+    
+    return url;
+}
+
 #pragma mark - LAHDelegate
 - (id)downloader:(LAHDownloader* )operation needFileAtPath:(NSString*)path{
     
     NSURL *url = [[NSURL alloc] initWithString:path];
-    __block MKNetworkOperation *op = [_engine operationWithPath:url.relativePath];
-    __block LAHOperation *bOperation = operation.recursiveOperation;
-    
-    [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
-        
-        NSData *rd = [completedOperation responseData];
-        TFHpple * doc = [[TFHpple alloc] initWithHTMLData:rd];
-        TFHppleElement<LAHHTMLElement> *root = (TFHppleElement<LAHHTMLElement>*)[doc peekAtSearchWithXPathQuery:@"/html/body"];
-        
-        [bOperation awakeDownloaderForKey:op withElement:root];
-        
-        if (!completedOperation.isCachedResponse) [bOperation removeNetwork:op];
-        
-        [doc release];
+    __block MKNetworkOperation *netOpe = nil;
+    if (url.host) {
+        netOpe = [_engine operationWithURLString:url.absoluteString];
+    } else {
+        netOpe = [_engine operationWithPath:url.relativePath];
+    }
+    __block LAHOperation *lahOpe = operation.recursiveOperation;
+
+    [netOpe addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+
+        LAHEle root = [completedOperation htmlWithXPath:@"/html/body"];
+        [lahOpe awakeDownloaderForKey:completedOperation.url withElement:root];
         
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
         
+        [lahOpe handleError:error withKey:completedOperation.url];
+        
         NSAssert(error == nil, @"%@", error.userInfo);
-        
-        [bOperation handleError:error];
-        
-        if (!completedOperation.isCachedResponse) [bOperation removeNetwork:op];
-        
     }];
     
-    [_engine enqueueOperation:op forceReload:YES];
-    [bOperation addNetwork:op];
-    
+    [_engine enqueueOperation:netOpe forceReload:YES];
+    [lahOpe addNetwork:netOpe];
     [url release];
     
-    return op;  //op is a key for dictionary
+    return netOpe.url;  //op is a key for dictionary
 }
 
 - (void)operation:(LAHOperation *)operation willCancelNetworks:(NSArray *)networks{
@@ -74,6 +83,20 @@
 
 - (NSString *)operationNeedsHostName:(LAHOperation *)operation{
     return _engine.readonlyHostName;
+}
+
+@end
+
+
+@implementation MKNetworkOperation (HTML)
+
+- (LAHEle)htmlWithXPath:(NSString *)xpath{
+    NSData *rd = self.responseData;
+    TFHpple * doc = [[TFHpple alloc] initWithHTMLData:rd];
+    TFHppleElement<LAHHTMLElement> *root = (TFHppleElement<LAHHTMLElement>*)[doc peekAtSearchWithXPathQuery:xpath];
+    
+    [doc release];
+    return root;
 }
 
 @end

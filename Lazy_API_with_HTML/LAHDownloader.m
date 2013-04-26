@@ -48,6 +48,10 @@
     return host;
 }
 
+- (NSString *)identifier{
+    return [NSString stringWithFormat:@"%p", self];
+}
+
 #pragma mark - Seek
 - (void)download:(LAHEle)element{
     NSAssert(_link != nil || _linker != nil || _symbol != nil, @"Can't get link.");
@@ -94,6 +98,15 @@
 }
 
 - (void)seekWithRoot:(LAHEle)element{
+/*
+#ifdef LAH_RULES_DEBUG
+    NSMutableString *space = [NSMutableString string];
+    for (int i = 0; i < gRecLogDegree; i ++) [space appendString:@"\t"];
+    NSMutableString *info = [NSMutableString stringWithFormat:@"%@%@", space, self];
+    printf("\n%s\n", [info cStringUsingEncoding:NSASCIIStringEncoding]);
+    gRecLogDegree += 1;
+#endif
+*/
     for (LAHRecognizer* node in _children) {
         [node handleElement:element];
     }
@@ -101,6 +114,11 @@
     for (LAHEle e in element.children) {
         [self seekWithRoot:e];
     }
+/*
+#ifdef LAH_RULES_DEBUG
+    gRecLogDegree -= 1;
+#endif
+ */
 }
 
 - (LAHOperation*)recursiveOperation{
