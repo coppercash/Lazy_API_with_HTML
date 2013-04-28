@@ -11,10 +11,10 @@
 
 #import "LAHArray.h"
 #import "LAHDictionary.h"
-#import "LAHFetcher.h"
+#import "LAHString.h"
 #import "LAHOperation.h"
-#import "LAHRecognizer.h"
-#import "LAHDownloader.h"
+#import "LAHTag.h"
+#import "LAHPage.h"
 
 @implementation LAHFrame
 - (id)initWithDictionary:(NSMutableDictionary *)container{
@@ -53,19 +53,19 @@
 }
 
 - (SEL)methodWithTarget:(LAHNode *)target value:(LAHNode *)value{
-    if ([target isKindOfClass:[LAHRecognizer class]]) {
-        if ([value isKindOfClass:[LAHFetcher class]]) {
+    if ([target isKindOfClass:[LAHTag class]]) {
+        if ([value isKindOfClass:[LAHString class]]) {
             return @selector(addFetcher:);
-        }else if ([value isKindOfClass:[LAHDownloader class]]) {
+        }else if ([value isKindOfClass:[LAHPage class]]) {
             return @selector(addDownloader:);
         }
         return @selector(addChild:);
-    } else if ([target isKindOfClass:[LAHConstruct class]]){
-        if ([value isKindOfClass:[LAHRecognizer class]]) {
+    } else if ([target isKindOfClass:[LAHModel class]]){
+        if ([value isKindOfClass:[LAHTag class]]) {
             return @selector(addIdentifier:);
         }
-    } else if ([target isKindOfClass:[LAHDownloader class]]){
-        if ([value isKindOfClass:[LAHFetcher class]]) {
+    } else if ([target isKindOfClass:[LAHPage class]]){
+        if ([value isKindOfClass:[LAHString class]]) {
             return @selector(addFetcher:);
         }
         return @selector(addChild:);
@@ -135,7 +135,7 @@
 @end
 
 @implementation LAHStmtConstruct
-- (void)propertiesOfObject:(LAHConstruct *)object inFrame:(LAHFrame *)frame{
+- (void)propertiesOfObject:(LAHModel *)object inFrame:(LAHFrame *)frame{
     for (LAHStmtProperty *p in self.properties) {
         NSString *pN = p.propertyName;  //property name
         id pV = [p evaluate:frame]; //property value
@@ -146,7 +146,7 @@
             object.key = pV;
         } else if ([pN isEqualToString:LAHParaId]) {
             if ([pV isKindOfClass:[NSSet class]]) {
-                object.identifiers = [((LAHStmtSet *)p.value) evaluate:frame gainTarget:object];
+                //object.identifiers = [((LAHStmtSet *)p.value) evaluate:frame gainTarget:object];
             } else if ([pV isKindOfClass:[LAHStmtGain class]]) {
                 LAHStmtGain *gain = (LAHStmtGain *)pV;
                 [gain evaluate:frame target:object method:@selector(addIdentifier:)];
@@ -159,11 +159,11 @@
     }
 }
 
-- (void)childrenOfObject:(LAHConstruct *)object inFrame:(LAHFrame *)frame{
+- (void)childrenOfObject:(LAHModel *)object inFrame:(LAHFrame *)frame{
     for (LAHStmt *s in self.children) {
         if ([s isKindOfClass:[LAHStmtEntity class]]) {
-            LAHConstruct *con = [s evaluate:frame];
-            [frame assert:![con isKindOfClass:[LAHConstruct class]] error:@"LAHConstruct can't accept child"];
+            LAHModel *con = [s evaluate:frame];
+            [frame assert:![con isKindOfClass:[LAHModel class]] error:@"LAHConstruct can't accept child"];
             [object addChild:con];
         }else if ([s isKindOfClass:[LAHStmtGain class]]) {
             LAHStmtGain *gain  = (LAHStmtGain *)s;
@@ -194,17 +194,17 @@
 }
 @end
 
-@implementation LAHStmtFetcher
+@implementation LAHStmtString
 - (id)evaluate:(LAHFrame *)frame{
-    LAHFetcher *fetcher = [[LAHFetcher alloc] init];
+    LAHString *fetcher = [[LAHString alloc] init];
     [self generate:fetcher inFrame:frame];
     [self propertiesOfObject:fetcher inFrame:frame];
     return [fetcher autorelease];
 }
 
-- (void)propertiesOfObject:(LAHConstruct *)object inFrame:(LAHFrame *)frame{
+- (void)propertiesOfObject:(LAHModel *)object inFrame:(LAHFrame *)frame{
     NSUInteger index = 0;
-    LAHFetcher *fetcher = (LAHFetcher *)object;
+    LAHString *fetcher = (LAHString *)object;
     for (LAHStmtProperty *p in self.properties) {
         NSString *pN = p.propertyName;  //property name
         id pV = [p evaluate:frame]; //property value
@@ -212,7 +212,7 @@
         if ([pN isEqualToString:LAHParaDefault]) {
             switch (index) {
                 case 0:
-                    fetcher.symbol = pV;
+                    //fetcher.symbol = pV;
                     break;
                 default:
                     break;
@@ -221,7 +221,7 @@
         } else if ([pN isEqualToString:LAHParaSym]) {
             [frame assert:![pV isKindOfClass:[NSString class]]
                     error:@"LAHFetcher expects String as SYMBOL."];
-            fetcher.symbol = pV;
+            //fetcher.symbol = pV;
         
         } else if ([pN isEqualToString:LAHParaKey]) {
             [frame assert:![pV isKindOfClass:[NSString class]]
@@ -231,12 +231,12 @@
         } else if ([pN isEqualToString:LAHParaReg]) {
             [frame assert:![pV isKindOfClass:[NSString class]]
                     error:@"LAHFetcher expects String as REG."];
-            fetcher.reg = pV;
+            fetcher.re = pV;
             
         } else if ([pN isEqualToString:LAHParaId]) {
             [frame assert:![pV isKindOfClass:[NSArray class]]
                     error:@"LAHFetcher expects Tuple as IDENTIFIERS."];
-            fetcher.identifiers = pV;
+            //fetcher.identifiers = pV;
         
         } else{
             [frame error:@"LAHConstruct can't accept parameter."];
@@ -257,7 +257,7 @@
     return [ope autorelease];
 }
 
-- (void)propertiesOfObject:(LAHConstruct *)object inFrame:(LAHFrame *)frame{
+- (void)propertiesOfObject:(LAHModel *)object inFrame:(LAHFrame *)frame{
     NSUInteger index = 0;
     LAHOperation *ope = (LAHOperation *)object;
     for (LAHStmtProperty *p in self.properties) {
@@ -269,7 +269,7 @@
                     [(LAHStmtGain *)p.value evaluate:frame target:ope method:@selector(setConstruct:)];
                     break;
                 case 1:
-                    ope.link = [p.value evaluate:frame];
+                    //ope.link = [p.value evaluate:frame];
                     break;
                 default:
                     break;
@@ -277,7 +277,7 @@
         } else if ([pN isEqualToString:LAHParaRoot]) {
             [(LAHStmtGain *)p.value evaluate:frame target:ope method:@selector(setConstruct:)];
         } else if ([pN isEqualToString:LAHParaPath]) {
-            ope.link = [p.value evaluate:frame];
+            //ope.link = [p.value evaluate:frame];
         } else {
             [frame error:@"LAHOperation can' accept PROPERTY"];
         }
@@ -287,18 +287,18 @@
 
 @end
 
-@implementation LAHStmtRecgnizer
+@implementation LAHStmtTag
 - (id)evaluate:(LAHFrame *)frame{
-    LAHRecognizer *recognizer = [[LAHRecognizer alloc] init];
+    LAHTag *recognizer = [[LAHTag alloc] init];
     [self generate:recognizer inFrame:frame];
     [self propertiesOfObject:recognizer inFrame:frame];
     [self childrenOfObject:recognizer inFrame:frame];
     return [recognizer autorelease];
 }
 
-- (void)propertiesOfObject:(LAHConstruct *)object inFrame:(LAHFrame *)frame{
+- (void)propertiesOfObject:(LAHModel *)object inFrame:(LAHFrame *)frame{
     NSUInteger index = 0;
-    LAHRecognizer *rec = (LAHRecognizer *)object;
+    LAHTag *rec = (LAHTag *)object;
 
     void (^addAsAttributes)(id, NSString *) =  ^(id value, NSString *key){
         if ([value isKindOfClass:[NSSet class]]) {
@@ -342,7 +342,7 @@
             [frame assert:(array.count != 2) error:@"A Range should have too components"];
             NSString *locStr = [pV objectAtIndex:0];
             NSString *lenStr = [pV objectAtIndex:1];
-            rec.range = NSMakeRange(locStr.integerValue, lenStr.integerValue);
+            //rec.range = NSMakeRange(locStr.integerValue, lenStr.integerValue);
         
         } else if ([pN isEqualToString:LAHParaIndex]) {
             [frame assert:![pV isKindOfClass:[NSString class]] error:@"LAHRecognizer expects integer as INDEX."];
@@ -351,7 +351,7 @@
             
         } else if ([pN isEqualToString:LAHParaIsText]) {
             [frame assert:![pV isKindOfClass:[NSString class]] error:@"LAHRecognizer expects BOOL as isText."];
-            rec.isTextNode = boolValue(pV);
+            //rec.isTextNode = boolValue(pV);
             
         } else if ([pN isEqualToString:LAHParaIsDemocratic]) {
             [frame assert:![pV isKindOfClass:[NSString class]] error:@"LAHRecognizer expects BOOL as isDemocratic."];
@@ -367,18 +367,18 @@
 }
 
 - (void)childrenOfObject:(LAHNode *)object inFrame:(LAHFrame *)frame{
-    LAHRecognizer *recgonizer = (LAHRecognizer *)object;
+    LAHTag *recgonizer = (LAHTag *)object;
     for (LAHStmt *s in self.children) { //LAHStmtRecognizer, LAHStmtDownloader, LAHStmtGain
-        if ([s isKindOfClass:[LAHStmtRecgnizer class]]) {
-            LAHRecognizer *rec = [s evaluate:frame];
-            [frame assert:![rec isKindOfClass:[LAHRecognizer class]]
+        if ([s isKindOfClass:[LAHStmtTag class]]) {
+            LAHTag *rec = [s evaluate:frame];
+            [frame assert:![rec isKindOfClass:[LAHTag class]]
                     error:@"LAHRecognizer can't accept child"];
             [recgonizer addChild:rec];
-        }else if ([s isKindOfClass:[LAHStmtDownloader class]]) {
-            LAHDownloader *dow = [s evaluate:frame];
-            [frame assert:![dow isKindOfClass:[LAHDownloader class]]
+        }else if ([s isKindOfClass:[LAHStmtPage class]]) {
+            LAHPage *dow = [s evaluate:frame];
+            [frame assert:![dow isKindOfClass:[LAHPage class]]
                     error:@"LAHRecognizer can't accept downloader"];
-            [recgonizer addDownloader:dow];
+            //[recgonizer addDownloader:dow];
         }else if ([s isKindOfClass:[LAHStmtGain class]]) {
             LAHStmtGain *gain  = (LAHStmtGain *)s;
             [gain evaluate:frame target:object method:nil];
@@ -388,9 +388,9 @@
 
 @end
 
-@implementation LAHStmtDownloader
+@implementation LAHStmtPage
 - (id)evaluate:(LAHFrame *)frame{
-    LAHDownloader *downloader = [[LAHDownloader alloc] init];
+    LAHPage *downloader = [[LAHPage alloc] init];
     [self generate:downloader inFrame:frame];
     [self propertiesOfObject:downloader inFrame:frame];
     [self childrenOfObject:downloader inFrame:frame];
@@ -398,9 +398,9 @@
 }
 
 
-- (void)propertiesOfObject:(LAHConstruct *)object inFrame:(LAHFrame *)frame{
+- (void)propertiesOfObject:(LAHModel *)object inFrame:(LAHFrame *)frame{
     NSUInteger index = 0;
-    LAHDownloader *dow = (LAHDownloader *)object;
+    LAHPage *dow = (LAHPage *)object;
     for (LAHStmtProperty *p in self.properties) {
         NSString *pN = p.propertyName;  //property name
         id pV = [p evaluate:frame]; //property value
@@ -408,13 +408,13 @@
         if ([pN isEqualToString:LAHParaDefault]) {
             switch (index) {
                 case 0:
-                    dow.symbol = pV;
+                    //dow.symbol = pV;
                     break;
                 default:
                     break;
             }
         } else if ([pN isEqualToString:LAHParaSym]) {
-            dow.symbol = pV;
+            //dow.symbol = pV;
         } else {
             [frame error:@"LAHDownloader can' accept PROPERTY"];
         }
@@ -488,7 +488,14 @@
 }
 @end
 
+@implementation LAHStmtNumber
 
+@end
+
+@implementation LAHStmtMultiple
+
+@end
+/*
 @implementation LAHStmtTuple
 - (id)evaluate:(LAHFrame *)frame gainTarget:(LAHNode *)target{
     NSMutableArray *array = [[NSMutableArray alloc] init];
@@ -552,7 +559,8 @@
     [super dealloc];
 }
 @end
-
+*/
+ 
 NSString *quotedString(NSString *string){
     NSString *str = [string substringWithRange:NSMakeRange(1, string.length - 2)];
     return str;

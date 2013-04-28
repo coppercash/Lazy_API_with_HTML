@@ -6,17 +6,18 @@
 //  Copyright (c) 2013 Coder Dreamer. All rights reserved.
 //
 
-#import "LAHFetcher.h"
-#import "LAHRecognizer.h"
-#import "LAHDownloader.h"
+#import "LAHString.h"
+#import "LAHTag.h"
+#import "LAHPage.h"
 
-@interface LAHFetcher ()
-@property(nonatomic, copy)NSString *property;
+@interface LAHString ()
+@property(nonatomic, copy)NSString *data;
 - (void)doFetch;
 @end
 
-@implementation LAHFetcher
-@synthesize fetcher = _fetcher, property = _property, symbol = _symbol, reg = _reg;
+@implementation LAHString
+@synthesize data = _data, value = _value;
+@synthesize re = _re;
 #pragma mark - Life Cycle
 
 - (id)init{
@@ -26,7 +27,7 @@
     }
     return self;
 }
-
+/*
 - (id)initWithFetcher:(LAHPropertyFetcher)property{
     self = [self init];
     if (self) {
@@ -42,29 +43,32 @@
     }
     return self;
 }
-
+*/
 - (void)dealloc{
-    self.fetcher = nil;
-    self.property = nil;
-    self.symbol = nil;
+    //self.fetcher = nil;
+    self.data = nil;
+    self.value = nil;
+    self.re = nil;
+    //self.symbol = nil;
     
     [super dealloc];
 }
 
 - (id)copyWithZone:(NSZone *)zone{
-    LAHFetcher *copy = [super copyWithZone:zone];
+    LAHString *copy = [super copyWithZone:zone];
     
-    copy.fetcher = _fetcher;
-    copy.symbol = _symbol;
-    copy.property = _property;
+    //copy.fetcher = _fetcher;
+    //copy.symbol = _symbol;
+    //copy.data = _data;
     
     return copy;
 }
 
 #pragma mark - Element
+/*
 - (void)fetchProperty:(LAHEle)element{
     if (_fetcher) {
-        self.property = _fetcher(element);
+        self.data = _fetcher(element);
     } else if (_symbol) {
         NSString *property = nil;
         
@@ -78,10 +82,10 @@
             property = [element.attributes objectForKey:_symbol];
         }
         
-        if (property && _reg) {
+        if (property && _re) {
             
             NSError *regError = nil;
-            NSRegularExpression *regExp = [[NSRegularExpression alloc] initWithPattern:_reg options:0 error:&regError];
+            NSRegularExpression *regExp = [[NSRegularExpression alloc] initWithPattern:_re options:0 error:&regError];
             NSTextCheckingResult *match = [regExp firstMatchInString:property options:0 range:NSMakeRange(0, property.length)];
             [regExp release];
             NSAssert(regError == nil, @"%@", regError.userInfo);
@@ -89,12 +93,12 @@
             if (match) {
                 NSRange resultRange = [match rangeAtIndex:1];
                 NSString *result = [property substringWithRange:resultRange];
-                self.property = result;
+                self.data = result;
             }
         
         } else {
             
-            self.property = property;
+            self.data = property;
         
         }
         
@@ -106,49 +110,52 @@
 
 - (void)fetchSystemInfo:(LAHNode *)node{
     if ([_symbol isEqualToString:LAHValPath]) {
-        LAHDownloader *downloader = (LAHDownloader *)node;
-        self.property = downloader.link;
+        LAHPage *downloader = (LAHPage *)node;
+        self.data = downloader.link;
     }else if ([_symbol isEqualToString:LAHValURL]) {
-        LAHDownloader *downloader = (LAHDownloader *)node;
-        self.property = downloader.absolutePath;
+        LAHPage *downloader = (LAHPage *)node;
+        self.data = downloader.urlString;
     }else if ([_symbol isEqualToString:LAHValHost]) {
-        LAHDownloader *downloader = (LAHDownloader *)node;
-        self.property = downloader.hostName;
+        LAHPage *downloader = (LAHPage *)node;
+        self.data = downloader.hostName;
     }
     [self doFetch];
 }
-
+*/
+/*
 - (void)doFetch{
 #ifdef LAH_RULES_DEBUG
     NSMutableString *space = [NSMutableString string];
     for (int i = 0; i < gRecLogDegree; i ++) [space appendString:@"\t"];
     NSMutableString *info = [NSMutableString stringWithFormat:@"%@%@\n%@%@=%@",
                              space, self,
-                             space, _symbol, _property];
+                             space, _symbol, _data];
     printf("\n%s\n", [info cStringUsingEncoding:NSASCIIStringEncoding]);
 #endif
-    if (_property == nil) return;
+    if (_data == nil) return;
     
-    LAHConstruct *father = (LAHConstruct *)_father;
+    LAHModel *father = (LAHModel *)_father;
     [father checkUpate:self];
     [father recieve:self];
 }
+ */
 
-- (id)container{
-    return _property;
+- (id)data{
+    return _data;
 }
 
 - (id)newValue{
-    if (_property == nil) return [NSNull null];
-    return _property;
+    if (_data == nil) return [NSNull null];
+    return _data;
 }
 
 - (void)refresh{
-    self.property = nil;
+    self.data = nil;
     [super refresh];
 }
 
 #pragma mark - Interpreter
+/*
 - (NSString *)infoProperties{
     NSMutableString *info = [NSMutableString string];
     if (_symbol) [info appendFormat:@"sym=%@, ", _symbol];
@@ -157,6 +164,6 @@
     
     return info;
 }
-
+*/
 @end
 

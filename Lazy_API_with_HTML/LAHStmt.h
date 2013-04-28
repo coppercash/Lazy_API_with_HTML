@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-@class LAHNode, LAHConstruct;
+@class LAHNode, LAHModel;
 
 @interface LAHFrame : NSObject
 @property(nonatomic, retain)NSMutableDictionary *generates;
@@ -42,21 +42,22 @@
 @interface LAHStmtDictionary : LAHStmtConstruct
 @end
 
-@interface LAHStmtFetcher : LAHStmtConstruct
+@interface LAHStmtString : LAHStmtConstruct
 @end
 
 @interface LAHStmtOperation : LAHStmtEntity
 @end
 
-@interface LAHStmtRecgnizer : LAHStmtEntity
+@interface LAHStmtTag : LAHStmtEntity
 @end
 
-@interface LAHStmtDownloader : LAHStmtEntity
+@interface LAHStmtPage : LAHStmtEntity
 @end
 
 @class LAHStmtValue;
 @interface LAHStmtProperty : LAHStmt
 @property(nonatomic, copy)NSString *name;
+@property(nonatomic, copy)NSString *re;
 @property(nonatomic, retain)LAHStmtValue *value;
 - (NSString *)propertyName;
 @end
@@ -65,6 +66,14 @@
 @property(nonatomic, copy)NSString *string;
 @end
 
+@interface LAHStmtNumber : LAHStmtValue
+@property(nonatomic, copy)NSString *value;
+@end
+
+@interface LAHStmtMultiple : LAHStmtValue
+@property(nonatomic, retain)NSArray *values;
+@end
+/*
 @interface LAHStmtTuple : LAHStmtValue
 - (id)evaluate:(LAHFrame *)frame gainTarget:(LAHNode *)target;
 @property(nonatomic, retain)NSArray *values;
@@ -74,7 +83,7 @@
 - (id)evaluate:(LAHFrame *)frame gainTarget:(LAHNode *)target;
 @property(nonatomic, retain)NSArray *values;
 @end
-
+*/
 @class LAHNode;
 @interface LAHStmtGain : LAHStmtValue
 @property(nonatomic, copy)NSString *name;

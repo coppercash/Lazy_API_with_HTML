@@ -7,7 +7,7 @@
 //
 
 #import "LAHArray.h"
-#import "LAHRecognizer.h"
+#import "LAHTag.h"
 
 @interface LAHArray ()
 @property(nonatomic, retain)NSMutableArray *array;
@@ -24,7 +24,7 @@
     return self;
 }
 
-- (id)initWithObjects:(LAHConstruct *)firstObj, ... {
+- (id)initWithObjects:(LAHModel *)firstObj, ... {
     va_list objs; va_start(objs, firstObj);
     self = [self initWithFirstChild:firstObj variadicChildren:objs];
     va_end(objs);
@@ -55,29 +55,29 @@
 }
 
 #pragma mark - recursion
-- (BOOL)checkUpate:(LAHConstruct *)object{
-    [super checkUpate:object];
-    return object.isIdentifierElementChanged;
+- (BOOL)checkUpate:(LAHModel *)object{
+    //[super checkUpate:object];
+    //return object.isIdentifierElementChanged;
 }
 
 - (void)update{
     [self.array = [[NSMutableArray alloc] init] release];
-    [(LAHConstruct *)_father recieve:self];
+    [(LAHModel *)_father recieve:self];
 }
 
-- (void)recieve:(LAHConstruct*)object{
-    [_array addObject:object.container];
+- (void)recieve:(LAHModel*)object{
+    [_array addObject:object.data];
 }
 
-- (id)container{
+- (id)data{
     return _array;
 }
 
 #pragma mark - States
 - (void)saveStateForKey:(id)key{
     NSMutableDictionary *collector = [[NSMutableDictionary alloc] initWithCapacity:3];
-    if (_lastFatherContainer) [collector setObject:_lastFatherContainer forKey:gKeyLastFatherContainer];
-    if (_lastIdentifierElement) [collector setObject:_lastIdentifierElement forKey:gKeyLastIdentifierElement];
+    //if (_lastFatherContainer) [collector setObject:_lastFatherContainer forKey:gKeyLastFatherContainer];
+    //if (_lastIdentifierElement) [collector setObject:_lastIdentifierElement forKey:gKeyLastIdentifierElement];
     if (_array) [collector setObject:_array forKey:gKeyContainer];
     
     [_states setObject:collector forKey:key];
@@ -88,8 +88,8 @@
 
 - (void)restoreStateForKey:(id)key{
     NSDictionary *state = [_states objectForKey:key];
-    _lastFatherContainer = [state objectForKey:gKeyLastFatherContainer];
-    _lastIdentifierElement = [state objectForKey:gKeyLastIdentifierElement];
+    //_lastFatherContainer = [state objectForKey:gKeyLastFatherContainer];
+    //_lastIdentifierElement = [state objectForKey:gKeyLastIdentifierElement];
     self.array = [state objectForKey:gKeyContainer];
     [_states removeObjectForKey:key];
     

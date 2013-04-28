@@ -9,6 +9,7 @@
 #import "LAHModelsGroup.h"
 #import "LAHInterpreter.h"
 #import "LAHOperation.h"
+#import "LAHPage.h"
 
 @interface LAHModelsGroup ()
 @property (nonatomic, assign)NSInteger currentIndex;
@@ -93,7 +94,7 @@
     LAHOperation *ope = [self operationAtIndex:target];
     if (ope) {
         self.currentIndex = target;
-        if (link) ope.link = link;
+        if (link) ope.page.link = link;
     }
 }
 

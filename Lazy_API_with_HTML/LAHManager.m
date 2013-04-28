@@ -12,7 +12,7 @@
 
 @interface LAHManager ()
 @property(nonatomic, retain)NSMutableArray *operations;
-- (LAHOperation *)operationWithPath:(NSString *)path rootContainer:(LAHConstruct *)rootContainer firstChild:(LAHRecognizer *)firstChild variadicChildren:(va_list)children;
+- (LAHOperation *)operationWithPath:(NSString *)path rootContainer:(LAHModel *)rootContainer firstChild:(LAHTag *)firstChild variadicChildren:(va_list)children;
 - (void)addOperation:(LAHOperation *)operation;
 - (void)removeOperation:(LAHOperation *)operation;
 @end
@@ -35,7 +35,7 @@
 }
 
 #pragma mark - Operation
-- (LAHOperation*)operationWithPath:(NSString*)path rootContainer:(LAHConstruct*)rootContainer firstChild:(LAHRecognizer*)firstChild variadicChildren:(va_list)children{
+- (LAHOperation*)operationWithPath:(NSString*)path rootContainer:(LAHModel*)rootContainer firstChild:(LAHTag*)firstChild variadicChildren:(va_list)children{
     LAHOperation *operation = [[LAHOperation alloc] initWithPath:path construct:rootContainer firstChild:firstChild variadicChildren:children];
     [self addOperation:operation];
     operation.delegate = self;
@@ -44,7 +44,7 @@
     return operation;
 }
 
-- (LAHOperation*)operationWithPath:(NSString*)path rootContainer:(LAHConstruct*)rootContainer children:(LAHRecognizer*)firstChild, ...{
+- (LAHOperation*)operationWithPath:(NSString*)path rootContainer:(LAHModel*)rootContainer children:(LAHTag*)firstChild, ...{
     va_list children;
     va_start(children, firstChild);
     LAHOperation *operaton = [self operationWithPath:path rootContainer:rootContainer firstChild:firstChild variadicChildren:children];
@@ -129,7 +129,7 @@
     [self removeOperation:operation];
 }
 
-- (id)downloader:(LAHDownloader*)downloader needFileAtPath:(NSString*)path{
+- (id)page:(LAHPage*)downloader needFileAtLink:(NSString*)path{
     return nil;
 }
 

@@ -9,6 +9,7 @@
 #import "LAH_MKNetwork_Hpple.h"
 #import "MKNetworkEngine.h"
 #import "Hpple/TFHpple.h"
+#import "LAHPage.h"
 
 @interface LAH_MKNetworkKit_Hpple ()
 @property(nonatomic, retain)MKNetworkEngine *engine;
@@ -66,7 +67,7 @@
 }
 
 #pragma mark - LAHDelegate
-- (id)downloader:(LAHDownloader* )operation needFileAtPath:(NSString*)path{
+- (id)page:(LAHPage* )operation needFileAtLink:(NSString*)path{
     __block MKNetworkOperation *op = [_engine operationWithPath:path];
     __block LAHOperation *bOperation = operation.recursiveOperation;
     
@@ -76,7 +77,7 @@
         TFHpple * doc = [[TFHpple alloc] initWithHTMLData:rd];
         TFHppleElement<LAHHTMLElement> *root = (TFHppleElement<LAHHTMLElement>*)[doc peekAtSearchWithXPathQuery:@"/html/body"];
         
-        [bOperation awakeDownloaderForKey:op withElement:root];
+        [bOperation awakePageForKey:op withElement:root];
         
         if (!completedOperation.isCachedResponse) [bOperation removeNetwork:op];
     
@@ -95,7 +96,7 @@
     [_engine enqueueOperation:op forceReload:YES];
     [bOperation addNetwork:op];
     
-    [super downloader:operation needFileAtPath:path];
+    [super page:operation needFileAtLink:path];
     return op;  //op is a key for dictionary
 }
 

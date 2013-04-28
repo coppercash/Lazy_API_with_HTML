@@ -7,7 +7,7 @@
 //
 
 #import "LAHDictionary.h"
-#import "LAHRecognizer.h"
+#import "LAHTag.h"
 
 @interface LAHDictionary ()
 @property(nonatomic, retain)NSMutableDictionary *dictionary;
@@ -24,14 +24,14 @@
     return self;
 }
 
-- (id)initWithObjectsAndKeys:(LAHConstruct *)firstObj , ... NS_REQUIRES_NIL_TERMINATION{
+- (id)initWithObjectsAndKeys:(LAHModel *)firstObj , ... NS_REQUIRES_NIL_TERMINATION{
     va_list other; va_start(other, firstObj);
     self = [self initWithFirstObject:firstObj variadicObjectsAndKeys:other];
     va_end(other);
     return self;
 }
 
-- (id)initWithFirstObject:(LAHConstruct *)firstObj variadicObjectsAndKeys:(va_list)OtherObjsAndKeys{
+- (id)initWithFirstObject:(LAHModel *)firstObj variadicObjectsAndKeys:(va_list)OtherObjsAndKeys{
     self = [self init];
     if (self) {
         self.type = LAHConstructTypeDictionary;
@@ -39,12 +39,12 @@
         [self.children = [[NSMutableArray alloc] initWithObjects:firstObj, nil] release];
         firstObj.father = self;
         
-        LAHConstruct *child = firstObj;
+        LAHModel *child = firstObj;
         BOOL isObj = NO;
         id objOrKey;
         while ((objOrKey = va_arg(OtherObjsAndKeys, id)) != nil){
             if (isObj) {
-                child = (LAHConstruct *)objOrKey;
+                child = (LAHModel *)objOrKey;
                 [_children addObject:child];
                 child.father = self;
                 isObj = NO;
@@ -84,22 +84,22 @@
 #pragma mark - recursion
 - (void)update{
     [self.dictionary = [[NSMutableDictionary alloc] init] release];
-    [(LAHConstruct *)_father recieve:self];
+    [(LAHModel *)_father recieve:self];
 }
 
-- (void)recieve:(LAHConstruct*)object{
-    [_dictionary setObject:object.container forKey:object.key];
+- (void)recieve:(LAHModel*)object{
+    [_dictionary setObject:object.data forKey:object.key];
 }
 
-- (id)container{
+- (id)data{
     return _dictionary;
 }
 
 #pragma mark - States
 - (void)saveStateForKey:(id)key{
     NSMutableDictionary *collector = [[NSMutableDictionary alloc] initWithCapacity:3];
-    if (_lastFatherContainer) [collector setObject:_lastFatherContainer forKey:gKeyLastFatherContainer];
-    if (_lastIdentifierElement) [collector setObject:_lastIdentifierElement forKey:gKeyLastIdentifierElement];
+    //if (_lastFatherContainer) [collector setObject:_lastFatherContainer forKey:gKeyLastFatherContainer];
+    //if (_lastIdentifierElement) [collector setObject:_lastIdentifierElement forKey:gKeyLastIdentifierElement];
     if (_dictionary) [collector setObject:_dictionary forKey:gKeyContainer];
     
     [_states setObject:collector forKey:key];
@@ -110,8 +110,8 @@
 
 - (void)restoreStateForKey:(id)key{
     NSDictionary *state = [_states objectForKey:key];
-    _lastFatherContainer = [state objectForKey:gKeyLastFatherContainer];
-    _lastIdentifierElement = [state objectForKey:gKeyLastIdentifierElement];
+    //_lastFatherContainer = [state objectForKey:gKeyLastFatherContainer];
+    //_lastIdentifierElement = [state objectForKey:gKeyLastIdentifierElement];
     self.dictionary = [state objectForKey:gKeyContainer];
     [_states removeObjectForKey:key];
     

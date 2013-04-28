@@ -7,7 +7,7 @@
 //
 
 #import "LAHOperation.h"
-@class LAHOperation, LAHConstruct, LAHRecognizer;
+@class LAHOperation, LAHModel, LAHTag;
 @protocol LAHManagerDelegate;
 @interface LAHManager : NSObject <LAHDelegate>{
     NSMutableArray* _operations;
@@ -17,7 +17,7 @@
 @property(nonatomic, assign)id<LAHManagerDelegate> delegate;
 
 #pragma mark - Operation
-- (LAHOperation *)operationWithPath:(NSString *)path rootContainer:(LAHConstruct *)rootContainer children:(LAHRecognizer*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
+- (LAHOperation *)operationWithPath:(NSString *)path rootContainer:(LAHModel *)rootContainer children:(LAHTag*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
 - (LAHOperation *)operationWithFile:(NSString *)path key:(NSString *)key dictionary:(NSMutableDictionary *)dictionary;
 - (LAHOperation *)operationWithFile:(NSString *)path key:(NSString *)key;
 

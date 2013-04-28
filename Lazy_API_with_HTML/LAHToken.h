@@ -28,3 +28,8 @@
 - (NSUInteger)lineNumber;
 
 @end
+
+extern NSString * const gIndent;
+extern NSString * const gDedent;
+extern NSString * const gEof;
+extern NSString * const gNextLine;

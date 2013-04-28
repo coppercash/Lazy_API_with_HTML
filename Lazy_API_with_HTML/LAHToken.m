@@ -8,13 +8,10 @@
 
 #import "LAHToken.h"
 
-#define RE @"(?m)^ *(?:#.*)?\n|#.*$|(^ +|\n|\\d+|\\w+|[()\\[\\]{}:.,;]|[+\\-*/%<>=]=?|!=|'(?:\\\\[n'\"\\\\]|[^'])*'|\"(?:\\\\[n'\"\\\\]|[^\"])*\")"
+//#define RE @"(?m)^ *(?:#.*)?\n|#.*$|(^ +|\n|\\d+|\\w+|[()\\[\\]{}:.,;]|[+\\-*/%<>=]=?|!=|'(?:\\\\[n'\"\\\\]|[^'])*'|\"(?:\\\\[n'\"\\\\]|[^\"])*\")"
 
 
-static NSString * const gIndent = @"!INDENT";
-static NSString * const gDedent = @"!DEDENT";
-static NSString * const gEof = @"!EOF";
-
+static NSString * const re = @"(?m)^ *(?:#.*)?\n|#.*$|(^ +|\n|\\d+|\\w+|[()\\[\\]{}:.,;]|[+\\-*/%<>=]=?|!=|'(?:\\\\[n'\"\\\\]|[^'])*'|\"(?:\\\\[n'\"\\\\]|[^\"])*\")";
 
 @implementation LAHToken
 
@@ -32,7 +29,7 @@ static NSString * const gEof = @"!EOF";
 	source = [source stringByAppendingString:@"\n"];
 	
 	// compile the regular expression to tokenize the source
-	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:RE options:0 error:nil];
+	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:re options:0 error:nil];
 	
 	// process matches from source when applying the regular expression
 	[regex enumerateMatchesInString:source 
@@ -119,7 +116,8 @@ static NSString * const gEof = @"!EOF";
 }
 
 - (NSString *)stringValue {
-	return [source substringWithRange:range];
+    NSString *ret = [source substringWithRange:range];
+	return ret;
 }
 
 - (NSString *)stringByUnescapingStringValue {
@@ -160,3 +158,9 @@ static NSString * const gEof = @"!EOF";
 }
 
 @end
+
+
+NSString * const gIndent = @"!INDENT";
+NSString * const gDedent = @"!DEDENT";
+NSString * const gEof = @"!EOF";
+NSString * const gNextLine = @"\n";

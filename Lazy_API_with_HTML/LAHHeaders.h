@@ -8,10 +8,10 @@
 
 #import "LAHInterface.h"
 #import "LAHOperation.h"
-#import "LAHDownloader.h"
-#import "LAHRecognizer.h"
+#import "LAHPage.h"
+#import "LAHTag.h"
 
-#import "LAHConstruct.h"
+#import "LAHModel.h"
 #import "LAHArray.h"
 #import "LAHDictionary.h"
-#import "LAHFetcher.h"
+#import "LAHString.h"

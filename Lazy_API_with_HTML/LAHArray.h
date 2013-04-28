@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 Coder Dreamer. All rights reserved.
 //
 
-#import "LAHConstruct.h"
+#import "LAHModel.h"
 
-@interface LAHArray : LAHConstruct {
+@interface LAHArray : LAHModel {
     NSMutableArray *_array;
 }
-- (id)initWithObjects:(LAHConstruct *)firstObj, ... NS_REQUIRES_NIL_TERMINATION;
+- (id)initWithObjects:(LAHModel *)firstObj, ... NS_REQUIRES_NIL_TERMINATION;
 @end
 

@@ -15,32 +15,32 @@ typedef enum {
     LAHConstructTypeFetcher
 }LAHConstructType;
 
-@class LAHRecognizer;
-@interface LAHConstruct : LAHNode {
+@class LAHTag;
+@interface LAHModel : LAHNode {
     LAHConstructType _type;
     
     NSString *_key;
-    NSSet *_identifiers;
+    //NSSet *_identifiers;
     
-    id _lastFatherContainer;
-    LAHEle _lastIdentifierElement;
+    //id _lastFatherContainer;
+    //LAHEle _lastIdentifierElement;
 }
 @property(nonatomic, assign)LAHConstructType type;
 @property(nonatomic, copy)NSString *key;
-@property(nonatomic, retain)NSSet *identifiers;
-@property(nonatomic, readonly)id container;
+//@property(nonatomic, retain)NSSet *identifiers;
+@property(nonatomic, readonly)id data;
 
-- (BOOL)isIdentifierElementChanged;
-- (LAHEle)currentIdentifierElement;
+//- (BOOL)isIdentifierElementChanged;
+//- (LAHEle)currentIdentifierElement;
 
-- (BOOL)checkUpate:(LAHConstruct *)object;
+- (BOOL)checkUpate:(LAHModel *)object;
 - (void)update;
-- (void)recieve:(LAHConstruct*)object;
+- (void)recieve:(LAHModel*)object;
 #pragma mark - Interpreter
-- (void)addIdentifier:(LAHRecognizer *)identifier;
+//- (void)addIdentifier:(LAHTag *)identifier;
 @end
 
-extern NSString * const gKeyLastFatherContainer;
-extern NSString * const gKeyLastIdentifierElement;
+//extern NSString * const gKeyLastFatherContainer;
+//extern NSString * const gKeyLastIdentifierElement;
 extern NSString * const gKeyContainer;
 

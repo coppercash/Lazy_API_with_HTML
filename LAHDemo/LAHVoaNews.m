@@ -19,7 +19,7 @@
     NSString *path = [[NSBundle mainBundle] pathForResource:@"voa" ofType:@"lah"];
     NSMutableDictionary *container = [[NSMutableDictionary alloc] init];
     LAHOperation *operation = [self operationWithFile:path key:@"op" dictionary:container];
-    LAHFetcher *fetcher = [container objectForKey:@"imgSrc1"];
+    LAHString *fetcher = [container objectForKey:@"imgSrc1"];
     fetcher.fetcher = ^NSString *(LAHEle element) {
         NSString *style = [element.attributes objectForKey:@"style"];
         NSRange sR = [style rangeOfString:@"url("];

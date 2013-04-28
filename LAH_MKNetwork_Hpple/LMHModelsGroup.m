@@ -7,6 +7,7 @@
 //
 
 #import "LMHModelsGroup.h"
+#import "LAHPage.h"
 #import "MKNetworkEngine.h"
 #import "Hpple/TFHpple.h"
 
@@ -22,7 +23,7 @@
     if (self) {
         LAHOperation *rootOpe = self.operation;
         
-        NSURL *url = [[NSURL alloc] initWithString:rootOpe.link];
+        NSURL *url = [[NSURL alloc] initWithString:rootOpe.page.link];
         NSString *hostName = url.host;
         
         [self.engine = [[MKNetworkEngine alloc] initWithHostName:hostName] release];
@@ -47,7 +48,7 @@
 }
 
 #pragma mark - LAHDelegate
-- (id)downloader:(LAHDownloader* )operation needFileAtPath:(NSString*)path{
+- (id)page:(LAHPage* )page needFileAtLink:(NSString*)path{
     
     NSURL *url = [[NSURL alloc] initWithString:path];
     __block MKNetworkOperation *netOpe = nil;
@@ -56,12 +57,12 @@
     } else {
         netOpe = [_engine operationWithPath:url.relativePath];
     }
-    __block LAHOperation *lahOpe = operation.recursiveOperation;
+    __block LAHOperation *lahOpe = page.recursiveOperation;
 
     [netOpe addCompletionHandler:^(MKNetworkOperation *completedOperation) {
 
         LAHEle root = [completedOperation htmlWithXPath:@"/html/body"];
-        [lahOpe awakeDownloaderForKey:completedOperation.url withElement:root];
+        [lahOpe awakePageForKey:completedOperation.url withElement:root];
         
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
         

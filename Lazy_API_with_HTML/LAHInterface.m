@@ -11,12 +11,13 @@
 NSUInteger gRecLogDegree = 0;
 #endif
 
-NSString * const LAHEntArr    = @"arr";
-NSString * const LAHEntDic    = @"dic";
-NSString * const LAHEntFet    = @"fet";
-NSString * const LAHEntOpe    = @"ope";
-NSString * const LAHEntRec    = @"rec";
-NSString * const LAHEntDow    = @"dow";
+NSString * const LAHEntArr      = @"arr";
+NSString * const LAHEntDic      = @"dic";
+NSString * const LAHEntStr      = @"str";
+NSString * const LAHEntOpe      = @"ope";
+NSString * const LAHEntPage     = @"page";
+NSString * const LAHEntTag      = @"_tag";
+NSString * const LAHEntTextTag  = @"_text";
 
 NSString * const LAHParaId      = @"id";
 NSString * const LAHParaKey     = @"key";

@@ -54,7 +54,7 @@
 
     NSArray *tokens = [LAHToken tokenizeString:string];
     LAHParser *parser = [[LAHParser alloc] initWithTokens:tokens];
-    LAHStmtSuite *suite = [parser parse];
+    LAHStmtSuite *suite = [parser parseCommand];
     LAHFrame *frame = [[LAHFrame alloc] initWithDictionary:dictionary];
     [suite evaluate:frame];
     [frame doGain];

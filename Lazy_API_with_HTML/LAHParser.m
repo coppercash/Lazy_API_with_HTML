@@ -13,10 +13,32 @@
 @interface LAHParser ()
 @property(nonatomic, retain)NSArray *tokens;
 @property(nonatomic, retain)LAHToken *eof;
+@property(nonatomic, readonly)LAHToken *token;
+
+- (LAHStmtEntity *)parseEntity;
+- (LAHStmtProperty *)parseProperty;
+- (LAHStmtGain *)parseGain;
+- (LAHStmtValue *)parseValue;
+- (LAHStmtNumber *)parseNumber;
+- (LAHStmtValue *)parseTransferredValue;
+- (LAHStmtMultiple *)parseMultipleWithLeft:(NSString *)left right:(NSString *)right;
+
+- (NSString *)parseRegularExpression;
+
+- (BOOL)atHTMLTagName;
+- (BOOL)isPropertyName;
+- (BOOL)isNumber;
+
+- (void)advance;
+- (BOOL)at:(NSString *)token;
+- (void)expect:(NSString *)token;
+- (id)error:(NSString *)message;
+
 @end
 
 @implementation LAHParser
 @synthesize tokens = _tokens, eof = _eof;
+@dynamic token;
 
 #pragma mark - Class Basic
 - (id)initWithTokens:(NSArray *)tokens{
@@ -35,176 +57,344 @@
 }
 
 #pragma mark Suite parsing
-- (LAHStmtSuite *)parse{
-    NSMutableArray *stmts = [NSMutableArray array];
-	while (![self at:@"!EOF"]) {
-		if (![self at:@"\n"]) {
-            [stmts addObject:[self parseEntity]];
-		}
-	}
-    LAHStmtSuite *suite = [[[LAHStmtSuite alloc] init] autorelease];
+- (LAHStmtSuite *)parseCommand{
+    LAHStmtSuite *suite = [[LAHStmtSuite alloc] init];
+    NSMutableArray *stmts = [[NSMutableArray alloc] init];
     suite.statements = stmts;
-	return suite;
+
+	while (![self at:gEof]) {
+        LAHStmtEntity *entity = nil;
+        if ( (entity = [self parseEntity]) ) {
+            [stmts addObject:entity];
+        }
+	}
+    
+    [stmts release];
+	return [suite autorelease];
 }
 
 #pragma mark - Parse Entity
-- (LAHStmt *)parseChild{
-    NSString *value = [[self token] stringValue];
-	unichar ch = [value characterAtIndex:0];
-    if (ch == '\'') {
-        [self advance]; [self expect:@"\n"];
-        LAHStmtGain *gain = [[[LAHStmtGain alloc] init] autorelease];
-        gain.name = value;
-        return gain;
-    }else{
-        return [self parseEntity];
-    }
-    return [self error:@"expected CHILD"];
-}
-
 - (LAHStmtEntity *)parseEntity{
+    if (![self at:@"<"]) return nil;
+    
+    //Entity name or HTML tag name
     LAHStmtEntity *entity = nil;
-    if ([self at:LAHEntArr]) entity = [[LAHStmtArray alloc] init];
-    else if ([self at:LAHEntDic]) entity = [[LAHStmtDictionary alloc] init];
-    else if ([self at:LAHEntFet]) entity = [[LAHStmtFetcher alloc] init];
-    else if ([self at:LAHEntOpe]) entity = [[LAHStmtOperation alloc] init];
-    else if ([self at:LAHEntRec]) entity = [[LAHStmtRecgnizer alloc] init];
-    else if ([self at:LAHEntDow]) entity = [[LAHStmtDownloader alloc] init];
-    else {
-        NSString *expStr = [NSString stringWithFormat:@"expected: %@, %@, %@, %@, %@, %@, but find %@", LAHEntArr, LAHEntDic, LAHEntFet, LAHEntOpe, LAHEntRec, LAHEntDow, [[self token] stringValue]];
-        [self error:expStr];
+    if ([self at:LAHEntArr]) {
+        
+        entity = [[LAHStmtArray alloc] init];
+    
+    }else if ([self at:LAHEntDic]) {
+        
+        entity = [[LAHStmtDictionary alloc] init];
+    
+    }else if ([self at:LAHEntStr]) {
+        
+        entity = [[LAHStmtString alloc] init];
+    
+    }else if ([self at:LAHEntOpe]) {
+        
+        entity = [[LAHStmtOperation alloc] init];
+    
+    }else if ([self at:LAHEntPage]) {
+        
+        entity = [[LAHStmtPage alloc] init];
+    
+    }else if ([self at:LAHEntTag] || [self at:LAHEntTextTag] || [self atHTMLTagName]) {
+        
+        entity = [[LAHStmtTag alloc] init];
+    
+    }else {
+        
+        [self expect:@"Entity Name (e.x. arr, dic, str, ope, page, tag)."];
+        return nil;
+        
     }
     
-    NSString *tokenValue = [[self token] stringValue];
-	unichar ch = [tokenValue characterAtIndex:0];
-    if (ch == '\'') {
-        [self advance];
-        entity.generate = tokenValue;
-    }
     
-    if ([self at:@"("]) {
-        NSArray *pS = [self parseProperties];
-        entity.properties = pS;
-	}
+    //Properties
+    NSMutableArray *properties = [[NSMutableArray alloc] init];
+    entity.properties = properties;
     
-    if ([self at:@":"]) {
-        [self expect:@"\n"];
-        if ([self at:@"!INDENT"]) {
-            NSMutableArray *children = [NSMutableArray array];
-            while (![self at:@"!DEDENT"]) {
-                [children addObject:[self parseChild]];
-            }
-            entity.children = children;
+    while ( ![self at:@">"] ) {
+        LAHStmtProperty *property = nil;
+        
+        if ( (property = [self parseProperty]) ) {
+            
+            [properties addObject:property];
+
+        } else {
+            
+            [self expect:@"Property Name."];
+            
         }
-    }else{
-        [self expect:@"\n"];
+ 
+    };
+    
+    
+    //Next Line
+    [self expect:gNextLine];
+    
+    
+    //Children entity
+    NSMutableArray *children = [[NSMutableArray alloc] init];
+    entity.children = children;
+    
+    if ([self at:gIndent]) {
+        while (![self at:gDedent]) {
+            
+            LAHStmt *stmt = nil;
+            if ( (stmt = [self parseEntity]) ) {
+                
+                [children addObject:stmt];
+                
+            }else if ( (stmt = [self parseGain]) ) {
+                
+                [children addObject:stmt];
+                
+            }
+        }
     }
     
+    [properties release];
+    [children release];
     return [entity autorelease];
 }
 
 #pragma mark - Parse Property
-- (NSArray *)parseProperties{
-    NSMutableArray *properties = [NSMutableArray array];
-    if ([self at:@")"]) {
-		return nil;
-	}
-    [properties addObject:[self parseProperty]];
-    while ([self at:@","]) {
-		if ([self at:@")"]) {
-			return nil;
-		}
-		[properties addObject:[self parseProperty]];
-	}
-	[self expect:@")"];
-	
-    return properties;
-}
-
 - (LAHStmtProperty *)parseProperty{
-    LAHToken *next = [_tokens objectAtIndex:_index + 1];
-    NSString *nextValue = next.stringValue;
-    NSString *name = nil; LAHStmtValue *value = nil;
-    if ([nextValue isEqualToString:@"="]) {
-        name = [self parsePropertyName];
-        if ([self at:@"="]) {
-            value = [self parseValue];
-        }
-    }else if ([nextValue isEqualToString:@","] ||
-              [nextValue isEqualToString:@")"] ||
-              [self.token.stringValue isEqualToString:@"{"]) {
-        name = LAHParaDefault;
-        value = [self parseValue];
+    
+    //Name
+    if ( ![self isPropertyName] ) return nil;
+    
+    LAHStmtProperty *property = [[LAHStmtProperty alloc] init];
+    property.name = self.token.stringValue;
+    [self advance];
+    
+    
+    //Regular Expression
+    if ( [self at:@"."] ) {
+        property.re = [self parseRegularExpression];
     }
-    if (name && value) {
-        LAHStmtProperty *pro = [[[LAHStmtProperty alloc] init] autorelease];
-        pro.name = name;
-        pro.value = value;
-        return pro;
+    
+    
+    //Assignment operator
+    [self expect:@"="];
+    
+    
+    //Value
+    LAHStmtValue *value = nil;
+    if ( (value = [self parseSingleValue]) ) {
+        
+        property.value = value;
+        
+    }else if ( (value = [self parseMultipleWithLeft:@"(" right:@")"]) ) {
+        
+        property.value = value;
+        
+    }else if ( (value = [self parseMultipleWithLeft:@"{" right:@"}"]) ) {
+        
+        property.value = value;
+        
+    }else{
+        
+        [self expect:@"Property Value (e.x. \"string\", 'gain', _transferedValue, number, (tuple), {set})."];
+        return nil;
+        
     }
-
-    return [self error:@"expected PROPERTY"];
+    
+    return [property autorelease];
 }
 
-- (NSString *)parsePropertyName{
-    NSString *name = self.token.stringValue;
-	unichar ch = [name characterAtIndex:0];
-	if (([LAHParser isPropertyName:name]) || ch == '"') {
-		[self advance];
-		return name;
-	}
-	return [self error:@"expected PORPERTY NAME"];
+#pragma mark - Parse Method
+- (NSString *)parseRegularExpression{
+    if ( ![self at:@"re"] ) return nil;
+    
+    [self expect:@"("];
+    
+    unichar ch = self.token.firstCharacter;
+    if (ch != '"') [self expect:@"\""];
+    
+    NSString *re = self.token.stringByUnescapingStringValue;
+    [self advance];
+    
+    [self expect:@")"];
+
+    return re;
 }
 
+#pragma mark - Parse Value
 - (LAHStmtValue *)parseValue{
-    NSString *value = self.token.stringValue;
-	unichar ch = self.token.firstCharacter;
-    if (ch == '"' || ch == '_' || isalnum(ch)) {
-        [self advance];
-        LAHStmtValue *va = [[[LAHStmtValue alloc] init] autorelease];
-        va.string = value;
-        return va;
-    } else if (ch == '\'') {
-        [self advance];
-        LAHStmtGain *gain = [[[LAHStmtGain alloc] init] autorelease];
-        gain.name = value;
-        return gain;
-    } else if ([self at:@"("]) {
-		return [self parseTuple];
-	} else if ([self at:@"{"]) {
-		return [self parseSet];
-	}
-    return [self error:@"expexted VALUE"];
+    unichar ch = self.token.firstCharacter;
+    if (ch != '"') return nil;
+
+    LAHStmtValue *value = [[LAHStmtValue alloc] init];
+    value.string = self.token.stringByUnescapingStringValue;
+    [self advance];
+    
+    return [value autorelease];
 }
 
-- (LAHStmtTuple *)parseTuple{
-    NSMutableArray *values = [NSMutableArray array];
-    while (![self at:@")"]) {
-        if (![self at:@","]) {
-            [values addObject:[self parseValue]];
+- (LAHStmtValue *)parseTransferredValue{
+    unichar ch = self.token.firstCharacter;
+    if (ch != '_') return nil;
+    
+    LAHStmtValue *value = [[LAHStmtValue alloc] init];
+    value.string = self.token.stringValue;
+    [self advance];
+
+    return [value autorelease];
+}
+
+- (LAHStmtGain *)parseGain{
+    unichar ch = self.token.firstCharacter;
+    if (ch != '\'') return nil;
+
+    LAHStmtGain *value = [[LAHStmtGain alloc] init];
+    value.name = self.token.stringByUnescapingStringValue;
+    [self advance];
+    
+    return [value autorelease];
+}
+
+- (LAHStmtNumber *)parseNumber{
+    if ( ![self isNumber] ) return nil;
+    
+    LAHStmtNumber *number = [[LAHStmtNumber alloc] init];
+    number.value = self.token.stringValue;
+    [self advance];
+    
+    return [number autorelease];
+}
+
+- (LAHStmtValue *)parseSingleValue{
+    LAHStmtValue *value = nil;
+    
+    if      ( (value = [self parseValue]) ) ;
+    else if ( (value = [self parseGain]) ) ;
+    else if ( (value = [self parseTransferredValue]) ) ;
+    else if ( (value = [self parseNumber]) ) ;
+    else ;
+    
+    return value;
+}
+
+- (LAHStmtMultiple *)parseMultipleWithLeft:(NSString *)left right:(NSString *)right{
+    
+    NSMutableArray *values = [[NSMutableArray alloc] init];
+    
+    while (
+           ![self at:right] &&
+           ([self at:left] || [self at:@","])
+           ) {
+        
+        LAHStmtValue *value = nil;
+        if ( (value = [self parseSingleValue]) ) {
+            [values addObject:value];
         }
+        
     }
-    LAHStmtTuple *tuple = [[LAHStmtTuple alloc] init];
-    tuple.values = values;
-    return [tuple autorelease];
+    
+    LAHStmtMultiple *multiple = nil;
+    if (values.count != 0) {
+        multiple = [[LAHStmtMultiple alloc] init];
+        multiple.values = values;
+    }
+    
+    [values release];
+    return [multiple autorelease];
+
 }
 
-- (LAHStmtSet *)parseSet{
-    NSMutableArray *values = [NSMutableArray array];
-    while (![self at:@"}"]) {
-        if (![self at:@","]) {
-            [values addObject:[self parseValue]];
-        }
-    }
-    LAHStmtSet *tuple = [[LAHStmtSet alloc] init];
-    tuple.values = values;
-    return [tuple autorelease];
-}
-
-#pragma mark - Key words
+#pragma mark - Parsing helpers
 /**
- * Returns YES if the given string a LAH property name.
+ * Returns the current token.
  */
+- (LAHToken *)token {
+	if (_index < [_tokens count]) {
+		return [_tokens objectAtIndex:_index];
+	} else {
+		return _eof;
+	}
+}
+
+/**
+ * Advance to the next token, making it the new current token.
+ */
+- (void)advance {
+	_index += 1;
+    NSLog(@"%@", self.token.stringValue);
+}
+
+/**
+ * Returns YES if the current token matches the given one and consumes it
+ * or returns NO and keeps the current token.
+ */
+- (BOOL)at:(NSString *)token {
+	if ([self.token isEqualToString:token]) {
+		[self advance];
+		return YES;
+	}
+	return NO;
+}
+
+/**
+ * Raises an exception if the current token does not match the given one.
+ * Otherwise consume the token and advance to the next token.
+ */
+- (void)expect:(NSString *)token {
+	if (![self at:token]) {
+        [self error:[NSString stringWithFormat:@"expected %@", token]];
+	}
+}
+
+/**
+ * Raises a SyntaxError exception with the given message.
+ */
+- (id)error:(NSString *)message {
+    message = [NSString stringWithFormat:@"%@ but found %@ in line %d",
+               message,
+               self.token.stringValue,
+               self.token.lineNumber];
+	@throw [NSException exceptionWithName:@"SyntaxError" reason:message userInfo:nil];
+}
+
+#pragma mark - Specific
+static NSString * const htmlEX = @"^[a-zA-Z]+$";
+- (BOOL)atHTMLTagName{
+    
+    NSString *value = self.token.stringValue;
+    NSError *regError = nil;
+    NSRegularExpression *regExp = [[NSRegularExpression alloc] initWithPattern:htmlEX options:0 error:&regError];
+    NSUInteger numberOfMatches = [regExp numberOfMatchesInString:value options:0 range:NSMakeRange(0, [value length])];
+    
+    if (numberOfMatches) {
+        [self advance];
+		return YES;
+    }
+	
+    return NO;
+}
+
+- (BOOL)isPropertyName{
+    return YES;
+}
+
+static NSString * const numberEX = @"^[0-9]+$";
+- (BOOL)isNumber{
+    
+    NSString *value = self.token.stringValue;
+    NSError *regError = nil;
+    NSRegularExpression *regExp = [[NSRegularExpression alloc] initWithPattern:numberEX options:0 error:&regError];
+    NSUInteger numberOfMatches = [regExp numberOfMatchesInString:value options:0 range:NSMakeRange(0, [value length])];
+
+    if (numberOfMatches) {
+		return YES;
+    }
+    
+    return NO;
+}
+
+/*
 + (BOOL)isPropertyName:(NSString *)name{
     static NSSet *keywords = nil;
     if (!keywords) {
@@ -225,59 +415,7 @@
     }
     return [keywords containsObject:name];
 }
-
-#pragma mark Parsing helpers
-/**
- * Returns the current token.
- */
-- (LAHToken *)token {
-	if (_index < [_tokens count]) {
-		return [_tokens objectAtIndex:_index];
-	} else {
-		return _eof;
-	}
-}
-
-/**
- * Advance to the next token, making it the new current token.
- */
-- (void)advance {
-	_index += 1;
-    //NSLog(@"%@", self.token.stringValue);
-}
-
-/**
- * Returns YES if the current token matches the given one and consumes it
- * or returns NO and keeps the current token.
- */
-- (BOOL)at:(NSString *)token {
-	if ([[self token] isEqualToString:token]) {
-		[self advance];
-		return YES;
-	}
-	return NO;
-}
-
-/**
- * Raises a SyntaxError exception with the given message.
- */
-- (id)error:(NSString *)message {
-    message = [NSString stringWithFormat:@"%@ but found %@ in line %d",
-               message,
-               [[self token] stringValue],
-               [[self token] lineNumber]];
-	@throw [NSException exceptionWithName:@"SyntaxError" reason:message userInfo:nil];
-}
-
-/**
- * Raises an exception if the current token does not match the given one.
- * Otherwise consume the token and advance to the next token.
- */
-- (void)expect:(NSString *)token {
-	if (![self at:token]) {
-        [self error:[NSString stringWithFormat:@"expected %@", token]];
-	}
-}
+*/
 
 @end
 

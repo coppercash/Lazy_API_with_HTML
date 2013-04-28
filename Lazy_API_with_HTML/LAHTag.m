@@ -6,40 +6,44 @@
 //  Copyright (c) 2013 Coder Dreamer. All rights reserved.
 //
 
-#import "LAHRecognizer.h"
-#import "LAHConstruct.h"
-#import "LAHFetcher.h"
-#import "LAHDownloader.h"
+#import "LAHTag.h"
+//#import "LAHConstruct.h"
+//#import "LAHFetcher.h"
+#import "LAHPage.h"
+#import "LAHModel.h"
 
-@interface LAHRecognizer ()
-@property(nonatomic, assign)NSUInteger numberOfMatched;
-@property(nonatomic, assign)NSUInteger numberInRange; //Elements in range, must be matched first.
-@property(nonatomic, assign)LAHEle matchingElement;
+@interface LAHTag ()
+//@property(nonatomic, assign)NSUInteger numberOfMatched;
+//@property(nonatomic, assign)NSUInteger numberInRange; //Elements in range, must be matched first.
 @end
 
-@implementation LAHRecognizer
-@synthesize attributes = _attributes, isTextNode = _isTextNode, rule = _rule, isDemocratic = _isDemocratic;
-@synthesize range = _range;
-@synthesize isIdentifier = _isIdentifier, numberOfMatched = _numberOfMatched, matchingElement = _matchingElement;
-@synthesize fetchers = _fetchers, downloaders = _downloaders;
+@implementation LAHTag
+@synthesize rule = _rule, isDemocratic = _isDemocratic, index = _index;
+@synthesize attributes = _attributes;
+
+//@synthesize isTextNode = _isTextNode,
+//@synthesize range = _range;
+//@synthesize isIdentifier = _isIdentifier, numberOfMatched = _numberOfMatched, matchingElement = _matchingElement;
+//@synthesize fetchers = _fetchers, downloaders = _downloaders;
 
 #pragma mark - Life Cycle
 - (id)init{
     self = [super init];
     if (self) {
-        self.isTextNode = NO;
-        self.isIdentifier = NO;
-        self.range = NSMakeRange(0, NSUIntegerMax);
+        //self.isTextNode = NO;
+        //self.isIdentifier = NO;
+        //self.range = NSMakeRange(0, NSUIntegerMax);
         self.isDemocratic = NO;
+        [self index];
     }
     return self;
 }
-
-- (id)initWithFirstFetcher:(LAHFetcher *)firstFetcher variadicFetchers:(va_list)fetchers{
+/*
+- (id)initWithFirstFetcher:(LAHString *)firstFetcher variadicFetchers:(va_list)fetchers{
     self = [self init];
     if (self) {
         NSMutableArray *collector = [[NSMutableArray alloc] initWithObjects:firstFetcher, nil];
-        LAHFetcher *fetcher;
+        LAHString *fetcher;
         while ((fetcher = va_arg(fetchers, LAHFetcher*)) != nil) {
             [collector addObject:fetcher];
         }
@@ -49,7 +53,7 @@
     return self;
 }
 
-- (id)initWithFetchers:(LAHFetcher *)firstFetcher, ... NS_REQUIRES_NIL_TERMINATION{
+- (id)initWithFetchers:(LAHString *)firstFetcher, ... NS_REQUIRES_NIL_TERMINATION{
     va_list fetchers; va_start(fetchers, firstFetcher);
     self = [self initWithFirstFetcher:firstFetcher variadicFetchers:fetchers];
     va_end(fetchers);
@@ -66,20 +70,19 @@
     }
     return self;
 }
-
+*/
 - (void)dealloc{
-    self.attributes = nil;
     self.rule = nil;
-    self.fetchers = nil;
-    self.downloaders = nil;
- 
+    self.index = nil;
+    self.attributes = nil;
     [super dealloc];
 }
 
 - (id)copyWithZone:(NSZone *)zone{
+    /*
     //LAHRecognizer *copy = [super copyWithZone:zone];
     
-    LAHRecognizer *copy = [[[self class] allocWithZone:zone] init];
+    LAHTag *copy = [[[self class] allocWithZone:zone] init];
 
     if (_children) copy.children = _children;
     if (_states) copy.states = [[NSMutableDictionary alloc] initWithDictionary:_states copyItems:YES];
@@ -105,8 +108,9 @@
     [copy.downloaders release];
     
     return copy;
+     */
 }
-
+/*
 #pragma mark - Setter
 - (void)setTagName:(NSString *)tagName{
     NSSet *tagNames = [[NSSet alloc] initWithObjects:tagName, nil];
@@ -154,12 +158,33 @@
     [_downloaders release];
     _downloaders = [downloaders retain];
     
-    for (LAHDownloader *d in _downloaders) {
+    for (LAHPage *d in _downloaders) {
         d.father = self;
     }
 }
-
+*/
 #pragma mark - Getter
+- (NSMutableArray *)index{
+    if (!_index) {
+        NSNumber *loc = [[NSNumber alloc] initWithUnsignedInteger:0];
+        NSNumber *len = [[NSNumber alloc] initWithUnsignedInteger:NSUIntegerMax];
+        _index = [[NSMutableArray alloc] initWithObjects:loc, len, nil];
+        
+        [loc release];
+        [len release];
+        [_index release];
+    }
+    return _index;
+}
+
+- (NSMutableSet *)attributes{
+    if (!_attributes) {
+        _attributes = [[NSMutableSet alloc] init];
+    }
+    return _attributes;
+}
+
+/*
 - (NSUInteger)numberInRange{
     NSRange wR = NSMakeRange(0, _numberOfMatched);  //whole range
     NSRange iR = NSIntersectionRange(wR, _range);   //intersection range
@@ -169,8 +194,9 @@
 - (NSUInteger)identifier{
     return _range.location;
 }
-
+*/
 #pragma mark - Attributes
+/*
 - (void)setKey:(NSString *)key firstValue:(NSString *)firstValue variadicValues:(va_list)values{
     NSMutableArray *collector = [[NSMutableArray alloc] initWithObjects:firstValue, nil];
     NSString *value = nil;
@@ -201,12 +227,14 @@
     [self setKey:key firstValue:firstValue variadicValues:values];
     va_end(values);
 }
-
+*/
 #pragma mark - Recursive
 - (BOOL)handleElement:(LAHEle)element{
+    
+    /*
     //Step 0, check matching.
-    if (![self isElementMatched:element]) return NO;
-    _matchingElement = element;
+    //if (![self isElementMatched:element]) return NO;
+    //_matchingElement = element;
     
 #ifdef LAH_RULES_DEBUG
     gRecLogDegree += 1;
@@ -215,10 +243,10 @@
     BOOL isChildrenPass = (_children == nil || _children.count == 0) ? YES : NO;
     //Step 1, recursion
     //Two iteration in this order, so that the fetcher's fetching sequence depends on the sequence in the HTML.
-    for (LAHEle e in element.children) {
-        for (LAHRecognizer *node in _children) {
-            if (_isIdentifier) [node refresh];
-            isChildrenPass |= [node handleElement:e];
+    for (LAHEle subEle in element.children) {
+        for (LAHTag *tag in _children) {
+            //if (_isIdentifier) [node refresh];
+            isChildrenPass |= [tag handleElement:subEle];
         }
     }
 
@@ -230,12 +258,12 @@
     }
     
     //Step 2, fetch linked properties.
-    for (LAHFetcher *f in _fetchers) {
+    for (LAHString *f in _fetchers) {
         [f fetchProperty:element];
     }
 
     //Step 3, download with the property.
-    for (LAHDownloader *d in _downloaders) {
+    for (LAHPage *d in _downloaders) {
         [d download:element];
     }
     
@@ -244,8 +272,9 @@
     gRecLogDegree -= 1;
 #endif
     return YES;
+     */
 }
-
+/*
 - (BOOL)isElementMatched:(LAHEle)element{
 #ifdef LAH_RULES_DEBUG
     NSMutableString *space = [NSMutableString string];
@@ -297,7 +326,7 @@
             }
             isMatched |= [lV isEqualToString:value];
         }*/
-        
+        /*
 #ifdef LAH_RULES_DEBUG
         if (!logVisible) {
             logVisible = ([key isEqualToString:LAHParaTag] && isMatched);
@@ -362,36 +391,37 @@
     
     return YES;
 }
-
+*/
 #pragma mark - State
 - (void)saveStateForKey:(id)key{
-    if (_matchingElement) [_states setObject:_matchingElement forKey:key];
-    for (LAHConstruct *c in _children) {
-        [c saveStateForKey:key];
+    //if (_matchingElement) [_states setObject:_matchingElement forKey:key];
+    for (LAHModel *model in _children) {
+        [model saveStateForKey:key];
     }
 }
 
 - (void)restoreStateForKey:(id)key{
-    _matchingElement = [_states objectForKey:key];
-    [_states removeObjectForKey:key];
-    for (LAHConstruct *c in _children) {
+   // _matchingElement = [_states objectForKey:key];
+    //[_states removeObjectForKey:key];
+    for (LAHModel *c in _children) {
         [c restoreStateForKey:key];
     }
 }
 
 - (void)refresh{
-    self.numberOfMatched = 0;
-    self.matchingElement = nil;
+    //self.numberOfMatched = 0;
+    //self.matchingElement = nil;
     [super refresh];
 }
 
 #pragma mark - Interpreter
-- (void)addFetcher:(LAHFetcher *)fetcher{
+/*
+- (void)addFetcher:(LAHString *)fetcher{
     if (_fetchers == nil) [self.fetchers = [[NSMutableArray alloc] init] release];
     [(NSMutableArray *)_fetchers addObject:fetcher];
 }
 
-- (void)addDownloader:(LAHDownloader *)downloader{
+- (void)addDownloader:(LAHPage *)downloader{
     if (_downloaders == nil) [self.downloaders = [[NSMutableArray alloc] init] release];
     [(NSMutableArray *)_downloaders addObject:downloader];
     downloader.father = self;
@@ -401,8 +431,9 @@
     if (_attributes == nil) [self.attributes = [[NSMutableDictionary alloc] init] release];
     [(NSMutableDictionary *)_attributes setObject:attributes forKey:key];
 }
-
+*/
 #pragma mark - Log
+/*
 - (NSString *)infoProperties{
     NSMutableString *info = [NSMutableString string];
     
@@ -425,12 +456,12 @@
 - (NSString *)infoChildren:(NSUInteger)degree{
     NSMutableString *info = [NSMutableString string];
 
-    for (LAHFetcher *f in _fetchers) [info appendString:[f info:degree]];
-    for (LAHDownloader *d in _downloaders) [info appendString:[d info:degree]];
+    for (LAHString *f in _fetchers) [info appendString:[f info:degree]];
+    for (LAHPage *d in _downloaders) [info appendString:[d info:degree]];
     [info appendString:[super infoChildren:degree]];
     
     return info;
 }
-
+*/
 @end
 

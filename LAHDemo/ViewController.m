@@ -56,7 +56,7 @@
     LAHOperation *itemOp = [b51voa itemAtPath:@"/VOA_Special_English/It-Will-Not-Wash-48965.html"];
     [itemOp addCompletion:^(LAHOperation *operation) {
         NSLog(@"%@", operation.absolutePath);
-        NSLog(@"\n51voa\n%@", operation.container);
+        NSLog(@"\n51voa\n%@", operation.data);
     }];
     [itemOp start];
     
