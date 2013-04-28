@@ -56,10 +56,10 @@
 - (void)testAtHTMLTagName{
     
     LAHParser *parser0 = _parser(@"div");
-    STAssertTrueNoThrow(parser0.atHTMLTagName, @"Wrong answer");
+    STAssertTrueNoThrow(parser0.isHTMLTagName, @"Wrong answer");
     
     LAHParser *parser1 = _parser(@"123");
-    STAssertFalseNoThrow(parser1.atHTMLTagName, @"Wrong answer");
+    STAssertFalseNoThrow(parser1.isHTMLTagName, @"Wrong answer");
 
 }
 
@@ -178,11 +178,15 @@
     //div
     LAHStmtEntity *entity6 = [parser0 parseEntity];
     STAssertEqualObjects(entity6.class, [LAHStmtTag class], @"Wrong type of statement.");
-    STAssertEquals(entity6.properties.count, 1U, @"Wrong number of properties.");
+    STAssertEquals(entity6.properties.count, 2U, @"Wrong number of properties.");
     STAssertEquals(entity6.children.count, 0U, @"Wrong number of children.");
 
-    LAHStmtProperty *proFirst6 = entity6.properties[0];
-    LAHStmtMultiple *values = (LAHStmtMultiple *)proFirst6.value;
+    LAHStmtAttribute *pro6_0 = entity6.properties[0];
+    STAssertEqualObjects(pro6_0.name, LAHParaTag, @"Wrong value tagName name.");
+    STAssertEqualObjects(pro6_0.value.string, @"div", @"Wrong value tagName value");
+    
+    LAHStmtAttribute *pro6_1 = entity6.properties[1];
+    LAHStmtMultiple *values = (LAHStmtMultiple *)pro6_1.value;
     STAssertEquals(values.values.count, 2U, @"Wrong number of properties' values");
     
     LAHStmtValue *class = values.values[0];
@@ -196,14 +200,18 @@
     //_content
     LAHStmtEntity *entity7 = [parser0 parseEntity];
     STAssertEqualObjects(entity7.class, [LAHStmtTag class], @"Wrong type of statement.");
-    STAssertEquals(entity7.properties.count, 1U, @"Wrong number of properties.");
+    STAssertEquals(entity7.properties.count, 2U, @"Wrong number of properties.");
 
-    LAHStmtProperty *proFirst7 = entity7.properties[0];
-    STAssertEqualObjects(proFirst7.class, [LAHStmtProperty class], @"Wrong type of statement.");
-    STAssertEqualObjects(proFirst7.name, @"_content", @"Wrong value of property name.");
-    STAssertEqualObjects(proFirst7.re, @"regular expression", @"Wrong value of property re.");
+    LAHStmtAttribute *pro7_0 = entity7.properties[0];
+    STAssertEqualObjects(pro7_0.name, LAHParaTag, @"Wrong value tagName name.");
+    STAssertEqualObjects(pro7_0.value.string, LAHEntTextTag, @"Wrong value tagName value");
     
-    LAHStmtGain *gain7 = (LAHStmtGain *)proFirst7.value;
+    LAHStmtAttribute *pro7_1 = entity7.properties[1];
+    STAssertEqualObjects(pro7_1.class, [LAHStmtAttribute class], @"Wrong type of statement.");
+    STAssertEqualObjects(pro7_1.name, @"_content", @"Wrong value of property name.");
+    STAssertEqualObjects(pro7_1.re, @"regular expression", @"Wrong value of property re.");
+    
+    LAHStmtGain *gain7 = (LAHStmtGain *)pro7_1.value;
     STAssertEqualObjects(gain7.class, [LAHStmtGain class], @"Wrong type of statement.");
     STAssertEqualObjects(gain7.name, @"gain", @"Wrong value of statement.");
 

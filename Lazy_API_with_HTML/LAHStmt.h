@@ -26,8 +26,8 @@
 
 @interface LAHStmtEntity : LAHStmt
 @property(nonatomic, copy)NSString *generate;
-@property(nonatomic, retain)NSArray *properties;
-@property(nonatomic, retain)NSArray *children;
+@property(nonatomic, retain)NSMutableArray *properties;
+@property(nonatomic, retain)NSMutableArray *children;
 - (void)generate:(LAHNode *)object inFrame:(LAHFrame *)frame;
 - (void)propertiesOfObject:(LAHNode *)object inFrame:(LAHFrame *)frame;
 - (void)childrenOfObject:(LAHNode *)object inFrame:(LAHFrame *)frame;
@@ -55,11 +55,11 @@
 @end
 
 @class LAHStmtValue;
-@interface LAHStmtProperty : LAHStmt
+@interface LAHStmtAttribute : LAHStmt
 @property(nonatomic, copy)NSString *name;
 @property(nonatomic, copy)NSString *re;
 @property(nonatomic, retain)LAHStmtValue *value;
-- (NSString *)propertyName;
+//- (NSString *)propertyName;
 @end
 
 @interface LAHStmtValue : LAHStmt

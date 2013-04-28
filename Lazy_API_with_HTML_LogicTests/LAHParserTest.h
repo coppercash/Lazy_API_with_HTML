@@ -9,22 +9,22 @@
 #import <SenTestingKit/SenTestingKit.h>
 #import "LAHParser.h"
 
-@class LAHStmtEntity, LAHStmtProperty, LAHStmtGain, LAHStmtValue, LAHStmtNumber, LAHStmtMultiple;
+@class LAHStmtEntity, LAHStmtAttribute, LAHStmtGain, LAHStmtValue, LAHStmtNumber, LAHStmtMultiple;
 @interface LAHParserTest : SenTestCase
 
 @end
 
 @interface LAHParser (Test)
 - (LAHStmtEntity *)parseEntity;
-- (LAHStmtProperty *)parseProperty;
+- (LAHStmtAttribute *)parseAttribute;
 - (LAHStmtGain *)parseGain;
 - (LAHStmtValue *)parseValue;
 - (LAHStmtNumber *)parseNumber;
 - (LAHStmtValue *)parseTransferredValue;
 - (LAHStmtMultiple *)parseMultipleWithLeft:(NSString *)left right:(NSString *)right;
 - (NSString *)parseRegularExpression;
-- (BOOL)atHTMLTagName;
-- (BOOL)isPropertyName;
+- (BOOL)isHTMLTagName;
+- (BOOL)isAttributeName;
 - (BOOL)isNumber;
 
 @end

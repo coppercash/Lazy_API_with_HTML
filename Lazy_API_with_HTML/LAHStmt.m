@@ -103,6 +103,20 @@
 @end
 
 @implementation LAHStmtEntity
+- (NSMutableArray *)properties{
+    if (!_properties) {
+        _properties = [[NSMutableArray alloc] init];
+    }
+    return _properties;
+}
+
+- (NSMutableArray *)children{
+    if (!_children) {
+        _children = [[NSMutableArray alloc] init];
+    }
+    return _children;
+}
+
 - (void)generate:(id)object inFrame:(LAHFrame *)frame{
     NSString *generate = quotedString(self.generate);
     if (generate) {
@@ -136,8 +150,8 @@
 
 @implementation LAHStmtConstruct
 - (void)propertiesOfObject:(LAHModel *)object inFrame:(LAHFrame *)frame{
-    for (LAHStmtProperty *p in self.properties) {
-        NSString *pN = p.propertyName;  //property name
+    for (LAHStmtAttribute *p in self.properties) {
+        NSString *pN = p.name;  //property name
         id pV = [p evaluate:frame]; //property value
         
         if ([pN isEqualToString:LAHParaKey]) {
@@ -205,8 +219,8 @@
 - (void)propertiesOfObject:(LAHModel *)object inFrame:(LAHFrame *)frame{
     NSUInteger index = 0;
     LAHString *fetcher = (LAHString *)object;
-    for (LAHStmtProperty *p in self.properties) {
-        NSString *pN = p.propertyName;  //property name
+    for (LAHStmtAttribute *p in self.properties) {
+        NSString *pN = p.name;  //property name
         id pV = [p evaluate:frame]; //property value
         
         if ([pN isEqualToString:LAHParaDefault]) {
@@ -260,8 +274,8 @@
 - (void)propertiesOfObject:(LAHModel *)object inFrame:(LAHFrame *)frame{
     NSUInteger index = 0;
     LAHOperation *ope = (LAHOperation *)object;
-    for (LAHStmtProperty *p in self.properties) {
-        NSString *pN = p.propertyName;  //property name
+    for (LAHStmtAttribute *p in self.properties) {
+        NSString *pN = p.name;  //property name
         
         if ([pN isEqualToString:LAHParaDefault]) {
             switch (index) {
@@ -321,8 +335,8 @@
         return NO;
     };
     
-    for (LAHStmtProperty *p in self.properties) {
-        NSString *pN = p.propertyName;  //property name
+    for (LAHStmtAttribute *p in self.properties) {
+        NSString *pN = p.name;  //property name
         id pV = [p evaluate:frame]; //property value
         
         if ([pN isEqualToString:LAHParaDefault]) {
@@ -401,8 +415,8 @@
 - (void)propertiesOfObject:(LAHModel *)object inFrame:(LAHFrame *)frame{
     NSUInteger index = 0;
     LAHPage *dow = (LAHPage *)object;
-    for (LAHStmtProperty *p in self.properties) {
-        NSString *pN = p.propertyName;  //property name
+    for (LAHStmtAttribute *p in self.properties) {
+        NSString *pN = p.name;  //property name
         id pV = [p evaluate:frame]; //property value
         
         if ([pN isEqualToString:LAHParaDefault]) {
@@ -442,18 +456,18 @@
 }
 @end
 
-@implementation LAHStmtProperty
+@implementation LAHStmtAttribute
 - (id)evaluate:(LAHFrame *)frame{
     return [_value evaluate:frame];
 }
-
+/*
 - (NSString *)propertyName{
     NSString *name = self.name;
     if ([name characterAtIndex:0] == '"' && [name characterAtIndex:name.length - 1] == '"') {
         return quotedString(name);
     }
     return name;
-}
+}*/
 
 - (void)dealloc{
     self.name = nil;

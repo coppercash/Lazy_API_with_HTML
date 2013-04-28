@@ -16,7 +16,7 @@
 @property(nonatomic, readonly)LAHToken *token;
 
 - (LAHStmtEntity *)parseEntity;
-- (LAHStmtProperty *)parseProperty;
+- (LAHStmtAttribute *)parseAttribute;
 - (LAHStmtGain *)parseGain;
 - (LAHStmtValue *)parseValue;
 - (LAHStmtNumber *)parseNumber;
@@ -25,8 +25,9 @@
 
 - (NSString *)parseRegularExpression;
 
-- (BOOL)atHTMLTagName;
-- (BOOL)isPropertyName;
+- (BOOL)isHTMLTagName;
+- (BOOL)isTextTag;
+- (BOOL)isAttributeName;
 - (BOOL)isNumber;
 
 - (void)advance;
@@ -99,10 +100,24 @@
         
         entity = [[LAHStmtPage alloc] init];
     
-    }else if ([self at:LAHEntTag] || [self at:LAHEntTextTag] || [self atHTMLTagName]) {
+    }else if ([self at:LAHEntTag]) {
+        
+        entity = [[LAHStmtTag alloc] init];
+
+    }else if ([self isTextTag] || [self isHTMLTagName]) {
         
         entity = [[LAHStmtTag alloc] init];
     
+        LAHStmtAttribute *attribute = [[LAHStmtAttribute alloc] init];
+        attribute.name = LAHParaTag;
+        
+        LAHStmtValue *value = [[LAHStmtValue alloc] init];
+        value.string = self.token.stringValue;
+        [self advance];
+        attribute.value = value;
+
+        [entity.properties addObject:attribute];
+        
     }else {
         
         [self expect:@"Entity Name (e.x. arr, dic, str, ope, page, tag)."];
@@ -112,19 +127,16 @@
     
     
     //Properties
-    NSMutableArray *properties = [[NSMutableArray alloc] init];
-    entity.properties = properties;
-    
     while ( ![self at:@">"] ) {
-        LAHStmtProperty *property = nil;
+        LAHStmtAttribute *attribute = nil;
         
-        if ( (property = [self parseProperty]) ) {
+        if ( (attribute = [self parseAttribute]) ) {
             
-            [properties addObject:property];
+            [entity.properties addObject:attribute];
 
         } else {
             
-            [self expect:@"Property Name."];
+            [self expect:@"Attribute Name."];
             
         }
  
@@ -136,44 +148,39 @@
     
     
     //Children entity
-    NSMutableArray *children = [[NSMutableArray alloc] init];
-    entity.children = children;
-    
     if ([self at:gIndent]) {
         while (![self at:gDedent]) {
             
             LAHStmt *stmt = nil;
             if ( (stmt = [self parseEntity]) ) {
                 
-                [children addObject:stmt];
+                [entity.children addObject:stmt];
                 
             }else if ( (stmt = [self parseGain]) ) {
                 
-                [children addObject:stmt];
+                [entity.children addObject:stmt];
                 
             }
         }
     }
     
-    [properties release];
-    [children release];
     return [entity autorelease];
 }
 
-#pragma mark - Parse Property
-- (LAHStmtProperty *)parseProperty{
+#pragma mark - Parse Attribute
+- (LAHStmtAttribute *)parseAttribute{
     
     //Name
-    if ( ![self isPropertyName] ) return nil;
+    if ( ![self isAttributeName] ) return nil;
     
-    LAHStmtProperty *property = [[LAHStmtProperty alloc] init];
-    property.name = self.token.stringValue;
+    LAHStmtAttribute *Attribute = [[LAHStmtAttribute alloc] init];
+    Attribute.name = self.token.stringValue;
     [self advance];
     
     
     //Regular Expression
     if ( [self at:@"."] ) {
-        property.re = [self parseRegularExpression];
+        Attribute.re = [self parseRegularExpression];
     }
     
     
@@ -185,24 +192,24 @@
     LAHStmtValue *value = nil;
     if ( (value = [self parseSingleValue]) ) {
         
-        property.value = value;
+        Attribute.value = value;
         
     }else if ( (value = [self parseMultipleWithLeft:@"(" right:@")"]) ) {
         
-        property.value = value;
+        Attribute.value = value;
         
     }else if ( (value = [self parseMultipleWithLeft:@"{" right:@"}"]) ) {
         
-        property.value = value;
+        Attribute.value = value;
         
     }else{
         
-        [self expect:@"Property Value (e.x. \"string\", 'gain', _transferedValue, number, (tuple), {set})."];
+        [self expect:@"Attribute Value (e.x. \"string\", 'gain', _transferedValue, number, (tuple), {set})."];
         return nil;
         
     }
     
-    return [property autorelease];
+    return [Attribute autorelease];
 }
 
 #pragma mark - Parse Method
@@ -360,7 +367,7 @@
 
 #pragma mark - Specific
 static NSString * const htmlEX = @"^[a-zA-Z]+$";
-- (BOOL)atHTMLTagName{
+- (BOOL)isHTMLTagName{
     
     NSString *value = self.token.stringValue;
     NSError *regError = nil;
@@ -368,14 +375,25 @@ static NSString * const htmlEX = @"^[a-zA-Z]+$";
     NSUInteger numberOfMatches = [regExp numberOfMatchesInString:value options:0 range:NSMakeRange(0, [value length])];
     
     if (numberOfMatches) {
-        [self advance];
 		return YES;
     }
 	
     return NO;
 }
 
-- (BOOL)isPropertyName{
+- (BOOL)isTextTag{
+    
+    NSString *value = self.token.stringValue;
+    
+    if ([value isEqualToString:LAHEntTextTag]) {
+		return YES;
+    }
+	
+    return NO;
+}
+
+
+- (BOOL)isAttributeName{
     return YES;
 }
 
@@ -395,7 +413,7 @@ static NSString * const numberEX = @"^[0-9]+$";
 }
 
 /*
-+ (BOOL)isPropertyName:(NSString *)name{
++ (BOOL)isAttibuteName:(NSString *)name{
     static NSSet *keywords = nil;
     if (!keywords) {
         keywords = [[NSSet alloc] initWithObjects:
