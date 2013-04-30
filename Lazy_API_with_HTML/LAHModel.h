@@ -20,6 +20,7 @@ typedef enum {
     LAHConstructType _type;
     
     NSString *_key;
+    NSArray *_range;
     //NSSet *_identifiers;
     
     //id _lastFatherContainer;
@@ -27,6 +28,7 @@ typedef enum {
 }
 @property(nonatomic, assign)LAHConstructType type;
 @property(nonatomic, copy)NSString *key;
+@property(nonatomic, retain)NSArray *range;
 //@property(nonatomic, retain)NSSet *identifiers;
 @property(nonatomic, readonly)id data;
 

@@ -17,18 +17,17 @@
 
 - (LAHStmtEntity *)parseEntity;
 - (LAHStmtAttribute *)parseAttribute;
-- (LAHStmtGain *)parseGain;
+- (LAHStmtRef *)parseReference;
 - (LAHStmtValue *)parseValue;
 - (LAHStmtNumber *)parseNumber;
 - (LAHStmtValue *)parseTransferredValue;
 - (LAHStmtMultiple *)parseMultipleWithLeft:(NSString *)left right:(NSString *)right;
 
-- (NSString *)parseRegularExpression;
-
 - (BOOL)isHTMLTagName;
 - (BOOL)isTextTag;
 - (BOOL)isAttributeName;
 - (BOOL)isNumber;
+- (BOOL)isMethodName;
 
 - (void)advance;
 - (BOOL)at:(NSString *)token;
@@ -60,17 +59,14 @@
 #pragma mark Suite parsing
 - (LAHStmtSuite *)parseCommand{
     LAHStmtSuite *suite = [[LAHStmtSuite alloc] init];
-    NSMutableArray *stmts = [[NSMutableArray alloc] init];
-    suite.statements = stmts;
 
 	while (![self at:gEof]) {
         LAHStmtEntity *entity = nil;
         if ( (entity = [self parseEntity]) ) {
-            [stmts addObject:entity];
+            [suite.statements addObject:entity];
         }
 	}
     
-    [stmts release];
 	return [suite autorelease];
 }
 
@@ -112,31 +108,31 @@
         attribute.name = LAHParaTag;
         
         LAHStmtValue *value = [[LAHStmtValue alloc] init];
-        value.string = self.token.stringValue;
+        value.value = self.token.stringValue;
         [self advance];
         attribute.value = value;
 
-        [entity.properties addObject:attribute];
+        [entity.attributes addObject:attribute];
         
     }else {
         
-        [self expect:@"Entity Name (e.x. arr, dic, str, ope, page, tag)."];
+        [self expect:@"Entity Name (e.x. arr, dic, str, ope, page, tag)"];
         return nil;
         
     }
     
     
-    //Properties
+    //Attributes
     while ( ![self at:@">"] ) {
         LAHStmtAttribute *attribute = nil;
         
         if ( (attribute = [self parseAttribute]) ) {
             
-            [entity.properties addObject:attribute];
+            [entity.attributes addObject:attribute];
 
         } else {
             
-            [self expect:@"Attribute Name."];
+            [self expect:@"Attribute Name"];
             
         }
  
@@ -156,7 +152,7 @@
                 
                 [entity.children addObject:stmt];
                 
-            }else if ( (stmt = [self parseGain]) ) {
+            } else if ( (stmt = [self parseReferenceAsChild]) ) {
                 
                 [entity.children addObject:stmt];
                 
@@ -173,14 +169,26 @@
     //Name
     if ( ![self isAttributeName] ) return nil;
     
-    LAHStmtAttribute *Attribute = [[LAHStmtAttribute alloc] init];
-    Attribute.name = self.token.stringValue;
+    LAHStmtAttribute *attribute = [[LAHStmtAttribute alloc] init];
+    attribute.name = self.token.stringValue;
     [self advance];
     
     
     //Regular Expression
     if ( [self at:@"."] ) {
-        Attribute.re = [self parseRegularExpression];
+    
+        if ([self isMethodName]) {
+            
+            attribute.methodName = self.token.stringValue;
+            [self advance];
+            attribute.args = [self parseMultipleWithLeft:@"(" right:@")"];
+        
+        }else{
+            
+            [self expect:@"Method name"];
+        
+        }
+
     }
     
     
@@ -192,41 +200,24 @@
     LAHStmtValue *value = nil;
     if ( (value = [self parseSingleValue]) ) {
         
-        Attribute.value = value;
+        attribute.value = value;
         
     }else if ( (value = [self parseMultipleWithLeft:@"(" right:@")"]) ) {
         
-        Attribute.value = value;
+        attribute.value = value;
         
     }else if ( (value = [self parseMultipleWithLeft:@"{" right:@"}"]) ) {
         
-        Attribute.value = value;
+        attribute.value = value;
         
     }else{
         
-        [self expect:@"Attribute Value (e.x. \"string\", 'gain', _transferedValue, number, (tuple), {set})."];
+        [self expect:@"Attribute Value (e.x. \"string\", 'gain', _transferedValue, number, (tuple), {set})"];
         return nil;
         
     }
     
-    return [Attribute autorelease];
-}
-
-#pragma mark - Parse Method
-- (NSString *)parseRegularExpression{
-    if ( ![self at:@"re"] ) return nil;
-    
-    [self expect:@"("];
-    
-    unichar ch = self.token.firstCharacter;
-    if (ch != '"') [self expect:@"\""];
-    
-    NSString *re = self.token.stringByUnescapingStringValue;
-    [self advance];
-    
-    [self expect:@")"];
-
-    return re;
+    return [attribute autorelease];
 }
 
 #pragma mark - Parse Value
@@ -235,7 +226,7 @@
     if (ch != '"') return nil;
 
     LAHStmtValue *value = [[LAHStmtValue alloc] init];
-    value.string = self.token.stringByUnescapingStringValue;
+    value.value = self.token.stringByUnescapingStringValue;
     [self advance];
     
     return [value autorelease];
@@ -246,21 +237,27 @@
     if (ch != '_') return nil;
     
     LAHStmtValue *value = [[LAHStmtValue alloc] init];
-    value.string = self.token.stringValue;
+    value.value = self.token.stringValue;
     [self advance];
 
     return [value autorelease];
 }
 
-- (LAHStmtGain *)parseGain{
+- (LAHStmtRef *)parseReference{
     unichar ch = self.token.firstCharacter;
     if (ch != '\'') return nil;
 
-    LAHStmtGain *value = [[LAHStmtGain alloc] init];
+    LAHStmtRef *value = [[LAHStmtRef alloc] init];
     value.name = self.token.stringByUnescapingStringValue;
     [self advance];
     
     return [value autorelease];
+}
+
+- (LAHStmtRef *)parseReferenceAsChild{
+    LAHStmtRef *value = [self parseReference];
+    [self expect:@"\n"];
+    return value;
 }
 
 - (LAHStmtNumber *)parseNumber{
@@ -277,7 +274,7 @@
     LAHStmtValue *value = nil;
     
     if      ( (value = [self parseValue]) ) ;
-    else if ( (value = [self parseGain]) ) ;
+    else if ( (value = [self parseReference]) ) ;
     else if ( (value = [self parseTransferredValue]) ) ;
     else if ( (value = [self parseNumber]) ) ;
     else ;
@@ -366,19 +363,11 @@
 }
 
 #pragma mark - Specific
-static NSString * const htmlEX = @"^[a-zA-Z]+$";
 - (BOOL)isHTMLTagName{
     
     NSString *value = self.token.stringValue;
-    NSError *regError = nil;
-    NSRegularExpression *regExp = [[NSRegularExpression alloc] initWithPattern:htmlEX options:0 error:&regError];
-    NSUInteger numberOfMatches = [regExp numberOfMatchesInString:value options:0 range:NSMakeRange(0, [value length])];
+    return isByRegularExpression(value, gHtmlEX);
     
-    if (numberOfMatches) {
-		return YES;
-    }
-	
-    return NO;
 }
 
 - (BOOL)isTextTag{
@@ -397,19 +386,14 @@ static NSString * const htmlEX = @"^[a-zA-Z]+$";
     return YES;
 }
 
-static NSString * const numberEX = @"^[0-9]+$";
 - (BOOL)isNumber{
     
     NSString *value = self.token.stringValue;
-    NSError *regError = nil;
-    NSRegularExpression *regExp = [[NSRegularExpression alloc] initWithPattern:numberEX options:0 error:&regError];
-    NSUInteger numberOfMatches = [regExp numberOfMatchesInString:value options:0 range:NSMakeRange(0, [value length])];
+    return isByRegularExpression(value, gNumberEX);
+}
 
-    if (numberOfMatches) {
-		return YES;
-    }
-    
-    return NO;
+- (BOOL)isMethodName{
+    return YES;
 }
 
 /*

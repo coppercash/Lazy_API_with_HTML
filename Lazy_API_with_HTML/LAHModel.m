@@ -16,7 +16,7 @@
 @end
 
 @implementation LAHModel
-@synthesize type = _type, key = _key;//, identifiers = _identifiers;
+@synthesize type = _type, key = _key, range = _range;//, identifiers = _identifiers;
 //@synthesize lastFatherContainer = _lastFatherContainer, lastIdentifierElement = _lastIdentifierElement;
 
 - (void)dealloc{

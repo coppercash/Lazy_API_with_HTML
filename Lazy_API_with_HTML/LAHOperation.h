@@ -6,13 +6,13 @@
 //  Copyright (c) 2013 Coder Dreamer. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "LAHNode.h"
 #import "LAHInterface.h"
 
 @protocol LAHDelegate;
-@class LAHModel, LAHPage;
+@class LAHModel, LAHPage, LAHNode;
 
-@interface LAHOperation : NSObject {
+@interface LAHOperation : LAHNode {
     
     LAHModel *_model;
     LAHPage *_page;

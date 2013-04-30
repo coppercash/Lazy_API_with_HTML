@@ -22,7 +22,8 @@ extern NSUInteger gRecLogDegree;
 - (BOOL)isTextNode;
 @end
 
-@class LAHOperation, LAHPage;
+@class LAHOperation, LAHPage, LAHTag;
+typedef NSString *(^LAHAttrMethod)(NSString *value, NSArray *args, LAHTag *tag);
 typedef NSString*(^LAHPropertyFetcher)(id<LAHHTMLElement> element);
 typedef BOOL(^LAHRule)(id<LAHHTMLElement> element);
 typedef void(^LAHCompletion)(LAHOperation *operation);
@@ -45,16 +46,25 @@ extern NSString * const LAHEntPage;
 extern NSString * const LAHEntTag;
 extern NSString * const LAHEntTextTag;
 
-extern NSString * const LAHParaId;
+extern NSString * const LAHParaTag;
+extern NSString * const LAHParaRef;
 extern NSString * const LAHParaKey;
+extern NSString * const LAHParaRE;
+extern NSString * const LAHParaPage;
+extern NSString * const LAHParaModel;
+extern NSString * const LAHParaLink;
+extern NSString * const LAHParaRange;
+extern NSString * const LAHParaIndexOf;
+
+extern NSString * const LAHMethodRE;
+
+
+extern NSString * const LAHParaId;
 extern NSString * const LAHParaSym;
-extern NSString * const LAHParaReg;
 extern NSString * const LAHParaRoot;
 extern NSString * const LAHParaPath;
-extern NSString * const LAHParaTag;
 extern NSString * const LAHParaClass;
 extern NSString * const LAHParaText;
-extern NSString * const LAHParaRange;
 extern NSString * const LAHParaIndex;
 extern NSString * const LAHParaIsDemocratic;
 extern NSString * const LAHParaIsText;

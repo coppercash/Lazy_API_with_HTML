@@ -18,7 +18,7 @@
 @end
 
 @implementation LAHTag
-@synthesize rule = _rule, isDemocratic = _isDemocratic, index = _index;
+@synthesize rule = _rule, isDemocratic = _isDemocratic, range = _range;
 @synthesize attributes = _attributes;
 
 //@synthesize isTextNode = _isTextNode,
@@ -34,7 +34,7 @@
         //self.isIdentifier = NO;
         //self.range = NSMakeRange(0, NSUIntegerMax);
         self.isDemocratic = NO;
-        [self index];
+        [self range];
     }
     return self;
 }
@@ -73,7 +73,7 @@
 */
 - (void)dealloc{
     self.rule = nil;
-    self.index = nil;
+    self.range = nil;
     self.attributes = nil;
     [super dealloc];
 }
@@ -164,18 +164,19 @@
 }
 */
 #pragma mark - Getter
-- (NSMutableArray *)index{
-    if (!_index) {
+/*
+- (NSMutableArray *)range{
+    if (!_range) {
         NSNumber *loc = [[NSNumber alloc] initWithUnsignedInteger:0];
         NSNumber *len = [[NSNumber alloc] initWithUnsignedInteger:NSUIntegerMax];
-        _index = [[NSMutableArray alloc] initWithObjects:loc, len, nil];
+        _range = [[NSMutableArray alloc] initWithObjects:loc, len, nil];
         
         [loc release];
         [len release];
-        [_index release];
+        [_range release];
     }
-    return _index;
-}
+    return _range;
+}*/
 
 - (NSMutableSet *)attributes{
     if (!_attributes) {

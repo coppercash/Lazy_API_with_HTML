@@ -9,5 +9,11 @@
 #import "LAHAttribute.h"
 
 @implementation LAHAttribute
-
+@synthesize name;
+@synthesize legalValues, getters;
+@synthesize method, args;
+//@synthesize re;
+- (void)handleValue:(NSString *)value{
+    
+}
 @end

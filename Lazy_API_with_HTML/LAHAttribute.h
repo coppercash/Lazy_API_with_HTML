@@ -10,5 +10,12 @@
 
 @interface LAHAttribute : NSObject
 @property(nonatomic, copy)NSString *name;
+@property(nonatomic, retain)NSSet *legalValues;
+@property(nonatomic, retain)NSSet *getters;
+
+@property(nonatomic, copy)LAHAttrMethod method;
+@property(nonatomic, retain)NSArray *args;
+
+//@property(nonatomic, copy)NSString *re;
 - (void)handleValue:(NSString *)value;
 @end

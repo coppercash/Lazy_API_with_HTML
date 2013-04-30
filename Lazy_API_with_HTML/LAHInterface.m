@@ -19,16 +19,25 @@ NSString * const LAHEntPage     = @"page";
 NSString * const LAHEntTag      = @"_tag";
 NSString * const LAHEntTextTag  = @"_text";
 
-NSString * const LAHParaId      = @"id";
+NSString * const LAHParaTag     = @"_tagName";
+NSString * const LAHParaRef     = @"_ref";
 NSString * const LAHParaKey     = @"key";
+NSString * const LAHParaRE      = @"re";
+NSString * const LAHParaPage    = @"page";
+NSString * const LAHParaModel   = @"model";
+NSString * const LAHParaLink    = @"link";
+NSString * const LAHParaRange   = @"range";
+NSString * const LAHParaIndexOf = @"indexOf";
+
+NSString * const LAHMethodRE    = @"re";
+
+
+NSString * const LAHParaId      = @"id";
 NSString * const LAHParaSym     = @"sym";
-NSString * const LAHParaReg     = @"reg";
 NSString * const LAHParaRoot    = @"root";
 NSString * const LAHParaPath    = @"path";
-NSString * const LAHParaTag     = @"_tagName";
 NSString * const LAHParaClass   = @"class";
 NSString * const LAHParaText    = @"text";
-NSString * const LAHParaRange   = @"range";
 NSString * const LAHParaIndex   = @"index";
 NSString * const LAHParaIsText  = @"isText";
 NSString * const LAHParaIsDemocratic  = @"isDem";

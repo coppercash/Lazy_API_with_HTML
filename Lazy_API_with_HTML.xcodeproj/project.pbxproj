@@ -51,6 +51,7 @@
 		BEA0533F16E9CD7F000A7958 /* LAHInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = BEA0533E16E9CD7F000A7958 /* LAHInterface.m */; };
 		BEA0A60A16EDE96D0057FCB6 /* LOG in Resources */ = {isa = PBXBuildFile; fileRef = BEA0A60916EDE96D0057FCB6 /* LOG */; };
 		BEA2726016F0232200CE9B8E /* bbc.lah in Resources */ = {isa = PBXBuildFile; fileRef = BEA2725F16F0232200CE9B8E /* bbc.lah */; };
+		BEA39915172EBAFD004184E3 /* LAHTokenTest.m in Sources */ = {isa = PBXBuildFile; fileRef = BEA39914172EBAFD004184E3 /* LAHTokenTest.m */; };
 		BEAAEB1716EA172700A4A37B /* LAHInterpreter.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAAEB1616EA172700A4A37B /* LAHInterpreter.m */; };
 		BEAD47E5172B5D7A006ACC0E /* LAHAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAD47E4172B5D7A006ACC0E /* LAHAttribute.m */; };
 		BEB0617A16C50908003AA16F /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE93F0FE16C5074C008C3B3F /* CFNetwork.framework */; };
@@ -67,7 +68,7 @@
 		BED8CFF616BFAE5A001D819C /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEDD18DC16BF976F009825E8 /* SenTestingKit.framework */; };
 		BED8CFF816BFAE5A001D819C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEDD18CD16BF976F009825E8 /* Foundation.framework */; };
 		BED8CFFE16BFAE5A001D819C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BED8CFFC16BFAE5A001D819C /* InfoPlist.strings */; };
-		BED8D00116BFAE5A001D819C /* Lazy_API_with_HTML_LogicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BED8D00016BFAE5A001D819C /* Lazy_API_with_HTML_LogicTests.m */; };
+		BED8D00116BFAE5A001D819C /* LAHStatementsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BED8D00016BFAE5A001D819C /* LAHStatementsTests.m */; };
 		BED8D00716BFB1CB001D819C /* voa.html in Resources */ = {isa = PBXBuildFile; fileRef = BED8D00616BFB1CB001D819C /* voa.html */; };
 		BEDD18CE16BF976F009825E8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEDD18CD16BF976F009825E8 /* Foundation.framework */; };
 		BEE351E716C5096E0013C3AD /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BEE351E616C5096E0013C3AD /* libxml2.2.dylib */; };
@@ -167,6 +168,8 @@
 		BEA0533E16E9CD7F000A7958 /* LAHInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LAHInterface.m; sourceTree = "<group>"; };
 		BEA0A60916EDE96D0057FCB6 /* LOG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LOG; sourceTree = "<group>"; };
 		BEA2725F16F0232200CE9B8E /* bbc.lah */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bbc.lah; sourceTree = "<group>"; };
+		BEA39913172EBAFD004184E3 /* LAHTokenTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LAHTokenTest.h; sourceTree = "<group>"; };
+		BEA39914172EBAFD004184E3 /* LAHTokenTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LAHTokenTest.m; sourceTree = "<group>"; };
 		BEAAEB1516EA172700A4A37B /* LAHInterpreter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LAHInterpreter.h; sourceTree = "<group>"; };
 		BEAAEB1616EA172700A4A37B /* LAHInterpreter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LAHInterpreter.m; sourceTree = "<group>"; };
 		BEAD47E3172B5D7A006ACC0E /* LAHAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LAHAttribute.h; sourceTree = "<group>"; };
@@ -193,8 +196,8 @@
 		BED8CFF516BFAE5A001D819C /* Lazy_API_with_HTML_LogicTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Lazy_API_with_HTML_LogicTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BED8CFFB16BFAE5A001D819C /* Lazy_API_with_HTML_LogicTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Lazy_API_with_HTML_LogicTests-Info.plist"; sourceTree = "<group>"; };
 		BED8CFFD16BFAE5A001D819C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		BED8CFFF16BFAE5A001D819C /* Lazy_API_with_HTML_LogicTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Lazy_API_with_HTML_LogicTests.h; sourceTree = "<group>"; };
-		BED8D00016BFAE5A001D819C /* Lazy_API_with_HTML_LogicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Lazy_API_with_HTML_LogicTests.m; sourceTree = "<group>"; };
+		BED8CFFF16BFAE5A001D819C /* LAHStatementsTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LAHStatementsTests.h; sourceTree = "<group>"; };
+		BED8D00016BFAE5A001D819C /* LAHStatementsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LAHStatementsTests.m; sourceTree = "<group>"; };
 		BED8D00216BFAE5A001D819C /* Lazy_API_with_HTML_LogicTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Lazy_API_with_HTML_LogicTests-Prefix.pch"; sourceTree = "<group>"; };
 		BED8D00616BFB1CB001D819C /* voa.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = voa.html; sourceTree = "<group>"; };
 		BEDD18CA16BF976F009825E8 /* libLazy_API_with_HTML.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLazy_API_with_HTML.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -438,10 +441,12 @@
 				BED8D00616BFB1CB001D819C /* voa.html */,
 				BE10E77F17180E9200CDB057 /* testParseCommand.lah */,
 				BEB7213B172D21DB00521323 /* testParseEntity.lah */,
-				BED8CFFF16BFAE5A001D819C /* Lazy_API_with_HTML_LogicTests.h */,
-				BED8D00016BFAE5A001D819C /* Lazy_API_with_HTML_LogicTests.m */,
+				BED8CFFF16BFAE5A001D819C /* LAHStatementsTests.h */,
+				BED8D00016BFAE5A001D819C /* LAHStatementsTests.m */,
 				BEB7210B172CAA1500521323 /* LAHParserTest.h */,
 				BEB7210C172CAA1500521323 /* LAHParserTest.m */,
+				BEA39913172EBAFD004184E3 /* LAHTokenTest.h */,
+				BEA39914172EBAFD004184E3 /* LAHTokenTest.m */,
 				BED8CFFA16BFAE5A001D819C /* Supporting Files */,
 			);
 			path = Lazy_API_with_HTML_LogicTests;
@@ -707,8 +712,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BED8D00116BFAE5A001D819C /* Lazy_API_with_HTML_LogicTests.m in Sources */,
+				BED8D00116BFAE5A001D819C /* LAHStatementsTests.m in Sources */,
 				BEB7210D172CAA1500521323 /* LAHParserTest.m in Sources */,
+				BEA39915172EBAFD004184E3 /* LAHTokenTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -853,9 +859,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Lazy_API_with_HTML/MKNetworkKit-iOS\"",
-					"\"$(SRCROOT)/Hpple\"",
-					"\"$(SRCROOT)/MKNetworkKit-iOS\"",
 					"\"$(SRCROOT)/Libraries/OCMock\"",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
@@ -882,9 +885,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Lazy_API_with_HTML/MKNetworkKit-iOS\"",
-					"\"$(SRCROOT)/Hpple\"",
-					"\"$(SRCROOT)/MKNetworkKit-iOS\"",
 					"\"$(SRCROOT)/Libraries/OCMock\"",
 				);
 				OTHER_LDFLAGS = "$(inherited)";

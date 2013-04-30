@@ -164,3 +164,16 @@ NSString * const gIndent = @"!INDENT";
 NSString * const gDedent = @"!DEDENT";
 NSString * const gEof = @"!EOF";
 NSString * const gNextLine = @"\n";
+
+NSString * const gHtmlEX = @"^[a-zA-Z]+$";
+NSString * const gNumberEX = @"^[0-9]+$";
+
+bool isByRegularExpression(NSString *string, NSString *re){
+    
+    NSError *regError = nil;
+    NSRegularExpression *regExp = [[NSRegularExpression alloc] initWithPattern:re options:0 error:&regError];
+    NSUInteger numberOfMatches = [regExp numberOfMatchesInString:string options:0 range:NSMakeRange(0, [string length])];
+    
+    [regExp release];
+    return numberOfMatches != 0;
+}

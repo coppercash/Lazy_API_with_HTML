@@ -8,9 +8,5 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
-@interface Lazy_API_with_HTML_LogicTests : SenTestCase{
-    NSBundle *_bundle;
-    
-}
-
+@interface LAHStatementsTests : SenTestCase
 @end
