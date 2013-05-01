@@ -8,14 +8,25 @@
 
 #import <Foundation/Foundation.h>
 
-@interface LAHAttribute : NSObject
+@interface LAHAttribute : NSObject{
+    NSString *_name;
+    
+    NSSet *_legalValues;
+    NSSet *_getters;
+    
+    //LAHAttrMethod _method;
+    NSString *_methodName;
+    NSArray *_args;
+}
 @property(nonatomic, copy)NSString *name;
+
 @property(nonatomic, retain)NSSet *legalValues;
 @property(nonatomic, retain)NSSet *getters;
 
-@property(nonatomic, copy)LAHAttrMethod method;
+//@property(nonatomic, copy)LAHAttrMethod method;
+@property(nonatomic, copy)NSString *methodName;
 @property(nonatomic, retain)NSArray *args;
 
-//@property(nonatomic, copy)NSString *re;
 - (void)handleValue:(NSString *)value;
+- (NSString *)des;
 @end

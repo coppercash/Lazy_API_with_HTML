@@ -12,11 +12,11 @@
 @protocol LAHHTMLElement, LAHDownloaderDataSource, LAHDownloaderDelegate;
 @interface LAHNode : NSObject <NSCopying> {
     LAHNode *_father;
-    NSMutableArray *_children;
+    NSArray *_children;
     NSMutableDictionary *_states;
 }
 @property(nonatomic, assign)LAHNode *father;
-@property(nonatomic, retain)NSMutableArray *children;
+@property(nonatomic, retain)NSArray *children;
 @property(nonatomic, retain)NSMutableDictionary* states;
 
 - (id)initWithFirstChild:(LAHNode*)firstChild variadicChildren:(va_list)children;
@@ -28,12 +28,21 @@
 - (void)restoreStateForKey:(id)key;
 - (void)refresh;
 #pragma mark - Interpreter
-- (void)addChild:(LAHNode *)child;
+//- (void)addChild:(LAHNode *)child;
 #pragma mark - Log
+/*
 - (void)log;
 - (void)logLonely;
+*/
+- (NSString *)des;
+- (NSString *)debugLog:(NSUInteger)degree;
+- (NSString *)tagNameInfo;
+- (NSString *)attributesInfo;
+
+/*
 - (NSString *)info:(NSUInteger)degree;
 - (NSString *)infoSelf;
 - (NSString *)infoProperties;
 - (NSString *)infoChildren:(NSUInteger)degree;
+ */
 @end

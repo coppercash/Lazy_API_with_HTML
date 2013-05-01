@@ -57,7 +57,6 @@
     LAHStmtSuite *suite = [parser parseCommand];
     LAHFrame *frame = [[LAHFrame alloc] initWithDictionary:dictionary];
     [suite evaluate:frame];
-    [frame doGain];
     
     [parser release]; [frame release];
     [pool release];

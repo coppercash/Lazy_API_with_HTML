@@ -326,7 +326,7 @@
  */
 - (void)advance {
 	_index += 1;
-    NSLog(@"%@", self.token.stringValue);
+    //NSLog(@"%@", self.token.stringValue);
 }
 
 /**

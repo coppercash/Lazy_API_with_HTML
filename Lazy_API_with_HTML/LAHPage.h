@@ -10,10 +10,8 @@
 
 @interface LAHPage : LAHNode {
     NSString *_link;
-    NSMutableSet *_attributes;
 }
 @property(nonatomic, copy)NSString *link;
-@property(nonatomic, retain)NSMutableSet *attributes;
 
 @property(nonatomic, readonly)LAHOperation *recursiveOperation;
 @property(nonatomic, readonly)NSString *identifier;

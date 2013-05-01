@@ -11,7 +11,11 @@
 @class LAHStmtValue, LAHStmtAttribute, LAHAttribute, LAHStmtMultiple;
 
 
-@interface LAHFrame : NSObject
+@interface LAHFrame : NSObject {
+    NSMutableArray *_toRefer;
+    NSMutableDictionary *_references;
+    LAHFrame *_father;
+}
 @property(nonatomic, retain)NSMutableArray *toRefer;
 @property(nonatomic, retain)NSMutableDictionary *references;
 @property(nonatomic, assign)LAHFrame *father;
@@ -79,7 +83,6 @@
 
 @interface LAHStmtAttribute : LAHStmt
 @property(nonatomic, copy)NSString *name;
-//@property(nonatomic, copy)NSString *re;
 @property(nonatomic, retain)LAHStmtValue *value;
 @property(nonatomic, copy)NSString *methodName;
 @property(nonatomic, retain)LAHStmtMultiple *args;

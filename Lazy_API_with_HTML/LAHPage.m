@@ -72,13 +72,13 @@
     gRecLogDegree += 1;
 #endif
     
-    for (LAHAttribute *attr in _attributes) {
-        NSString *value = nil;
-        if ([attr.name isEqualToString:LAHValURL]) {
-            value = self.urlString;
-        }
-        [attr handleValue:value];
-    }
+//    for (LAHAttribute *attr in _attributes) {
+//        NSString *value = nil;
+//        if ([attr.name isEqualToString:LAHValURL]) {
+//            value = self.urlString;
+//        }
+//        [attr handleValue:value];
+//    }
 
 #ifdef LAH_RULES_DEBUG
     gRecLogDegree -= 1;
@@ -122,10 +122,27 @@
 #pragma mark - Interpreter
 
 #pragma mark - Log
+
+- (NSString *)tagNameInfo{
+    return @"page";
+}
+
+- (NSString *)attributesInfo{
+    NSMutableString *info = [NSMutableString stringWithString:[super attributesInfo]];
+    if (_link) [info appendFormat:@"  link=\"%@\"", _link];
+    return info;
+}
+/*
+- (NSString *)debugDescription{
+    
+}
+
+- ()
+
 - (NSString *)infoProperties{
     NSMutableString *info = [NSMutableString string];
     //if (_symbol) [info appendFormat:@"sym=%@, ", _symbol];
     return info;
-}
+}*/
 
 @end

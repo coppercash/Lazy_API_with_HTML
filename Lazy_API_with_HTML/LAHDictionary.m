@@ -123,5 +123,10 @@
     [super refresh];
 }
 
+#pragma mark - Log
+- (NSString *)tagNameInfo{
+    return @"dic";
+}
+
 @end
 

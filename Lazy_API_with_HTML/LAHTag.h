@@ -13,7 +13,7 @@
 @interface LAHTag : LAHNode {
     LAHRule _rule;
     BOOL _isDemocratic;
-    NSArray *_range;
+    NSArray *_indexes;
     NSMutableSet *_attributes;
     
     NSSet *_indexOf;
@@ -33,7 +33,7 @@
 }
 @property(nonatomic, copy)LAHRule rule;
 @property(nonatomic, assign)BOOL isDemocratic;
-@property(nonatomic, retain)NSArray *range;
+@property(nonatomic, retain)NSArray *indexes;
 @property(nonatomic, retain)NSMutableSet *attributes;
 @property(nonatomic, retain)NSSet *indexOf;
 

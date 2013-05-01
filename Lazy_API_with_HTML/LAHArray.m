@@ -101,5 +101,10 @@
     [super refresh];
 }
 
+#pragma mark - Log
+- (NSString *)tagNameInfo{
+    return @"arr";
+}
+
 @end
 

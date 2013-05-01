@@ -165,5 +165,17 @@
     return info;
 }
 */
+
+#pragma mark - Log
+- (NSString *)tagNameInfo{
+    return @"str";
+}
+
+- (NSString *)attributesInfo{
+    NSMutableString *info = [NSMutableString stringWithString:[super attributesInfo]];
+    if (_re) [info appendFormat:@"re=\"%@\"", _re];
+    return info;
+}
+
 @end
 

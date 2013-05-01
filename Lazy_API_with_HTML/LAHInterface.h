@@ -24,7 +24,7 @@ extern NSUInteger gRecLogDegree;
 
 @class LAHOperation, LAHPage, LAHTag;
 typedef NSString *(^LAHAttrMethod)(NSString *value, NSArray *args, LAHTag *tag);
-typedef NSString*(^LAHPropertyFetcher)(id<LAHHTMLElement> element);
+typedef NSString *(^LAHPropertyFetcher)(id<LAHHTMLElement> element);
 typedef BOOL(^LAHRule)(id<LAHHTMLElement> element);
 typedef void(^LAHCompletion)(LAHOperation *operation);
 typedef void(^LAHCorrector)(LAHOperation *operation, NSError* error);
@@ -54,9 +54,16 @@ extern NSString * const LAHParaPage;
 extern NSString * const LAHParaModel;
 extern NSString * const LAHParaLink;
 extern NSString * const LAHParaRange;
+extern NSString * const LAHParaIndexes;
 extern NSString * const LAHParaIndexOf;
+extern NSString * const LAHParaContent;
+extern NSString * const LAHParaIsDemocratic;
 
 extern NSString * const LAHMethodRE;
+extern NSString * const LAHMethodJoinMethod;
+
+extern NSString * const LAHValYES;
+extern NSString * const LAHValNO;
 
 
 extern NSString * const LAHParaId;
@@ -66,7 +73,6 @@ extern NSString * const LAHParaPath;
 extern NSString * const LAHParaClass;
 extern NSString * const LAHParaText;
 extern NSString * const LAHParaIndex;
-extern NSString * const LAHParaIsDemocratic;
 extern NSString * const LAHParaIsText;
 extern NSString * const LAHParaDefault;
 

@@ -20,38 +20,23 @@
 #import "LAHToken.h"
 
 @implementation LAHFrame
+@synthesize toRefer = _toRefer, references = _references;
+@synthesize father = _father;
 #pragma mark - Class Basic
 - (id)initWithDictionary:(NSMutableDictionary *)container{
     self = [super init];
     if (self) {
-        
         self.references = container;
-        [self extendIntegratedMethods];
-    
     }
     return self;
 }
 
 - (NSMutableDictionary *)references{
     if (!_references) {
-        
         _references = [[NSMutableDictionary alloc] init];
-        [self extendIntegratedMethods];
-    
     }
     
     return _references;
-}
-
-- (void)extendIntegratedMethods{
-    if (_father) return;
-    
-    LAHAttrMethod re = ^(NSString *value, NSArray *args, LAHTag *tag){
-        
-        return [NSString stringWithFormat:@""];
-    };
-    
-    [self.references setObject:re forKey:LAHMethodRE];
 }
 
 - (NSMutableArray *)toRefer{
@@ -61,7 +46,7 @@
         NSMutableArray *toRefer = _father.toRefer;
         if (toRefer) {
             
-            _toRefer = _father.toRefer;
+            _toRefer = [_father.toRefer retain];
         
         }else{
            
@@ -75,7 +60,8 @@
 
 - (void)dealloc{
     self.references = nil;
-    //self.gains = nil;
+    self.toRefer = nil;
+    self.father = nil;
     [super dealloc];
 }
 
@@ -150,6 +136,7 @@
         
         [collector addObject:[s evaluate:subFrame]];
         
+        [frame.references addEntriesFromDictionary:subFrame.references];
         [subFrame release];
         
     }
@@ -179,12 +166,14 @@
         [self attribute:attr of:entity inFrame:frame];
     }
     
+    NSMutableArray *children = [[NSMutableArray alloc] initWithCapacity:_children.count];
     for (LAHStmt *childStmt in _children) {
         
         LAHNode *child = [childStmt evaluate:frame];
-        [entity addChild:child];
+        [children addObject:child];
     
     }
+    entity.children = children;
     
     return entity;
 }
@@ -196,7 +185,10 @@
 
 - (BOOL)attribute:(LAHStmtAttribute *)attr of:(LAHNode *)entity inFrame:(LAHFrame *)frame{
     NSString *name = attr.name;
+    LAHStmtValue *value = attr.value;
     if ([name isEqualToString:LAHParaRef]) {
+        
+        [frame attribute:name ofEntity:entity expect:[LAHStmtRef class] find:value];
         
         [frame.toRefer addObject:entity];
         
@@ -391,21 +383,28 @@
     LAHStmtValue *value = attrStmt.value;
     LAHTag *tag  = (LAHTag *)entity;
     
-    if ( [name isEqualToString:LAHParaRange] ) {
+    if ( [name isEqualToString:LAHParaIndexes] ) {              //<div _indexes=(0, 17)>
         
         [frame attribute:name ofEntity:entity expect:[LAHStmtMultiple class] find:value];
         
-        NSArray *range = [[NSArray alloc] initWithArray:[value evaluate:frame]];
-        tag.range = range;
-        [range release];
+        NSArray *indexes = [[NSArray alloc] initWithArray:[value evaluate:frame]];
+        tag.indexes = indexes;
+        [indexes release];
         
         return YES;
     
-    } else if ( [name isEqualToString:LAHParaIndexOf] ) {
+    } else if ( [name isEqualToString:LAHParaIndexOf] ) {       //<div _indexOf='ref'>
         
         if ([value isMemberOfClass:[LAHStmtRef class]]) {
             
-            NSSet *indexOf = [[NSSet alloc] initWithObjects:[value evaluate:frame], nil];
+            LAHNode *entity = [value evaluate:frame];
+            if ( ![entity isKindOfClass:[LAHModel class]] ) {
+                NSString *message = [NSString stringWithFormat:@"_indexOf of tag can only accept %@ reference, but find %@",
+                                     NSStringFromClass([LAHModel class]),
+                                     NSStringFromClass([entity class])];
+                [frame error:message];
+            }
+            NSSet *indexOf = [[NSSet alloc] initWithObjects:entity, nil];
             tag.indexOf = indexOf;
             [indexOf release];
             
@@ -426,6 +425,18 @@
                 
         return YES;
 
+    }  else if ( [name isEqualToString:LAHParaIsDemocratic] ) {     //<div _isDemo="YES">
+        
+        [frame attribute:name ofEntity:entity expect:[LAHStmtValue class] find:value];
+        NSString *boolValue = [value evaluate:frame];
+        if ([boolValue isEqualToString:LAHValYES]) {
+            tag.isDemocratic = YES;
+        }else if ([boolValue isEqualToString:LAHValNO]) {
+            tag.isDemocratic = NO;
+        }
+        
+        return YES;
+        
     } else {
         
         LAHAttribute *attribute = [[LAHAttribute alloc] init];
@@ -438,18 +449,10 @@
         
         
         //Attribute method
-        NSString *methodName = attrStmt.methodName;
-        if (methodName) {
-            
-            LAHAttrMethod method = [frame objectForKey:methodName];
-            if (!method) {
-                NSString *message = [NSString stringWithFormat:@"Can't get method named %@.", methodName];
-                [frame error:message];
-            }
-            attribute.method = method;
-            
+        NSString *methodName = nil;
+        if ( (methodName = attrStmt.methodName) ) {
+            attribute.methodName = methodName;
             attribute.args = [attrStmt.args evaluate:frame];    //Type uncheck
-
         }
 
         
@@ -462,7 +465,7 @@
                                  NSStringFromClass([LAHStmtMultiple class])];
             [frame attribute:name ofEntity:entity expect:message butFind:attrStmt.value];
         
-        }
+        } 
         
         return YES;
     
@@ -473,21 +476,28 @@
 
 - (BOOL)add:(LAHStmtValue *)value to:(LAHAttribute *)attribute frame:(LAHFrame *)frame{
     
-    if ([value isMemberOfClass:[LAHStmtValue class]]) {
+    if ([value isMemberOfClass:[LAHStmtValue class]]) {         //<div class="legalValue">
         
         NSString *string = [value evaluate:frame];
         NSSet *set = [[NSSet alloc] initWithObjects:string, nil];
         attribute.legalValues = set;
         [set release];
 
-    } else if ([value isMemberOfClass:[LAHStmtRef class]]) {
-        //String and page only
+    } else if ([value isMemberOfClass:[LAHStmtRef class]]) {    //<div class='ref'>
+
         LAHNode *entity = [value evaluate:frame];
+        if ( ![entity isKindOfClass:[LAHPage class]] && ![entity isKindOfClass:[LAHString class]] ) {
+            NSString *message = [NSString stringWithFormat:@"Html attribute of tag can only accept %@ / %@ reference, but find %@",
+                                 NSStringFromClass([LAHString class]),
+                                 NSStringFromClass([LAHPage class]),
+                                 NSStringFromClass([entity class])];
+            [frame error:message];
+        }
         NSSet *set = [[NSSet alloc] initWithObjects:entity, nil];
         attribute.getters = set;
         [set release];
 
-    } else if ([value isMemberOfClass:[LAHStmtMultiple class]]) {
+    } else if ([value isMemberOfClass:[LAHStmtMultiple class]]) {   //<div class={"legalValue", 'ref'}>
         
         NSArray *values = [value evaluate:frame];
         NSMutableSet *legalValues = [[NSMutableSet alloc] init];

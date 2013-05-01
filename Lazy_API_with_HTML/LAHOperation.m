@@ -118,6 +118,11 @@
     return _model.data;
 }
 
+- (NSArray *)children{
+    NSArray *children = [NSArray arrayWithObjects:_model, _page, nil];
+    return children;
+}
+
 #pragma mark - Status
 - (void)refresh{
     [self cancelNetwork];
@@ -298,6 +303,18 @@
 }
 
 #pragma mark - Log
+- (NSString *)tagNameInfo{
+    return @"ope";
+}
+
+- (NSString *)attributesInfo{
+    NSMutableString *info = [NSMutableString stringWithString:[super attributesInfo]];
+    if (_model) [info appendFormat:@"  model=%@", _model.des];
+    if (_page) [info appendFormat:@"  page=%@", _page.des];
+    return info;
+}
+
+/*
 - (NSString *)infoProperties{
     NSMutableString *info = [NSMutableString string];
     //if (_link) [info appendFormat:@"path=%@", _link];
@@ -312,5 +329,5 @@
     
     return info;
 }
-
+*/
 @end

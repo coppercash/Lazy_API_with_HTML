@@ -37,13 +37,27 @@
 
 - (void)testParseAttributeMethod{
     LAHParser *parser0 = _parser(@"<div class.re(\"some regular expression\")=\"some value\">");
-    LAHStmtTag *tag = (LAHStmtTag *)[parser0 parseEntity];
-    LAHStmtAttribute *attr = tag.attributes[1];
-    STAssertEqualObjects(attr.methodName, @"re",
+    LAHStmtTag *tag0 = (LAHStmtTag *)[parser0 parseEntity];
+    LAHStmtAttribute *attr0 = tag0.attributes[1];
+    STAssertEqualObjects(attr0.methodName, @"re",
                          @"Parse attribute method name");
-    LAHStmtValue *firstArg = attr.args.values[0];
+    LAHStmtValue *firstArg = attr0.args.values[0];
     STAssertEqualObjects(firstArg.value, @"some regular expression",
                          @"Parse attribute method args");
+    
+    
+    LAHParser *parser1 = _parser(@"<div class.joinHost()=\"some value\">");
+    LAHStmtTag *tag1 = (LAHStmtTag *)[parser1 parseEntity];
+    LAHStmtAttribute *attr1 = tag1.attributes[1];
+    STAssertEqualObjects(attr1.methodName, @"joinHost",
+                         @"Parse attribute method name");
+    STAssertEquals(attr1.args.values.count, 0U,
+                         @"Parse attribute method name");
+
+    //    LAHStmtValue *firstArg = attr1.args.values[0];
+    //    STAssertEqualObjects(firstArg.value, @"some regular expression",
+    //                         @"Parse attribute method args");
+    
 }
 
 - (void)testIsNumber{
@@ -184,7 +198,11 @@
     STAssertEqualObjects(entity5.class, [LAHStmtTag class], @"Wrong type of statement.");
     STAssertEquals(entity5.attributes.count, 1U, @"Wrong number of properties");
     STAssertEquals(entity5.children.count, 0U, @"Wrong number of children");
+    
+    LAHStmtAttribute *attr5 = entity5.attributes[0];
+    STAssertEqualObjects(attr5.value.class, [LAHStmtRef class], @"Get refer by attribute");
 
+    
     //div
     LAHStmtEntity *entity6 = [parser0 parseEntity];
     STAssertEqualObjects(entity6.class, [LAHStmtTag class], @"Wrong type of statement.");
@@ -227,5 +245,6 @@
 
     [parser0 release];
 }
+
 
 @end

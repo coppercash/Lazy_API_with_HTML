@@ -69,7 +69,7 @@
 }
 
 #pragma mark - Setter
-- (void)setChildren:(NSMutableArray *)children{
+- (void)setChildren:(NSArray *)children{
     [_children release];
     _children = [children retain];
     for (LAHNode* node in _children) {
@@ -113,19 +113,54 @@
         [c refresh];
     }
 }
-
+/*
 #pragma mark - Interpreter
 - (void)addChild:(LAHNode *)child{
     if (_children == nil) [self.children = [[NSMutableArray alloc] init] release];
     [_children addObject:child];
     child.father = self;
 }
+ */
 
 #pragma mark - Log
-- (NSString *)debugDescription{
-    return [self info:0];
+- (NSString *)des{
+    return [super description];
 }
 
+- (NSString *)description{
+    NSString *info = [NSString stringWithFormat:@"<%@%@  @%p>", self.tagNameInfo, self.attributesInfo, self.des];
+    return info;
+}
+
+- (NSString *)debugDescription{
+    return [self debugLog:0];
+}
+
+- (NSString *)debugLog:(NSUInteger)degree{
+    NSMutableString *info = [NSMutableString stringWithString:@"\n"];
+    
+    NSUInteger counter = degree;
+    while (counter --) [info appendString:@"\t"];
+    
+    [info appendString:self.description];
+    
+    for (LAHNode *child in self.children) {
+        [info appendFormat:@"%@", [child debugLog:degree + 1]];
+    }
+    
+    return info;
+}
+
+
+- (NSString *)tagNameInfo{
+    return @"node";
+}
+
+- (NSString *)attributesInfo{
+    return @"";
+}
+
+/*
 - (void)log{
     NSLog(@"%@", [self info:0]);
 }
@@ -164,6 +199,6 @@
     NSMutableString *info = [NSMutableString string];
     for (LAHNode *n in _children) [info appendString:[n info:degree]];
     return info;
-}
+}*/
 
 @end

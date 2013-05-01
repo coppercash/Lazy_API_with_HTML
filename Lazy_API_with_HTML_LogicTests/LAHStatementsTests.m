@@ -31,11 +31,12 @@
     STAssertThrows([frame referObject:node1 toKey:@"same key"],
                    @"Find same key");
 
-
+    
     [frame referObject:node1 toKey:@"different key"];
     LAHNode *node2 = [frame objectForKey:@"different key"];
     STAssertNotNil(node2,
                    @"Get entity normally");
+     
     
 }
 
@@ -301,13 +302,13 @@
 
     LAHStmtTag *tagStmt = [[[LAHStmtTag alloc] init] autorelease];
     LAHStmtAttribute *rangeAttrStmt = [[[LAHStmtAttribute alloc] init] autorelease];
-    rangeAttrStmt.name = LAHParaRange;
+    rangeAttrStmt.name = LAHParaIndexes;
     rangeAttrStmt.value = _aRangeQus;
     [tagStmt.attributes addObject:rangeAttrStmt];
     LAHTag* tag = [tagStmt evaluate:frame];
     STAssertEqualObjects(tag.class, [LAHTag class],
                          @"Generate LAHTag");
-    STAssertEqualObjects(tag.range, _aRangeAns,
+    STAssertEqualObjects(tag.indexes, _aRangeAns,
                          @"Get range of LHATag by attribute");
 
 }
@@ -343,6 +344,7 @@
     
     
     LAHStmtAttribute *indexAttrStmt1 = [[[LAHStmtAttribute alloc] init] autorelease];
+    [tagStmt.attributes removeAllObjects];
     [tagStmt.attributes addObject:indexAttrStmt1];
     LAHStmtMultiple *multiple1 = [[[LAHStmtMultiple alloc] init] autorelease];
     multiple1.values = @[modelRef];
@@ -353,9 +355,11 @@
     STAssertEqualObjects(tag1.indexOf.anyObject, model,
                          @"Get multiple indexOf of LHATag by attribute");
 
+    /*
     multiple1.values = @[pageRef];
     STAssertThrows([tagStmt evaluate:frame],
                    @"Throws, multiple indexOf only accept LAHModel");
+     */
 
 }
 
@@ -421,15 +425,17 @@
     STAssertThrows([tagStmt evaluate:frame],
                    @"Throws, single Tag attribute only accept LAHString, LAHPage, NSString");
 
+    /*
     LAHStmtMultiple *multiple2 = [[[LAHStmtMultiple alloc] init] autorelease];
     multiple2.values = @[modelRef];
     tagAttrStmt.value = multiple2;
     STAssertThrows([tagStmt evaluate:frame],
                    @"Throws, multiple Tag attribute only accept LAHString, LAHPage, NSString");
+     */
     
 }
 
-- (void)testLAHStmtTagHTMLTagMethod{
+- (void)testLAHStmtTagHTMLTagMethodRE{
     LAHFrame *frame = [[[LAHFrame alloc] init] autorelease];
 
     LAHStmtTag *tagStmt = [[[LAHStmtTag alloc] init] autorelease];
@@ -451,12 +457,13 @@
     
     LAHTag *tag = [tagStmt evaluate:frame];
     LAHAttribute *attr0 = tag.attributes.anyObject;
-    STAssertNotNil(attr0.method,
-                   @"Get method name of a LAHAttribute");
+    STAssertEqualObjects(attr0.methodName, @"re",
+                         @"Get method name of a LAHAttribute");
     STAssertEqualObjects(attr0.args, @[@"some arg"],
                          @"Get method args of a LAHAttribute");
 
 }
+
 
 - (void)setUp{
     [super setUp];

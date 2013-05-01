@@ -128,6 +128,32 @@
     
     return info;
 }*/
+- (NSString *)tagNameInfo{
+    return @"model";
+}
+
+- (NSString *)attributesInfo{
+    NSMutableString *info = [NSMutableString stringWithString:[super attributesInfo]];
+    if (_key) [info appendFormat:@"  key=\"%@\"", _key];
+    if (_range && _range.count != 0) {
+        [info appendFormat:@"  range=("];
+
+        BOOL isFirst = YES;
+        for (NSNumber *number in _range) {
+            
+            if (isFirst) {
+                isFirst = NO;
+            }else{
+                [info appendFormat:@", "];
+            }
+
+            [info appendFormat:@"%d", number.integerValue];
+        }
+        
+        [info appendFormat:@")"];
+    }
+    return info;
+}
 
 @end
 

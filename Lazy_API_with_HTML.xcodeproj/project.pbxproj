@@ -28,6 +28,9 @@
 		BE71B27416C1F9D4005AD9D7 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BE71B27316C1F9D4005AD9D7 /* Default-568h@2x.png */; };
 		BE71B27716C1F9D4005AD9D7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE71B27616C1F9D4005AD9D7 /* ViewController.m */; };
 		BE71B27A16C1F9D4005AD9D7 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE71B27816C1F9D4005AD9D7 /* ViewController.xib */; };
+		BE7AEC271730C50600CB51C0 /* LAHInterpreterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7AEC261730C50600CB51C0 /* LAHInterpreterTest.m */; };
+		BE7AEC2C1730C62400CB51C0 /* 51VOA.lah in Resources */ = {isa = PBXBuildFile; fileRef = BE7AEC2B1730C62400CB51C0 /* 51VOA.lah */; };
+		BE7AEC2E1730C62E00CB51C0 /* 51VOA.lah copy in Resources */ = {isa = PBXBuildFile; fileRef = BE7AEC2D1730C62D00CB51C0 /* 51VOA.lah copy */; };
 		BE93F0BE16C4FCDB008C3B3F /* LAH51voa.m in Sources */ = {isa = PBXBuildFile; fileRef = BE93F0BD16C4FCDB008C3B3F /* LAH51voa.m */; };
 		BE93F0C516C502DE008C3B3F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEDD18CD16BF976F009825E8 /* Foundation.framework */; };
 		BE93F0CA16C502DF008C3B3F /* LAH_MKNetwork_Hpple.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BE93F0C916C502DF008C3B3F /* LAH_MKNetwork_Hpple.h */; };
@@ -119,6 +122,10 @@
 		BE71B27516C1F9D4005AD9D7 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		BE71B27616C1F9D4005AD9D7 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		BE71B27916C1F9D4005AD9D7 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
+		BE7AEC251730C50600CB51C0 /* LAHInterpreterTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LAHInterpreterTest.h; sourceTree = "<group>"; };
+		BE7AEC261730C50600CB51C0 /* LAHInterpreterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LAHInterpreterTest.m; sourceTree = "<group>"; };
+		BE7AEC2B1730C62400CB51C0 /* 51VOA.lah */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 51VOA.lah; sourceTree = "<group>"; };
+		BE7AEC2D1730C62D00CB51C0 /* 51VOA.lah copy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "51VOA.lah copy"; sourceTree = "<group>"; };
 		BE93F0BC16C4FCDB008C3B3F /* LAH51voa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LAH51voa.h; sourceTree = "<group>"; };
 		BE93F0BD16C4FCDB008C3B3F /* LAH51voa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LAH51voa.m; sourceTree = "<group>"; };
 		BE93F0C416C502DE008C3B3F /* libLAH_MKNetwork_Hpple.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLAH_MKNetwork_Hpple.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -439,6 +446,8 @@
 			isa = PBXGroup;
 			children = (
 				BED8D00616BFB1CB001D819C /* voa.html */,
+				BE7AEC2B1730C62400CB51C0 /* 51VOA.lah */,
+				BE7AEC2D1730C62D00CB51C0 /* 51VOA.lah copy */,
 				BE10E77F17180E9200CDB057 /* testParseCommand.lah */,
 				BEB7213B172D21DB00521323 /* testParseEntity.lah */,
 				BED8CFFF16BFAE5A001D819C /* LAHStatementsTests.h */,
@@ -447,6 +456,8 @@
 				BEB7210C172CAA1500521323 /* LAHParserTest.m */,
 				BEA39913172EBAFD004184E3 /* LAHTokenTest.h */,
 				BEA39914172EBAFD004184E3 /* LAHTokenTest.m */,
+				BE7AEC251730C50600CB51C0 /* LAHInterpreterTest.h */,
+				BE7AEC261730C50600CB51C0 /* LAHInterpreterTest.m */,
 				BED8CFFA16BFAE5A001D819C /* Supporting Files */,
 			);
 			path = Lazy_API_with_HTML_LogicTests;
@@ -664,6 +675,8 @@
 				BED8D00716BFB1CB001D819C /* voa.html in Resources */,
 				BE10E78017180E9200CDB057 /* testParseCommand.lah in Resources */,
 				BEB72144172D21DC00521323 /* testParseEntity.lah in Resources */,
+				BE7AEC2C1730C62400CB51C0 /* 51VOA.lah in Resources */,
+				BE7AEC2E1730C62E00CB51C0 /* 51VOA.lah copy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -715,6 +728,7 @@
 				BED8D00116BFAE5A001D819C /* LAHStatementsTests.m in Sources */,
 				BEB7210D172CAA1500521323 /* LAHParserTest.m in Sources */,
 				BEA39915172EBAFD004184E3 /* LAHTokenTest.m in Sources */,
+				BE7AEC271730C50600CB51C0 /* LAHInterpreterTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

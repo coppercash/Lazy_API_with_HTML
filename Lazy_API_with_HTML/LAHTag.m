@@ -10,7 +10,8 @@
 //#import "LAHConstruct.h"
 //#import "LAHFetcher.h"
 #import "LAHPage.h"
-#import "LAHModel.h"
+#import "LAHString.h"
+#import "LAHAttribute.h"
 
 @interface LAHTag ()
 //@property(nonatomic, assign)NSUInteger numberOfMatched;
@@ -18,7 +19,7 @@
 @end
 
 @implementation LAHTag
-@synthesize rule = _rule, isDemocratic = _isDemocratic, range = _range;
+@synthesize rule = _rule, isDemocratic = _isDemocratic, indexes = _indexes;
 @synthesize attributes = _attributes;
 
 //@synthesize isTextNode = _isTextNode,
@@ -34,7 +35,7 @@
         //self.isIdentifier = NO;
         //self.range = NSMakeRange(0, NSUIntegerMax);
         self.isDemocratic = NO;
-        [self range];
+        [self indexes];
     }
     return self;
 }
@@ -73,7 +74,7 @@
 */
 - (void)dealloc{
     self.rule = nil;
-    self.range = nil;
+    self.indexes = nil;
     self.attributes = nil;
     [super dealloc];
 }
@@ -434,6 +435,75 @@
 }
 */
 #pragma mark - Log
+- (NSString *)tagNameInfo{
+    NSString *info = nil;
+    for (LAHAttribute *attr in _attributes) {
+        if ([attr.name isEqualToString:LAHParaTag]){
+            info = attr.legalValues.anyObject;
+            break;
+        }
+    }
+    return info ? info : LAHParaTag;
+}
+
+- (NSString *)attributesInfo{
+    NSMutableString *info = [NSMutableString stringWithString:[super attributesInfo]];
+    
+    if (_attributes && _attributes.count != 0) {
+        
+        BOOL isFirst = YES;
+        for (LAHAttribute *attr in _attributes) {
+            
+            if ([attr.name isEqualToString:LAHParaTag]) continue;
+            
+            if (isFirst) isFirst = NO;
+            
+            [info appendFormat:@"  %@", attr.description];
+        }
+    }
+    
+    if (_isDemocratic) {
+        [info appendFormat:@"  _isDem=\"YES\""];
+    }
+    
+    if (_indexes && _indexes.count != 0) {
+        [info appendFormat:@"  _indexes=("];
+        
+        BOOL isFirst = YES;
+        for (NSNumber *number in _indexes) {
+            
+            if (isFirst) {
+                isFirst = NO;
+            }else{
+                [info appendFormat:@", "];
+            }
+
+            [info appendFormat:@"%d", number.integerValue];
+        }
+        
+        [info appendFormat:@")"];
+    }
+    
+    if (_indexOf && _indexOf.count != 0){
+        [info appendFormat:@"  _indexOf={"];
+        
+        BOOL isFirst = YES;
+        for (LAHString *string in _indexOf) {
+            
+            if (isFirst) {
+                isFirst = NO;
+            }else{
+                [info appendFormat:@", "];
+            }
+            [info appendFormat:@"%@", string];
+        }
+        
+        [info appendFormat:@"}"];
+    }
+    
+    return info;
+}
+
 /*
 - (NSString *)infoProperties{
     NSMutableString *info = [NSMutableString string];
