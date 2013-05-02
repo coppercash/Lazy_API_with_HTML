@@ -10,6 +10,7 @@
 #import "LAHStmt.h"
 #import "LAHHeaders.h"
 #import "LAHAttribute.h"
+#import "LAHFrame.h"
 
 @implementation LAHStatementsTests {
     @private
@@ -464,6 +465,49 @@
 
 }
 
+- (void)testConvertRange{
+    LAHFrame *frame = [[[LAHFrame alloc] init] autorelease];
+    NSArray *qus0 = @[
+                      [NSNumber numberWithInteger:1],
+                      [NSNumber numberWithInteger:10],
+                      [NSNumber numberWithInteger:11],
+                      [NSNumber numberWithInteger:2],
+                      ];
+    NSArray *ans0 = @[
+                      [NSValue valueWithRange:NSMakeRange(1, 10)],
+                      [NSValue valueWithRange:NSMakeRange(21, 2)],
+                      ];
+    STAssertEqualObjects([LAHStmtMultiple convertRange:qus0 frame:frame], ans0,
+                         @"Convert range");
+    
+    
+    NSArray *qus1 = @[
+                      [NSNumber numberWithInteger:0],
+                      [NSNumber numberWithInteger:0],
+                      [NSNumber numberWithInteger:11],
+                      [NSNumber numberWithInteger:0],
+                      [NSNumber numberWithInteger:11],
+                      [NSNumber numberWithInteger:2],
+                      ];
+    NSArray *ans1 = @[
+                      [NSValue valueWithRange:NSMakeRange(11, 2)],
+                      ];
+    STAssertEqualObjects([LAHStmtMultiple convertRange:qus1 frame:frame], ans1,
+                         @"Convert range");
+    
+    
+    NSArray *qus2 = @[
+                      [NSNumber numberWithInteger:11],
+                      [NSNumber numberWithInteger:2],
+                      [NSNumber numberWithInteger:11],
+                      ];
+    NSArray *ans2 = @[
+                      [NSValue valueWithRange:NSMakeRange(11, 2)],
+                      ];
+    STAssertEqualObjects([LAHStmtMultiple convertRange:qus2 frame:frame], ans2,
+                         @"Convert range");
+
+}
 
 - (void)setUp{
     [super setUp];
@@ -478,9 +522,7 @@
     _aRangeQus = [[LAHStmtMultiple alloc] init];
     _aRangeQus.values = @[quichNumber(@"1"), quichNumber(@"10"), quichNumber(@"11")];
     _aRangeAns = @[
-                   [NSNumber numberWithInteger:1],
-                   [NSNumber numberWithInteger:10],
-                   [NSNumber numberWithInteger:11]
+                   [NSValue valueWithRange:NSMakeRange(1, 10)]
                    ];
 }
 

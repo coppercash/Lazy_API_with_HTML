@@ -75,6 +75,7 @@
 		BED8D00716BFB1CB001D819C /* voa.html in Resources */ = {isa = PBXBuildFile; fileRef = BED8D00616BFB1CB001D819C /* voa.html */; };
 		BEDD18CE16BF976F009825E8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEDD18CD16BF976F009825E8 /* Foundation.framework */; };
 		BEE351E716C5096E0013C3AD /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BEE351E616C5096E0013C3AD /* libxml2.2.dylib */; };
+		BEFCD10917323B2C002F2E32 /* LAHFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFCD10817323B2C002F2E32 /* LAHFrame.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -212,6 +213,8 @@
 		BEDD18D116BF976F009825E8 /* Lazy_API_with_HTML-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Lazy_API_with_HTML-Prefix.pch"; sourceTree = "<group>"; };
 		BEDD18DC16BF976F009825E8 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		BEE351E616C5096E0013C3AD /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = usr/lib/libxml2.2.dylib; sourceTree = SDKROOT; };
+		BEFCD10717323B2C002F2E32 /* LAHFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LAHFrame.h; sourceTree = "<group>"; };
+		BEFCD10817323B2C002F2E32 /* LAHFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LAHFrame.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -385,6 +388,8 @@
 				BE98178516EB21DA00FE93DE /* LAHParser.m */,
 				BE98178716EB2AD500FE93DE /* LAHStmt.h */,
 				BE98178816EB2AD500FE93DE /* LAHStmt.m */,
+				BEFCD10717323B2C002F2E32 /* LAHFrame.h */,
+				BEFCD10817323B2C002F2E32 /* LAHFrame.m */,
 			);
 			name = LAHInterpreter;
 			sourceTree = "<group>";
@@ -752,6 +757,7 @@
 				BE98178916EB2AD500FE93DE /* LAHStmt.m in Sources */,
 				BE10E7711717EECE00CDB057 /* LAHModelsGroup.m in Sources */,
 				BEAD47E5172B5D7A006ACC0E /* LAHAttribute.m in Sources */,
+				BEFCD10917323B2C002F2E32 /* LAHFrame.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

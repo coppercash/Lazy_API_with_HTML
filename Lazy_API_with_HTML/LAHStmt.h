@@ -7,30 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-@class LAHNode, LAHModel;
+
+@class LAHFrame;
+@class LAHNode;
 @class LAHStmtValue, LAHStmtAttribute, LAHAttribute, LAHStmtMultiple;
-
-
-@interface LAHFrame : NSObject {
-    NSMutableArray *_toRefer;
-    NSMutableDictionary *_references;
-    LAHFrame *_father;
-}
-@property(nonatomic, retain)NSMutableArray *toRefer;
-@property(nonatomic, retain)NSMutableDictionary *references;
-@property(nonatomic, assign)LAHFrame *father;
-#pragma mark - Class Basic
-- (id)initWithDictionary:(NSMutableDictionary *)container;
-#pragma mark - Reference
-- (void)referObject:(LAHNode *)entity toKey:(NSString *)key;
-- (id)objectForKey:(NSString *)key;
-#pragma mark - Error
-- (void)error:(NSString *)message;
-- (void)attribute:(NSString *)attr ofEntity:(LAHNode *)entity expect:(NSString *)expect butFind:(LAHStmtValue *)find;
-- (void)attribute:(NSString *)attr ofEntity:(LAHNode *)entity expect:(Class)expect find:(LAHStmtValue *)find;
-
-@end
-
 
 @interface LAHStmt : NSObject
 - (id)evaluate:(LAHFrame *)frame;
@@ -73,7 +53,7 @@
 
 
 @interface LAHStmtTag : LAHStmtEntity
-- (BOOL)add:(LAHStmtValue *)value to:(LAHAttribute *)attribute frame:(LAHFrame *)frame;
++ (BOOL)add:(LAHStmtValue *)value to:(LAHAttribute *)attribute frame:(LAHFrame *)frame;
 @end
 
 
@@ -102,6 +82,7 @@
 
 @interface LAHStmtMultiple : LAHStmtValue
 @property(nonatomic, retain)NSArray *values;
++ (NSArray *)convertRange:(NSArray *)range frame:(LAHFrame *)frame;
 @end
 
 
@@ -109,3 +90,4 @@
 @interface LAHStmtRef : LAHStmtValue
 @property(nonatomic, copy)NSString *name;
 @end
+

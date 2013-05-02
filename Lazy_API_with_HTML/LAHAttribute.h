@@ -14,7 +14,6 @@
     NSSet *_legalValues;
     NSSet *_getters;
     
-    //LAHAttrMethod _method;
     NSString *_methodName;
     NSArray *_args;
 }
@@ -23,7 +22,6 @@
 @property(nonatomic, retain)NSSet *legalValues;
 @property(nonatomic, retain)NSSet *getters;
 
-//@property(nonatomic, copy)LAHAttrMethod method;
 @property(nonatomic, copy)NSString *methodName;
 @property(nonatomic, retain)NSArray *args;
 

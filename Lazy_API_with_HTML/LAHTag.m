@@ -470,15 +470,15 @@
         [info appendFormat:@"  _indexes=("];
         
         BOOL isFirst = YES;
-        for (NSNumber *number in _indexes) {
+        for (NSValue *value in _indexes) {
             
             if (isFirst) {
                 isFirst = NO;
             }else{
                 [info appendFormat:@", "];
             }
-
-            [info appendFormat:@"%d", number.integerValue];
+            NSRange range = value.rangeValue;
+            [info appendFormat:@"%d...%d", range.location, NSMaxRange(range) - 1];
         }
         
         [info appendFormat:@")"];

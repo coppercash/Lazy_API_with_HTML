@@ -18,106 +18,7 @@
 #import "LAHAttribute.h"
 
 #import "LAHToken.h"
-
-@implementation LAHFrame
-@synthesize toRefer = _toRefer, references = _references;
-@synthesize father = _father;
-#pragma mark - Class Basic
-- (id)initWithDictionary:(NSMutableDictionary *)container{
-    self = [super init];
-    if (self) {
-        self.references = container;
-    }
-    return self;
-}
-
-- (NSMutableDictionary *)references{
-    if (!_references) {
-        _references = [[NSMutableDictionary alloc] init];
-    }
-    
-    return _references;
-}
-
-- (NSMutableArray *)toRefer{
-    
-    if (!_toRefer) {
-        
-        NSMutableArray *toRefer = _father.toRefer;
-        if (toRefer) {
-            
-            _toRefer = [_father.toRefer retain];
-        
-        }else{
-           
-            _toRefer = [[NSMutableArray alloc] init];
-        
-        }
-    }
-    
-    return _toRefer;
-}
-
-- (void)dealloc{
-    self.references = nil;
-    self.toRefer = nil;
-    self.father = nil;
-    [super dealloc];
-}
-
-#pragma mark - Reference
-- (void)referObject:(LAHNode *)entity toKey:(NSString *)key{
-    if ( !entity ) {
-        NSString *message = [NSString stringWithFormat:@"Can't refer '%@' to key '%@'", entity, key];
-        [self error:message];
-    }
-    
-    LAHNode *unexpect = _references[key];
-    if (unexpect) {
-        NSString *message = [NSString stringWithFormat:@"Entity '%@' can't be refered to key '%@', because of entity '%@' using the same key.", entity, key, unexpect];
-        [self error:message];
-    }
-    
-    [self.references setObject:entity forKey:key];
-}
-
-- (id)objectForKey:(NSString *)key{
-    
-    id object = [self.references objectForKey:key];
-    
-    if (!object) {
-        object = [_father objectForKey:key];
-    }
-        
-    return object;
-}
-
-#pragma mark - Error
-- (void)error:(NSString *)message{
-    @throw [NSException exceptionWithName:@"LinkError" reason:message userInfo:nil];
-}
-
-- (void)attribute:(NSString *)attr ofEntity:(LAHNode *)entity expect:(NSString *)expect butFind:(LAHStmtValue *)find{
-   
-    NSString *message = [NSString stringWithFormat:@"Attribute '%@' of entity '%@' expect type '%@', but find '%@'.",
-                         attr,
-                         NSStringFromClass(entity.class),
-                         expect,
-                         NSStringFromClass(find.class)
-                         ];
-    [self error:message];
-
-}
-
-- (void)attribute:(NSString *)attr ofEntity:(LAHNode *)entity expect:(Class)expect find:(LAHStmtValue *)find{
-    
-    if ( ![find isMemberOfClass:expect] ) {
-        [self attribute:attr ofEntity:entity expect:NSStringFromClass(expect) butFind:find];
-    }
-
-}
-
-@end
+#import "LAHFrame.h"
 
 #pragma mark - Basic
 @implementation LAHStmt
@@ -188,7 +89,7 @@
     LAHStmtValue *value = attr.value;
     if ([name isEqualToString:LAHParaRef]) {
         
-        [frame attribute:name ofEntity:entity expect:[LAHStmtRef class] find:value];
+        [frame attribute:name ofEntity:entity expect:@[[LAHStmtRef class]] find:value];
         
         [frame.toRefer addObject:entity];
         
@@ -240,7 +141,7 @@
     if ( [name isEqualToString:LAHParaKey] ) {
         
         LAHStmtValue *value = attr.value;
-        [frame attribute:name ofEntity:entity expect:[LAHStmtValue class] find:value];
+        [frame attribute:name ofEntity:entity expect:@[[LAHStmtValue class]] find:value];
         
         NSString *key = [value evaluate:frame];
         model.key = key;
@@ -250,9 +151,10 @@
     } else if ( [name isEqualToString:LAHParaRange] ) {
         
         LAHStmtMultiple *multiple = (LAHStmtMultiple *)attr.value;
-        [frame attribute:name ofEntity:entity expect:[LAHStmtMultiple class] find:multiple];
+        [frame attribute:name ofEntity:entity expect:@[[LAHStmtMultiple class]] find:multiple];
 
-        NSArray *range = [[NSArray alloc] initWithArray:[multiple evaluate:frame]];
+        NSArray *values = [multiple evaluate:frame];
+        NSArray *range = [[NSArray alloc] initWithArray:[LAHStmtMultiple convertRange:values frame:frame]];
         model.range = range;
         [range release];
         
@@ -293,7 +195,7 @@
     if ([name isEqualToString:LAHParaRE]) {
         
         LAHStmtValue *value = attr.value;
-        [frame attribute:name ofEntity:entity expect:[LAHStmtValue class] find:value];
+        [frame attribute:name ofEntity:entity expect:@[[LAHStmtValue class]] find:value];
 
         NSString *re = [value evaluate:frame];
         string.re = re;
@@ -348,7 +250,7 @@
     if ([name isEqualToString:LAHParaPage]) {
         
         LAHStmtRef *ref = (LAHStmtRef *)attr.value;
-        [frame attribute:name ofEntity:entity expect:[LAHStmtRef class] find:ref];
+        [frame attribute:name ofEntity:entity expect:@[[LAHStmtRef class]] find:ref];
         
         LAHPage *page = [ref evaluate:frame];
         ope.page = page;
@@ -357,7 +259,7 @@
     } else if ([name isEqualToString:LAHParaModel]) {
         
         LAHStmtRef *ref = (LAHStmtRef *)attr.value;
-        [frame attribute:name ofEntity:entity expect:[LAHStmtRef class] find:ref];
+        [frame attribute:name ofEntity:entity expect:@[[LAHStmtRef class]] find:ref];
         
         LAHModel *model = [ref evaluate:frame];
         ope.model = model;
@@ -385,9 +287,10 @@
     
     if ( [name isEqualToString:LAHParaIndexes] ) {              //<div _indexes=(0, 17)>
         
-        [frame attribute:name ofEntity:entity expect:[LAHStmtMultiple class] find:value];
+        [frame attribute:name ofEntity:entity expect:@[[LAHStmtMultiple class]] find:value];
         
-        NSArray *indexes = [[NSArray alloc] initWithArray:[value evaluate:frame]];
+        NSArray *values = [value evaluate:frame];
+        NSArray *indexes = [[NSArray alloc] initWithArray:[LAHStmtMultiple convertRange:values frame:frame]];
         tag.indexes = indexes;
         [indexes release];
         
@@ -398,6 +301,8 @@
         if ([value isMemberOfClass:[LAHStmtRef class]]) {
             
             LAHNode *entity = [value evaluate:frame];
+            
+            
             if ( ![entity isKindOfClass:[LAHModel class]] ) {
                 NSString *message = [NSString stringWithFormat:@"_indexOf of tag can only accept %@ reference, but find %@",
                                      NSStringFromClass([LAHModel class]),
@@ -416,10 +321,7 @@
 
         } else {
             
-            NSString *message = [NSString stringWithFormat:@"%@ / %@",
-                                 NSStringFromClass([LAHStmtValue class]),
-                                 NSStringFromClass([LAHStmtMultiple class])];
-            [frame attribute:name ofEntity:entity expect:message butFind:value];
+            [frame attribute:name ofEntity:entity expect:@[[LAHStmtValue class], [LAHStmtMultiple class]] find:value];
             
         }
                 
@@ -427,7 +329,7 @@
 
     }  else if ( [name isEqualToString:LAHParaIsDemocratic] ) {     //<div _isDemo="YES">
         
-        [frame attribute:name ofEntity:entity expect:[LAHStmtValue class] find:value];
+        [frame attribute:name ofEntity:entity expect:@[[LAHStmtValue class]] find:value];
         NSString *boolValue = [value evaluate:frame];
         if ([boolValue isEqualToString:LAHValYES]) {
             tag.isDemocratic = YES;
@@ -457,13 +359,12 @@
 
         
         //Attribute legal values and getters
-        if ( ![self add:attrStmt.value to:attribute frame:frame] ) {
+        if ( ![self.class add:attrStmt.value to:attribute frame:frame] ) {
             
-            NSString *message = [NSString stringWithFormat:@"%@ / %@ / %@",
-                                 NSStringFromClass([LAHStmtValue class]),
-                                 NSStringFromClass([LAHStmtRef class]),
-                                 NSStringFromClass([LAHStmtMultiple class])];
-            [frame attribute:name ofEntity:entity expect:message butFind:attrStmt.value];
+              [frame attribute:name ofEntity:entity expect:@[[LAHStmtValue class],
+                                                             [LAHStmtRef class],
+                                                             [LAHStmtMultiple class]]
+                          find:attrStmt.value];
         
         } 
         
@@ -474,7 +375,7 @@
     return NO;
 }
 
-- (BOOL)add:(LAHStmtValue *)value to:(LAHAttribute *)attribute frame:(LAHFrame *)frame{
++ (BOOL)add:(LAHStmtValue *)value to:(LAHAttribute *)attribute frame:(LAHFrame *)frame{
     
     if ([value isMemberOfClass:[LAHStmtValue class]]) {         //<div class="legalValue">
         
@@ -549,7 +450,7 @@
     if ([name isEqualToString:LAHParaLink]) {
         
         LAHStmtValue *value = attr.value;
-        [frame attribute:name ofEntity:entity expect:[LAHStmtValue class] find:value];
+        [frame attribute:name ofEntity:entity expect:@[[LAHStmtValue class]] find:value];
         
         NSString *link = [value evaluate:frame];
         page.link = link;
@@ -671,4 +572,38 @@
     
     return collector;
 }
+
++ (NSArray *)convertRange:(NSArray *)range frame:(LAHFrame *)frame{
+    if (!range || range.count == 0) return nil;
+    
+    NSInteger index = 0;
+    NSRange cRange = NSMakeRange(0, 0);
+    NSMutableArray *collector = [NSMutableArray arrayWithCapacity:range.count / 2];
+    while (index < range.count) {
+        NSNumber *locNum = range[index ++];
+        [frame object:@"Range" accept:@[[NSNumber class]] find:locNum];
+        NSUInteger loc = locNum.unsignedIntegerValue;
+
+        if (index >= range.count) break;
+        
+        NSNumber *lenNum = range[index ++];
+        [frame object:@"Range" accept:@[[NSNumber class]] find:lenNum];
+        NSUInteger len = lenNum.unsignedIntegerValue;
+        
+        if (len == 0) continue;
+        
+        if (NSEqualRanges(cRange, NSMakeRange(0, 0))) {
+            cRange.location = loc;
+        } else {
+            cRange.location = NSMaxRange(cRange) - 1 + loc;
+        }
+        cRange.length = len;
+        NSValue *rangeValue = [NSValue valueWithRange:cRange];
+        
+        [collector addObject:rangeValue];
+    }
+    
+    return collector;
+}
+
 @end
