@@ -11,6 +11,7 @@
 #import "LAHHeaders.h"
 #import "LAHAttribute.h"
 #import "LAHFrame.h"
+#import "LAHCategories.h"
 
 @implementation LAHStatementsTests {
     @private
@@ -477,7 +478,7 @@
                       [NSValue valueWithRange:NSMakeRange(1, 10)],
                       [NSValue valueWithRange:NSMakeRange(21, 2)],
                       ];
-    STAssertEqualObjects([LAHStmtMultiple convertRange:qus0 frame:frame], ans0,
+    STAssertEqualObjects([qus0 dividedRangesWithFrame:frame], ans0,
                          @"Convert range");
     
     
@@ -492,7 +493,7 @@
     NSArray *ans1 = @[
                       [NSValue valueWithRange:NSMakeRange(11, 2)],
                       ];
-    STAssertEqualObjects([LAHStmtMultiple convertRange:qus1 frame:frame], ans1,
+    STAssertEqualObjects([qus1 dividedRangesWithFrame:frame], ans1,
                          @"Convert range");
     
     
@@ -504,7 +505,7 @@
     NSArray *ans2 = @[
                       [NSValue valueWithRange:NSMakeRange(11, 2)],
                       ];
-    STAssertEqualObjects([LAHStmtMultiple convertRange:qus2 frame:frame], ans2,
+    STAssertEqualObjects([qus2 dividedRangesWithFrame:frame], ans2,
                          @"Convert range");
 
 }

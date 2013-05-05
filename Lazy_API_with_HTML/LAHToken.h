@@ -10,8 +10,8 @@
 
 
 @interface LAHToken : NSObject {
-	NSString *source;
-	NSRange range;
+	NSString *_source;
+	NSRange _range;
 }
 
 + (NSArray *)tokenizeString:(NSString *)string;

@@ -9,7 +9,8 @@
 #import "LAHOperation.h"
 #import "LAHPage.h"
 #import "LAHModel.h"
-//#import "LAHFetcher.h"
+#import "LAHCategories.h"
+#import "LAHNote.h"
 
 @interface LAHOperation ()
 //Pages in States
@@ -78,6 +79,19 @@
     return copy;
 }
 
+#pragma mark = Setters
+- (void)setPage:(LAHPage *)page{
+    [_page release];
+    _page = [page retain];
+    page.father = self;
+}
+
+- (void)setModel:(LAHModel *)model{
+    [_model release];
+    _model = [model retain];
+    model.father = self;
+}
+
 #pragma mark - Getters
 - (NSMutableDictionary *)downloadings{
     if (!_downloadings) {
@@ -123,6 +137,14 @@
     return children;
 }
 
+- (LAHAttrMethod)methodWithName:(NSString *)name{
+    if (_delegate && [_delegate respondsToSelector:@selector(operation:needsMethodNamed:)]) {
+        LAHAttrMethod method = [_delegate operation:self needsMethodNamed:name];
+        return method;
+    }
+    return nil;
+}
+
 #pragma mark - Status
 - (void)refresh{
     [self cancelNetwork];
@@ -136,6 +158,7 @@
 }
 
 #pragma mark - Fake LAHConstruct
+/*
 - (BOOL)checkUpate:(LAHModel *)object{
     return NO;
 }
@@ -144,7 +167,7 @@
 }
 
 - (void)recieve:(LAHModel*)object{
-}
+}*/
 
 #pragma mark - Recursive
 /*
@@ -157,6 +180,16 @@
 - (LAHOperation *)recursiveOperation{
     return self;
 }
+
+- (void)recieve:(LAHModel *)model{
+    
+}
+
+- (BOOL)needUpdate{
+    
+    return NO;
+}
+
 
 #pragma mark - Queue
 - (void)freezePage:(LAHPage *)page forKey:(id)key{
@@ -174,28 +207,34 @@
     }
 
     //Page key is different from key. Key indicates a network object.
-    NSString *pageKey = page.identifier;
-    [_model saveStateForKey:pageKey];
-    [_page saveStateForKey:pageKey];
+    //NSString *pageKey = page.identifier;
+    [_model saveStateForKey:key];
+    [_page saveStateForKey:key];
 }
 
 - (void)awakePageForKey:(id)key withElement:(LAHEle)element{
     
     NSArray *pages = [_downloadings objectForKey:key];
+    NSAssert(pages != nil, @"Can't get pages for key:%@", key);
     
     for (LAHPage *page in pages) {
         
         //Page key is different from key. Key indicates a network object.
-        NSString *pageKey = page.identifier;
-        [_model restoreStateForKey:pageKey];
-        [_page restoreStateForKey:pageKey];
+        //NSString *pageKey = page.identifier;
+        [_model restoreStateForKey:key];
+        [_page restoreStateForKey:key];
         
         //Seek the pages, and when they being seeked mark them
+#ifdef LAH_RULES_DEBUG
+        [LAHNote openNote:@"%@", page];
+#endif
         [self.seekings addObject:page];
-        
         [page seekWithElement:element];
-
         [_seekings removeObject:page];
+
+#ifdef LAH_RULES_DEBUG
+        [LAHNote closeNote];
+#endif
     }
     
     [_downloadings removeObjectForKey:key];
@@ -207,9 +246,11 @@
 #pragma mark - Network
 - (void)downloadPage:(LAHPage *)page{
     NSAssert(_delegate != nil, @"Can't download without download delegate.");
+    NSAssert(page.link != nil, @"Can't download without LAHPage or link of it.");
+    if (!page.link) return;
     
-    if (_delegate && [_delegate respondsToSelector:@selector(operation:needPage:)]) {
-        id key = [_delegate operation:self needPage:page];
+    if (_delegate && [_delegate respondsToSelector:@selector(operation:needPageAtLink:)]) {
+        id key = [_delegate operation:self needPageAtLink:page.link];
         [self freezePage:page forKey:key];
     }
 }
@@ -245,7 +286,13 @@
 
 #pragma mark - Event
 - (void)start{
-    [_page download];
+#ifdef LAH_RULES_DEBUG
+    [LAHNote openNote:@"%@", self];
+#endif
+    
+    [_page fetchValue:nil];
+    //[self downloadPage:_page];
+    //[_page download];
 }
 
 - (void)cancel{
@@ -278,6 +325,10 @@
         for (LAHCompletion completion in _completions) {
             completion(bSelf);
         }
+    
+#ifdef LAH_RULES_DEBUG
+        [LAHNote logWisely];
+#endif
     }
 }
 

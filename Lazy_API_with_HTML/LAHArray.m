@@ -43,7 +43,7 @@
     self.array = nil;
     [super dealloc];
 }
-
+/*
 - (id)copyWithZone:(NSZone *)zone{
     LAHArray *copy = [super copyWithZone:zone];
     
@@ -52,21 +52,33 @@
     [copy.array release];
     
     return copy;
-}
+}*/
 
 #pragma mark - recursion
+/*
 - (BOOL)checkUpate:(LAHModel *)object{
     //[super checkUpate:object];
     //return object.isIdentifierElementChanged;
-}
-
+}*/
+/*
 - (void)update{
     [self.array = [[NSMutableArray alloc] init] release];
     [(LAHModel *)_father recieve:self];
 }
-
+*/
 - (void)recieve:(LAHModel*)object{
-    [_array addObject:object.data];
+    [super recieve:object];
+    [self.array addObject:object.data];
+}
+
+- (NSMutableArray *)array{
+    if (!_array || self.needUpdate) {
+        [_array release];
+        _array = [[NSMutableArray alloc] init];
+        self.needUpdate = NO;
+        [(LAHModel *)_father recieve:self];
+    }
+    return _array;
 }
 
 - (id)data{
@@ -75,22 +87,27 @@
 
 #pragma mark - States
 - (void)saveStateForKey:(id)key{
-    NSMutableDictionary *collector = [[NSMutableDictionary alloc] initWithCapacity:3];
-    //if (_lastFatherContainer) [collector setObject:_lastFatherContainer forKey:gKeyLastFatherContainer];
-    //if (_lastIdentifierElement) [collector setObject:_lastIdentifierElement forKey:gKeyLastIdentifierElement];
-    if (_array) [collector setObject:_array forKey:gKeyContainer];
+    NSAssert(_states[key] == nil, @"Will overwrite state for key '%@'", key);
     
-    [_states setObject:collector forKey:key];
-    [collector release];
+    NSMutableDictionary *state = [[NSMutableDictionary alloc] initWithCapacity:3];
+    if (_array) state[gKeyContainer] = _array;
+    state[gKeyNeedUpdate] = [NSNumber numberWithBool:_needUpdate];
+    
+    //if (_array) [state setObject:_array forKey:gKeyContainer];
+    //[state setObject:[NSNumber numberWithBool:_needUpdate] forKey:gKeyNeedUpdate];
+    
+    _states[key] = state;
+    //[_states setObject:collector forKey:key];
+    [state release];
     
     [super saveStateForKey:key];
 }
 
 - (void)restoreStateForKey:(id)key{
     NSDictionary *state = [_states objectForKey:key];
-    //_lastFatherContainer = [state objectForKey:gKeyLastFatherContainer];
-    //_lastIdentifierElement = [state objectForKey:gKeyLastIdentifierElement];
     self.array = [state objectForKey:gKeyContainer];
+    self.needUpdate = [state[gKeyNeedUpdate] boolValue];
+    
     [_states removeObjectForKey:key];
     
     [super restoreStateForKey:key];

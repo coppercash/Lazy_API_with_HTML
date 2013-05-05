@@ -30,10 +30,13 @@
         firstChild.father = self;
 
         LAHNode* child;
+        NSMutableArray *collector = [[NSMutableArray alloc] init];
         while ((child = va_arg(children, LAHNode*)) != nil){
-            [_children addObject:child];
+            [collector addObject:child];
             child.father = self;
         }
+        _children = [[NSArray alloc] initWithArray:collector];
+        [collector release];
     }
     return self;
 }
@@ -94,15 +97,6 @@
     return _father.recursiveOperation;
 }
 
-- (void)releaseChild:(LAHNode*)child{
-    [_children removeObject:child];
-    child.father = nil;
-    if (_children.count == 0) {
-        [_children release]; _children = nil;
-        [_father releaseChild:self];
-    }
-}
-
 #pragma mark - States
 - (void)saveStateForKey:(id)key{}
 - (void)restoreStateForKey:(id)key{}
@@ -123,6 +117,21 @@
  */
 
 #pragma mark - Log
+@dynamic degree;
+@synthesize degreeSpace;
+- (NSUInteger)degree{
+    return (_father == nil) ? 0 : _father.degree + 1;
+}
+
+- (NSString *)degreeSpace{
+    NSUInteger degree = self.degree;
+    NSMutableString *space = [NSMutableString string];
+    while (degree --) {
+        [space appendString:@"\t"];
+    }
+    return space;
+}
+
 - (NSString *)des{
     return [super description];
 }
@@ -150,7 +159,6 @@
     
     return info;
 }
-
 
 - (NSString *)tagNameInfo{
     return @"node";

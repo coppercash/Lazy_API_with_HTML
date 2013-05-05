@@ -19,6 +19,7 @@
 - (LAHStmtAttribute *)parseAttribute;
 - (LAHStmtRef *)parseReference;
 - (LAHStmtValue *)parseValue;
+- (LAHStmtValue *)parseTagName;
 - (LAHStmtNumber *)parseNumber;
 - (LAHStmtValue *)parseTransferredValue;
 - (LAHStmtMultiple *)parseMultipleWithLeft:(NSString *)left right:(NSString *)right;
@@ -106,15 +107,23 @@
     
         LAHStmtAttribute *attribute = [[LAHStmtAttribute alloc] init];
         attribute.name = LAHParaTag;
-        
-        LAHStmtValue *value = [[LAHStmtValue alloc] init];
-        value.value = self.token.stringValue;
-        [self advance];
-        attribute.value = value;
+        attribute.value = [self parseTagName];
 
         [entity.attributes addObject:attribute];
         
-    }else {
+    } else if ([self.token.stringValue isEqualToString:@"{"]) {
+        
+        entity = [[LAHStmtTag alloc] init];
+        
+        LAHStmtAttribute *attribute = [[LAHStmtAttribute alloc] init];
+        attribute.name = LAHParaTag;
+        
+        LAHStmtMultiple *tagNames = [self parseMultipleWithLeft:@"{" right:@"}"];
+        attribute.value = tagNames;
+        
+        [entity.attributes addObject:attribute];
+        
+    } else {
         
         [self expect:@"Entity Name (e.x. arr, dic, str, ope, page, tag)"];
         return nil;
@@ -243,6 +252,16 @@
     return [value autorelease];
 }
 
+- (LAHStmtValue *)parseTagName{
+    if (![self isHTMLTagName]) return nil;
+    
+    LAHStmtValue *value = [[LAHStmtValue alloc] init];
+    value.value = self.token.stringValue;
+    [self advance];
+
+    return [value autorelease];
+}
+
 - (LAHStmtRef *)parseReference{
     unichar ch = self.token.firstCharacter;
     if (ch != '\'') return nil;
@@ -277,6 +296,7 @@
     else if ( (value = [self parseReference]) ) ;
     else if ( (value = [self parseTransferredValue]) ) ;
     else if ( (value = [self parseNumber]) ) ;
+    else if ( (value = [self parseTagName]) ) ;
     else ;
     
     return value;
@@ -364,7 +384,6 @@
 
 #pragma mark - Specific
 - (BOOL)isHTMLTagName{
-    
     NSString *value = self.token.stringValue;
     return isByRegularExpression(value, gHtmlEX);
     

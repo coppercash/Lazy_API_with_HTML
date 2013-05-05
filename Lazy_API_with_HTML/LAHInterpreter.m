@@ -10,6 +10,7 @@
 #import "LAHParser.h"
 #import "LAHToken.h"
 #import "LAHStmt.h"
+#import "LAHFrame.h"
 
 @implementation LAHInterpreter
 + (void)interpretFile:(NSString *)path intoDictionary:(NSMutableDictionary *)dictionary{

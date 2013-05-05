@@ -79,7 +79,7 @@
     STAssertTrueNoThrow(parser0.isHTMLTagName, @"Wrong answer");
     
     LAHParser *parser1 = _parser(@"123");
-    STAssertFalseNoThrow(parser1.isHTMLTagName, @"Wrong answer");
+    STAssertTrueNoThrow(parser1.isHTMLTagName, @"Wrong answer");
 
 }
 
@@ -246,5 +246,19 @@
     [parser0 release];
 }
 
+- (void)testParseMultopleTagName{
+    LAHParser *parser0 = _parser(@"<{h3, h4, h5} class=\"class  value\">");
+    LAHStmtTag *tag0 = (LAHStmtTag *)[parser0 parseEntity];
+    
+    LAHStmtAttribute *tagName = tag0.attributes[0];
+    STAssertEqualObjects(tagName.name, LAHParaTag, @"Parse multiple tag names, attribute name.");
+    LAHStmtMultiple *tagNames = (LAHStmtMultiple *)tagName.value;
+    STAssertEqualObjects(tagNames.class, [LAHStmtMultiple class], @"Parse multiple tag names, stmt type.");
+    STAssertEquals(tagNames.values.count, 3U, @"Parse multiple tag names, value count.");
+    
+    LAHStmtAttribute *class = tag0.attributes[1];
+    STAssertEqualObjects(class.name, @"class", @"Parse multiple tag names, effection on other attributes, attribute name.");
+
+}
 
 @end

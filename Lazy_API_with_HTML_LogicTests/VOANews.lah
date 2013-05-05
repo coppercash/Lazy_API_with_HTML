@@ -1,0 +1,36 @@
+<dic _r='sectionModel'>
+    <arr key="items">
+        <dic _r='itemDic'>
+            <str key="title"_r='storyTitle'>
+            <str key="link" _r='storyLink'>
+            <arr key="images">
+                <str _r='storyImage'>
+            
+<page _r='sectionPage_images'>
+    <div class="columns">
+        <div class="content_column2_1">
+            <div id="article" class="middle_content">
+                <div id="mainMediaSmall">
+                    <div class="embedded_content_object">
+                        <div class="expandSmall floatLeft">
+                            <div class="contentImage floatLeft">
+                                <img class="photo" src='storyImage'>
+            <div id="article" class="middle_content">
+                <div class="contentImage floatNone">
+                    <div class="watermark">
+                        <a>
+                            <img class="photo" src='storyImage'>
+
+<page _r='sectionPage'>
+    <div id.re("(widgetDeskSection)")="widgetDeskSection" class.re("(boxwidget)")="boxwidget">
+        <div class="boxwidgetInner">
+            <div class="boxwidget_part">
+                <div id={ "ctl00_ctl00_cpAB_cp1_widgetDeskSection_ctl01_ctl03_ctl00_divTopArticleBox", "ctl00_ctl00_cpAB_cp1_widgetDeskSection_ctl01_ctl03_ctl00_div2ArticleBox", "ctl00_ctl00_cpAB_cp1_widgetDeskSection_ctl01_ctl03_ctl00_div3ArticleBox" }>
+                    <div class= { "boxwidget_part newsvertical_maincontent", "boxwidget_part ", "boxwidget_part topintend_low", "boxwidget_part"} _indexOf='itemDic'>
+                        <{h3, h4}>
+                            <a href={'storyLink', 'sectionPage_images'}>
+                                <text _content='storyTitle'>
+
+<ope model='sectionModel' page='sectionPage' _r='ope1'>
+<ope _r='ope0'>
+    <page link="www.voanews.com">

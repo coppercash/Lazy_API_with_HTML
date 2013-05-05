@@ -22,27 +22,18 @@
 - (id)initWithFirstChild:(LAHNode*)firstChild variadicChildren:(va_list)children;
 - (id)initWithChildren:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
 - (LAHOperation *)recursiveOperation;
-- (void)releaseChild:(LAHNode*)child;
+
 #pragma mark - Status
 - (void)saveStateForKey:(id)key;
 - (void)restoreStateForKey:(id)key;
 - (void)refresh;
-#pragma mark - Interpreter
-//- (void)addChild:(LAHNode *)child;
+
 #pragma mark - Log
-/*
-- (void)log;
-- (void)logLonely;
-*/
+@property(nonatomic, readonly)NSUInteger degree;
+@property(nonatomic, readonly)NSString *degreeSpace;
 - (NSString *)des;
 - (NSString *)debugLog:(NSUInteger)degree;
 - (NSString *)tagNameInfo;
 - (NSString *)attributesInfo;
 
-/*
-- (NSString *)info:(NSUInteger)degree;
-- (NSString *)infoSelf;
-- (NSString *)infoProperties;
-- (NSString *)infoChildren:(NSUInteger)degree;
- */
 @end

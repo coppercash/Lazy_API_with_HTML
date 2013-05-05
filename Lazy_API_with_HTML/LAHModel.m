@@ -9,6 +9,7 @@
 #import "LAHModel.h"
 #import "LAHTag.h"
 #import "LAHOperation.h"
+#import "LAHNote.h"
 
 @interface LAHModel ()
 //@property(nonatomic, assign)id lastFatherContainer;
@@ -17,6 +18,7 @@
 
 @implementation LAHModel
 @synthesize type = _type, key = _key, range = _range;//, identifiers = _identifiers;
+@synthesize needUpdate = _needUpdate;
 //@synthesize lastFatherContainer = _lastFatherContainer, lastIdentifierElement = _lastIdentifierElement;
 
 - (void)dealloc{
@@ -34,9 +36,9 @@
         r.isIdentifier = YES;
     }
 }*/
-
+/*
 - (id)copyWithZone:(NSZone *)zone{
-    /*
+    
     LAHModel *copy = [super copyWithZone:zone];
     
     copy.type = _type;
@@ -48,9 +50,9 @@
     
     [copy.identifiers release];
     return copy;
-     */
+     
 }
-
+*/
 #pragma mark - States
 - (void)saveStateForKey:(id)key{
     for (LAHModel *c in _children) {
@@ -85,8 +87,9 @@
 }*/
 
 #pragma mark - recursion
+/*
 - (BOOL)checkUpate:(LAHModel *)object{
-    /*
+    
     LAHModel *father = (LAHModel *)_father;
     BOOL update =
     [father checkUpate:self] ||
@@ -98,12 +101,23 @@
     _lastFatherContainer = father.data;
     _lastIdentifierElement = self.currentIdentifierElement;
     return NO;
-     */
+     
 }
 
 - (void)update{}
+*/
+- (void)recieve:(LAHModel*)object{
+#ifdef LAH_RULES_DEBUG
+    [LAHNote quickNote:@"%@\tneedUpdate %@\tdata %p", self.des, BOOLStr(_needUpdate), self.data];
+#endif
+}
 
-- (void)recieve:(LAHModel*)object{}
+- (BOOL)needUpdate{
+    LAHModel *father = (LAHModel *)_father;
+    BOOL needUpdate = father.needUpdate || _needUpdate;
+    return needUpdate;
+}
+
 
 #pragma mark - Interpreter
 /*
@@ -160,5 +174,6 @@
 //NSString * const gKeyLastFatherContainer = @"LFC";
 //NSString * const gKeyLastIdentifierElement = @"LIE";
 NSString * const gKeyContainer = @"Con";
+NSString * const gKeyNeedUpdate = @"NUp";
 
 

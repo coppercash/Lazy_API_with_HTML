@@ -12,6 +12,9 @@
 #import "LAHPage.h"
 #import "LAHString.h"
 #import "LAHAttribute.h"
+#import "LAHCategories.h"
+#import "LAHOperation.h"
+#import "LAHNote.h"
 
 @interface LAHTag ()
 //@property(nonatomic, assign)NSUInteger numberOfMatched;
@@ -78,9 +81,9 @@
     self.attributes = nil;
     [super dealloc];
 }
-
+/*
 - (id)copyWithZone:(NSZone *)zone{
-    /*
+    
     //LAHRecognizer *copy = [super copyWithZone:zone];
     
     LAHTag *copy = [[[self class] allocWithZone:zone] init];
@@ -109,8 +112,8 @@
     [copy.downloaders release];
     
     return copy;
-     */
-}
+     
+}*/
 /*
 #pragma mark - Setter
 - (void)setTagName:(NSString *)tagName{
@@ -231,9 +234,84 @@
 }
 */
 #pragma mark - Recursive
+- (BOOL)handleElement:(LAHEle)element atIndex:(NSInteger)index{
+#ifdef LAH_RULES_DEBUG
+    [LAHNote openNote:@"%@", self.des];
+#endif
+    
+    
+    
+    //Step 0, match the index
+    
+    BOOL isIndexPass = YES;
+    if (_indexes.count != 0) {
+        isIndexPass = [_indexes locationInDividedRanges:index];
+    }
+
+#ifdef LAH_RULES_DEBUG
+    [LAHNote noteAttr:@"index" d:[NSString stringWithFormat:@"%d", index] s:_indexes.dividedDescription pass:isIndexPass];
+#endif
+    if ( !isIndexPass ) return NO;
+    
+    
+    
+    //Step 1, match the attributes
+    
+    BOOL isAttrPass = YES;
+    for (LAHAttribute *attr in _attributes) {
+        
+        [attr cacheValueWithElement:element];
+        isAttrPass &= attr.isMatched;
+        
+        if ( !isAttrPass ) return NO;
+    }
+
+    
+    
+    //Step 2, notification LAHMode in _indexOf to update
+    
+    for (LAHModel *model in _indexOf) {
+        model.needUpdate = YES;
+    }
+
+    
+    
+    //Step 3, match the children (is isDemocratic), and let children handle the elements
+    //Two iteration in this order, so that the fetcher's fetching sequence depends on the sequence in the HTML.
+    
+    BOOL isChildrenPass = (_children.count == 0) ? YES : NO;    //Indicates at least one child can pass the test
+    NSInteger subIndex = 0;
+    for (LAHEle subEle in element.children) {
+        for (LAHTag *tag in _children) {
+            isChildrenPass |= [tag handleElement:subEle atIndex:subIndex];
+        }
+        subIndex ++;
+    }
+
+#ifdef LAH_RULES_DEBUG
+    [LAHNote noteAttr:@"isDemocratic" d:BOOLStr(_isDemocratic) s:@"" pass:isChildrenPass];
+#endif
+    if (_isDemocratic && !isChildrenPass) return NO;
+
+
+    
+    //Step 4, fetch
+    
+    for (LAHAttribute *attr in _attributes) {
+        [attr fetch];
+    }
+    
+#ifdef LAH_RULES_DEBUG
+    //[LAHNote closeNote];
+    if (isChildrenPass) [LAHNote closeNote];
+#endif
+    return YES;
+}
+
+/*
 - (BOOL)handleElement:(LAHEle)element{
     
-    /*
+    
     //Step 0, check matching.
     //if (![self isElementMatched:element]) return NO;
     //_matchingElement = element;
@@ -274,8 +352,10 @@
     gRecLogDegree -= 1;
 #endif
     return YES;
-     */
+     
+ 
 }
+ */
 /*
 - (BOOL)isElementMatched:(LAHEle)element{
 #ifdef LAH_RULES_DEBUG
@@ -318,7 +398,7 @@
                 isMatched |= [recV isEqualToString:LAHValNone];
         }
         
-        /*
+        
         //Statement below has same logic with the above one.But in each step of loop, it do [value isEqualToString:gRWNone].So its performance is worse.
         value = value ? value : gRWNone;
         for (NSString *lV in lVs) {
@@ -451,13 +531,9 @@
     
     if (_attributes && _attributes.count != 0) {
         
-        BOOL isFirst = YES;
         for (LAHAttribute *attr in _attributes) {
             
             if ([attr.name isEqualToString:LAHParaTag]) continue;
-            
-            if (isFirst) isFirst = NO;
-            
             [info appendFormat:@"  %@", attr.description];
         }
     }

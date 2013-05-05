@@ -8,10 +8,12 @@
 
 #import "LAHNode.h"
 
-@interface LAHPage : LAHNode {
+@interface LAHPage : LAHNode <LAHFetcher> {
     NSString *_link;
+    NSMutableSet *_attributes;
 }
 @property(nonatomic, copy)NSString *link;
+@property(nonatomic, retain)NSMutableSet *attributes;
 
 @property(nonatomic, readonly)LAHOperation *recursiveOperation;
 @property(nonatomic, readonly)NSString *identifier;

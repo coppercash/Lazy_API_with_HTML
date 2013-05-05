@@ -23,8 +23,10 @@
     if (self) {
         LAHOperation *rootOpe = self.operation;
         
+        NSString *link = rootOpe.page.link;
         NSURL *url = [[NSURL alloc] initWithString:rootOpe.page.link];
-        NSString *hostName = url.host;
+        NSString *hostStr = url.host;
+        NSString *hostName = hostStr ? hostStr : link;
         
         [self.engine = [[MKNetworkEngine alloc] initWithHostName:hostName] release];
         
@@ -48,17 +50,17 @@
 }
 
 #pragma mark - LAHDelegate
-- (id)page:(LAHPage* )page needFileAtLink:(NSString*)path{
-    
-    NSURL *url = [[NSURL alloc] initWithString:path];
-    __block MKNetworkOperation *netOpe = nil;
+- (id)operation:(LAHOperation *)operation needPageAtLink:(NSString *)link{
+    NSURL *url = [[NSURL alloc] initWithString:link];
+    MKNetworkOperation *netOpe = nil;
     if (url.host) {
-        netOpe = [_engine operationWithURLString:url.absoluteString];
+        netOpe = [_engine operationWithURLString:link];
     } else {
-        netOpe = [_engine operationWithPath:url.relativePath];
+        netOpe = [_engine operationWithPath:link];
     }
-    __block LAHOperation *lahOpe = page.recursiveOperation;
-
+    NSAssert(netOpe != nil, @"Can't generate Network Operation");
+    
+    __block LAHOperation *lahOpe = operation;
     [netOpe addCompletionHandler:^(MKNetworkOperation *completedOperation) {
 
         LAHEle root = [completedOperation htmlWithXPath:@"/html/body"];
@@ -72,7 +74,7 @@
     }];
     
     [_engine enqueueOperation:netOpe forceReload:YES];
-    [lahOpe addNetwork:netOpe];
+    [lahOpe addNetwork:netOpe]; //Should be remove, too verbo
     [url release];
     
     return netOpe.url;  //op is a key for dictionary

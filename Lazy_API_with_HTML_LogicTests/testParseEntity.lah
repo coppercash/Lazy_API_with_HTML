@@ -16,4 +16,4 @@
 
 <div class={"class", 'gain'}>
 
-<_text _content.re("regular expression")='gain'>
+<text _content.re("regular expression")='gain'>

@@ -95,13 +95,13 @@
 }
 
 - (BOOL)object:(NSString *)object accept:(NSArray *)types find:(NSObject *)find strict:(BOOL)strict{
-    BOOL isAcceptive = YES;
+    BOOL isAcceptive = NO;
     NSMutableString *message = [NSMutableString stringWithString:@""];
     for (Class class in types) {
         if (strict) {
-            isAcceptive &= [find isMemberOfClass:class];
+            isAcceptive |= [find isMemberOfClass:class];
         }else{
-            isAcceptive &= [find isKindOfClass:class];
+            isAcceptive |= [find isKindOfClass:class];
         }
         
         [message appendFormat:@"%@%@", ([message isEqualToString:@""] ? @"" : @" / "), NSStringFromClass(class)];

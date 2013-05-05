@@ -9,14 +9,14 @@
 #import "LAHString.h"
 #import "LAHTag.h"
 #import "LAHPage.h"
+#import "LAHNote.h"
 
 @interface LAHString ()
-@property(nonatomic, copy)NSString *data;
-- (void)doFetch;
+@property(nonatomic, copy)NSString *string;
 @end
 
 @implementation LAHString
-@synthesize data = _data, value = _value;
+@synthesize string = _string, value = _value;
 @synthesize re = _re;
 #pragma mark - Life Cycle
 
@@ -46,14 +46,14 @@
 */
 - (void)dealloc{
     //self.fetcher = nil;
-    self.data = nil;
+    self.string = nil;
     self.value = nil;
     self.re = nil;
     //self.symbol = nil;
     
     [super dealloc];
 }
-
+/*
 - (id)copyWithZone:(NSZone *)zone{
     LAHString *copy = [super copyWithZone:zone];
     
@@ -62,6 +62,15 @@
     //copy.data = _data;
     
     return copy;
+}*/
+
+#pragma mark - LAHFetcher
+- (void)fetchValue:(NSString *)value{
+#ifdef LAH_RULES_DEBUG
+    [LAHNote quickNote:@"%@\tfetching \"%@\"", self.des, value];
+#endif
+    self.string = value;
+    [(LAHModel *)_father recieve:self];
 }
 
 #pragma mark - Element
@@ -140,18 +149,15 @@
 }
  */
 
-- (id)data{
-    return _data;
-}
 
-- (id)newValue{
-    if (_data == nil) return [NSNull null];
-    return _data;
-}
-
+#pragma mark - States
 - (void)refresh{
-    self.data = nil;
+    self.string = nil;
     [super refresh];
+}
+
+- (id)data{
+    return _string;
 }
 
 #pragma mark - Interpreter

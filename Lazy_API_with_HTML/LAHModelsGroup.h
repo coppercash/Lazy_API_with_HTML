@@ -11,12 +11,13 @@
 
 @interface LAHModelsGroup : NSObject <LAHDelegate> {
     NSArray *_operations;
+    NSDictionary *_containerCache;
     NSInteger _currentIndex;
 }
-@property (nonatomic, retain)NSArray *operations;
+@property(nonatomic, retain)NSArray *operations;
 @property(nonatomic, readonly)LAHOperation *operation;
 #pragma mark - Class Basic
-- (id)initWithCommand:(NSString *)string key:(NSString *)key;
+- (id)initWithCommand:(NSString *)command key:(NSString *)key;
 #pragma mark - Operations
 - (LAHOperation *)operationAtIndex:(NSInteger)index;
 #pragma mark - Push & Pop

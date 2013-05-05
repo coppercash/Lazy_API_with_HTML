@@ -27,7 +27,7 @@
 @property(nonatomic, retain)NSMutableArray *children;
 
 - (LAHNode *)entity;
-- (BOOL)attribute:(LAHStmtAttribute *)attr of:(LAHNode *)entity inFrame:(LAHFrame *)frame;
+- (BOOL)attribute:(LAHStmtAttribute *)attrStmt of:(LAHNode *)entity inFrame:(LAHFrame *)frame;
 
 @end
 
@@ -53,7 +53,6 @@
 
 
 @interface LAHStmtTag : LAHStmtEntity
-+ (BOOL)add:(LAHStmtValue *)value to:(LAHAttribute *)attribute frame:(LAHFrame *)frame;
 @end
 
 
@@ -66,6 +65,7 @@
 @property(nonatomic, retain)LAHStmtValue *value;
 @property(nonatomic, copy)NSString *methodName;
 @property(nonatomic, retain)LAHStmtMultiple *args;
++ (BOOL)add:(LAHStmtValue *)value to:(LAHAttribute *)attribute frame:(LAHFrame *)frame;
 @end
 
 
@@ -82,7 +82,6 @@
 
 @interface LAHStmtMultiple : LAHStmtValue
 @property(nonatomic, retain)NSArray *values;
-+ (NSArray *)convertRange:(NSArray *)range frame:(LAHFrame *)frame;
 @end
 
 

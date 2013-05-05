@@ -11,12 +11,16 @@
 
 @class LAHString;
 @interface LAHTag : LAHNode {
-    LAHRule _rule;
-    BOOL _isDemocratic;
     NSArray *_indexes;
     NSMutableSet *_attributes;
     
     NSSet *_indexOf;
+    
+    BOOL _isDemocratic;
+
+    
+    LAHRule _rule;
+
     
     //NSDictionary *_attributes;
     //BOOL _isTextNode;
@@ -37,7 +41,7 @@
 @property(nonatomic, retain)NSMutableSet *attributes;
 @property(nonatomic, retain)NSSet *indexOf;
 
-- (BOOL)handleElement:(LAHEle)element;
+- (BOOL)handleElement:(LAHEle)element atIndex:(NSInteger)index;
 
 
 //@property(nonatomic, assign)BOOL isTextNode;

@@ -52,6 +52,9 @@
 - (void)addNetwork:(id)object;
 - (void)cancelNetwork;
 
+#pragma mark - Method
+- (LAHAttrMethod)methodWithName:(NSString *)name;
+
 #pragma mark - Info
 - (NSString *)urlStringWith:(NSString *)relativeLink;
 

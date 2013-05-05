@@ -13,27 +13,39 @@
 
 @interface LAHModelsGroup ()
 @property (nonatomic, assign)NSInteger currentIndex;
-- (void)setupOperationWithString:(NSString *)string key:(NSString *)key;
+@property(nonatomic, retain)NSDictionary *containerCache;
+- (void)cacheContainerWithCommand:(NSString *)command;
+- (void)setupOperationWithKey:(NSString *)key;
 @end
 
 @implementation LAHModelsGroup
 @synthesize operations = _operations, currentIndex = _currentIndex;
+@synthesize containerCache = _containerCache;
 @dynamic operation;
 
 #pragma mark - Class Basic
-- (id)initWithCommand:(NSString *)string key:(NSString *)key{
-    NSAssert(string != nil && key != nil, @"%@ can't work without LAHString or key.", NSStringFromClass(self.class));
-    if (!string || !key) return nil;
+- (id)initWithCommand:(NSString *)command key:(NSString *)key{
+    NSAssert(command != nil && key != nil, @"%@ can't work without LAHString or key.", NSStringFromClass(self.class));
+    if (!command || !key) return nil;
     
     self = [super init];
     if (self) {
-        [self setupOperationWithString:string key:key];
+        [self cacheContainerWithCommand:command];
+        [self setupOperationWithKey:key];
+        self.containerCache = nil;
         
         if (_operations.count <= 0) return nil;
        
         self.currentIndex = 0;
     }
     return self;
+}
+
+- (void)dealloc{
+    self.containerCache = nil;
+    self.operations = nil;
+    
+    [super dealloc];
 }
 
 - (NSString *)description{
@@ -46,20 +58,25 @@
     return description;
 }
 
-#pragma mark - Operations
-- (void)setupOperationWithString:(NSString *)string key:(NSString *)key{
+#pragma mark - Interpret
+- (void)cacheContainerWithCommand:(NSString *)command{
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    [LAHInterpreter interpretString:string intoDictionary:dictionary];
-    NSMutableArray *collector = [[NSMutableArray alloc] initWithCapacity:dictionary.count];
-    
+    [LAHInterpreter interpretString:command intoDictionary:dictionary];
+    self.containerCache = dictionary;
+    [dictionary release];
+}
+
+- (void)setupOperationWithKey:(NSString *)key{
+    NSMutableArray *collector = [[NSMutableArray alloc] initWithCapacity:_containerCache.count];
+
     NSString *keyWord = key.copy;
     LAHOperation *ope = nil;
     do {
         
         NSString *iteration = [keyWord stringByAppendingFormat:@"%d", collector.count];
-        ope = [dictionary objectForKey:iteration];
+        ope = [_containerCache objectForKey:iteration];
+        
         if (!ope) continue;
-
         ope.delegate = self;
         [collector addObject:ope];
         
@@ -68,12 +85,11 @@
     NSAssert(collector.count > 0, @"%@ needs at least 1 %@", NSStringFromClass(self.class), key);
     
     self.operations = [[NSArray alloc] initWithArray:collector];
-    
     [self.operations release];
     [keyWord release];
-    [dictionary release];
 }
 
+#pragma mark - Operations
 - (LAHOperation *)operationAtIndex:(NSInteger)index{
     NSAssert(NSLocationInRange(index, NSMakeRange(0, _operations.count)), @"Operation at %d out of range.", index);
     if ( !NSLocationInRange(index, NSMakeRange(0, _operations.count)) ) return nil;

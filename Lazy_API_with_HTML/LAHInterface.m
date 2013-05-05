@@ -17,7 +17,7 @@ NSString * const LAHEntStr      = @"str";
 NSString * const LAHEntOpe      = @"ope";
 NSString * const LAHEntPage     = @"page";
 NSString * const LAHEntTag      = @"_tag";
-NSString * const LAHEntTextTag  = @"_text";
+NSString * const LAHEntTextTag  = @"text";
 
 NSString * const LAHParaTag     = @"_tagName";
 NSString * const LAHParaRef     = @"_r";
@@ -29,7 +29,7 @@ NSString * const LAHParaLink    = @"link";
 NSString * const LAHParaRange   = @"range";
 NSString * const LAHParaIndexes = @"_indexes";
 NSString * const LAHParaIndexOf = @"_indexOf";
-NSString * const LAHParaContent = @"content";
+NSString * const LAHParaContent = @"_content";
 NSString * const LAHParaIsDemocratic  = @"_isDem";
 
 NSString * const LAHMethodRE    = @"re";
@@ -37,6 +37,8 @@ NSString * const LAHMethodJoinMethod = @"joinHost";
 
 NSString * const LAHValYES = @"YES";
 NSString * const LAHValNO = @"NO";
+NSString * const LAHValNone  = @"_none";
+NSString * const LAHValAll   = @"_all";
 
 NSString * const LAHParaId      = @"id";
 NSString * const LAHParaSym     = @"sym";
@@ -51,8 +53,7 @@ NSString * const LAHParaDefault = @"_def";
 NSString * const LAHValContent  = @"_content";
 NSString * const LAHValText  = @"_text";
 NSString * const LAHValTag   = @"_tag";
-NSString * const LAHValNone  = @"_none";
-NSString * const LAHValAll   = @"_all";
+
 NSString * const LAHValPath   = @"_path";
 NSString * const LAHValURL   = @"_url";
 NSString * const LAHValHost   = @"_host";

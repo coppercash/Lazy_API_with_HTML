@@ -8,8 +8,8 @@
 
 #import "LAHModel.h"
 
-@interface LAHString : LAHModel {
-    NSString *_data;
+@interface LAHString : LAHModel <LAHFetcher> {
+    NSString *_string;
     NSString *_value;
     
     NSString *_re;

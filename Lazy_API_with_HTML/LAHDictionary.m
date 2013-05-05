@@ -8,6 +8,7 @@
 
 #import "LAHDictionary.h"
 #import "LAHTag.h"
+#import "LAHNote.h"
 
 @interface LAHDictionary ()
 @property(nonatomic, retain)NSMutableDictionary *dictionary;
@@ -16,6 +17,7 @@
 @implementation LAHDictionary
 @synthesize dictionary = _dictionary;
 
+#pragma mark - Class Basic
 - (id)init{
     self = [super init];
     if (self) {
@@ -24,7 +26,7 @@
     return self;
 }
 
-- (id)initWithObjectsAndKeys:(LAHModel *)firstObj , ... NS_REQUIRES_NIL_TERMINATION{
+- (id)initWithObjectsAndKeys:(LAHModel *)firstObj , ... {
     va_list other; va_start(other, firstObj);
     self = [self initWithFirstObject:firstObj variadicObjectsAndKeys:other];
     va_end(other);
@@ -40,12 +42,13 @@
         firstObj.father = self;
         
         LAHModel *child = firstObj;
+        NSMutableArray *collector = [[NSMutableArray alloc] init];
         BOOL isObj = NO;
         id objOrKey;
         while ((objOrKey = va_arg(OtherObjsAndKeys, id)) != nil){
             if (isObj) {
                 child = (LAHModel *)objOrKey;
-                [_children addObject:child];
+                [collector addObject:child];
                 child.father = self;
                 isObj = NO;
             }else{
@@ -54,6 +57,8 @@
                 isObj = YES;
             }
         }
+        _children = collector;
+        [collector release];
     }
     return self;
 }
@@ -81,39 +86,64 @@
     return copy;
 }
 
-#pragma mark - recursion
-- (void)update{
-    [self.dictionary = [[NSMutableDictionary alloc] init] release];
-    [(LAHModel *)_father recieve:self];
-}
-
-- (void)recieve:(LAHModel*)object{
-    [_dictionary setObject:object.data forKey:object.key];
-}
-
+#pragma mark - Getter
 - (id)data{
     return _dictionary;
 }
 
+- (NSMutableDictionary *)dictionary{
+    if (!_dictionary || self.needUpdate) {
+        [_dictionary release];
+        _dictionary = [[NSMutableDictionary alloc] init];
+        self.needUpdate = NO;
+        [(LAHModel *)_father recieve:self];
+    }
+    return _dictionary;
+}
+
+- (void)recieve:(LAHModel*)object{
+    [super recieve:object];
+    [self.dictionary setObject:object.data forKey:object.key];
+}
+
+#pragma mark - recursion
+/*
+- (void)update{
+    [self.dictionary = [[NSMutableDictionary alloc] init] release];
+    [(LAHModel *)_father recieve:self];
+}*/
+
+
+
+/*
+- (id)data{
+    return _dictionary;
+}*/
+
 #pragma mark - States
 - (void)saveStateForKey:(id)key{
     NSMutableDictionary *collector = [[NSMutableDictionary alloc] initWithCapacity:3];
-    //if (_lastFatherContainer) [collector setObject:_lastFatherContainer forKey:gKeyLastFatherContainer];
-    //if (_lastIdentifierElement) [collector setObject:_lastIdentifierElement forKey:gKeyLastIdentifierElement];
     if (_dictionary) [collector setObject:_dictionary forKey:gKeyContainer];
-    
+    [collector setObject:[NSNumber numberWithBool:_needUpdate] forKey:gKeyNeedUpdate];
+
     [_states setObject:collector forKey:key];
     [collector release];
+    
+    NSLog(@"save\t%p\tat %@\tforKey %@", collector, self, key);
+
     
     [super saveStateForKey:key];
 }
 
 - (void)restoreStateForKey:(id)key{
     NSDictionary *state = [_states objectForKey:key];
-    //_lastFatherContainer = [state objectForKey:gKeyLastFatherContainer];
-    //_lastIdentifierElement = [state objectForKey:gKeyLastIdentifierElement];
     self.dictionary = [state objectForKey:gKeyContainer];
+    self.needUpdate = [state[gKeyNeedUpdate] boolValue];
+    
     [_states removeObjectForKey:key];
+    
+    NSLog(@"restore\t%p\tat %@\tforKey %@", state, self, key);
+
     
     [super restoreStateForKey:key];
 }

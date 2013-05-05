@@ -28,20 +28,20 @@
         <ul>
             <li _indexes=(0, 17) _indexOf='range0'>
                 <a href='link0'>
-                    <_text _content='title0'>
+                    <text _content='title0'>
 
 <page _r='page1'>
     <span id={"blist", "list"}>
         <ul>
             <li _indexOf='range1'>
                 <a href='link1' href.joinHost()='url1' _isDem="YES">
-                    <_text content={"_all", 'title1'}>
+                    <text content={"_all", 'title1'}>
                 
 
 <ope model='model0' page='page0' _r='ope0'>
 <ope model='model1' page='page1' _r='ope1'>
 <ope model='model2' _r='ope2'>
-    <page>
+    <page url='url2'>
         <div id={"title", 'title2'}>
             <div id="content">
                 <div id="menubar">
@@ -58,28 +58,28 @@
                         <img src='img'>
                         
                     <span class="byline">
-                        <_text _content='text'>
+                        <text _content='text'>
                     <span class="datetime">
-                        <_text _content='text'>
+                        <text _content='text'>
 
                     <a href="_all">
-                        <_text _content='text'>
+                        <text _content='text'>
                         
                     <p>
-                        <_text _content='text'>
+                        <text _content='text'>
                         <strong id="_none">
-                            <_text _content='text'>
+                            <text _content='text'>
                         <font>
-                            <_text _content='text'>
+                            <text _content='text'>
 
-                    <_text _content='text'>
+                    <text _content='text'>
                         <strong id="_none">
-                            <_text _content='text'>
+                            <text _content='text'>
                         <div id="_none">
-                            <_text _content='text'>
+                            <text _content='text'>
 
                     <div class="articleBody">
                         <p>
-                            <_text _content='text'>
+                            <text _content='text'>
                             <font>
-                                <_text _content='text'>
+                                <text _content='text'>

@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Coder Dreamer. All rights reserved.
 //
 
-//#define LAH_RULES_DEBUG
+#define LAH_RULES_DEBUG
 //#define LAH_OPERATION_DEBUG
 
 #ifdef LAH_RULES_DEBUG
@@ -31,11 +31,16 @@ typedef void(^LAHCorrector)(LAHOperation *operation, NSError* error);
 typedef id<LAHHTMLElement> LAHEle;
 
 @protocol LAHDelegate <NSObject>
-- (id)operation:(LAHOperation *)operation needPage:(LAHPage *)page;
+- (id)operation:(LAHOperation *)operation needPageAtLink:(NSString *)link;
 - (void)operation:(LAHOperation *)operation willCancelNetworks:(NSArray *)networks;
 - (NSString *)operationNeedsHostName:(LAHOperation *)operation;
+- (LAHAttrMethod)operation:(LAHOperation *)operation needsMethodNamed:(NSString *)methodName;
 
 - (void)operation:(LAHOperation *)operation didFetch:(id)info;
+@end
+
+@protocol LAHFetcher <NSObject>
+- (void)fetchValue:(NSString *)value;
 @end
 
 extern NSString * const LAHEntArr;
@@ -64,7 +69,8 @@ extern NSString * const LAHMethodJoinMethod;
 
 extern NSString * const LAHValYES;
 extern NSString * const LAHValNO;
-
+extern NSString * const LAHValNone;
+extern NSString * const LAHValAll;
 
 extern NSString * const LAHParaId;
 extern NSString * const LAHParaSym;
@@ -79,8 +85,7 @@ extern NSString * const LAHParaDefault;
 extern NSString * const LAHValContent;
 extern NSString * const LAHValText;
 extern NSString * const LAHValTag;
-extern NSString * const LAHValNone;
-extern NSString * const LAHValAll;
+
 extern NSString * const LAHValPath;
 extern NSString * const LAHValURL;
 extern NSString * const LAHValHost;

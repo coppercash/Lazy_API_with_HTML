@@ -19,6 +19,7 @@
 
 #import "LAHToken.h"
 #import "LAHFrame.h"
+#import "LAHCategories.h"
 
 #pragma mark - Basic
 @implementation LAHStmt
@@ -62,6 +63,7 @@
 
 - (id)evaluate:(LAHFrame *)frame{
     LAHNode *entity = [self entity];
+    [frame.toRefer addObject:entity];
     
     for (LAHStmtAttribute *attr in _attributes) {
         [self attribute:attr of:entity inFrame:frame];
@@ -76,6 +78,7 @@
     }
     entity.children = children;
     
+    [frame.toRefer removeLastObject];
     return entity;
 }
 
@@ -84,18 +87,18 @@
     return [entity autorelease];
 }
 
-- (BOOL)attribute:(LAHStmtAttribute *)attr of:(LAHNode *)entity inFrame:(LAHFrame *)frame{
-    NSString *name = attr.name;
-    LAHStmtValue *value = attr.value;
+- (BOOL)attribute:(LAHStmtAttribute *)attrStmt of:(LAHNode *)entity inFrame:(LAHFrame *)frame{
+    NSString *name = attrStmt.name;
+    LAHStmtValue *value = attrStmt.value;
     if ([name isEqualToString:LAHParaRef]) {
         
         [frame attribute:name ofEntity:entity expect:@[[LAHStmtRef class]] find:value];
         
-        [frame.toRefer addObject:entity];
+        //[frame.toRefer addObject:entity];
         
-        [attr.value evaluate:frame];
+        [attrStmt.value evaluate:frame];
         
-        [frame.toRefer removeLastObject];
+        //[frame.toRefer removeLastObject];
         
         return YES;
     }
@@ -154,7 +157,7 @@
         [frame attribute:name ofEntity:entity expect:@[[LAHStmtMultiple class]] find:multiple];
 
         NSArray *values = [multiple evaluate:frame];
-        NSArray *range = [[NSArray alloc] initWithArray:[LAHStmtMultiple convertRange:values frame:frame]];
+        NSArray *range = [[NSArray alloc] initWithArray:[values dividedRangesWithFrame:frame]];
         model.range = range;
         [range release];
         
@@ -216,6 +219,7 @@
 
 - (id)evaluate:(LAHFrame *)frame{
     LAHOperation *ope = (LAHOperation *)[self entity];
+    [frame.toRefer addObject:ope];
     
     for (LAHStmtAttribute *attr in self.attributes) {
         [self attribute:attr of:ope inFrame:frame];
@@ -228,16 +232,19 @@
         
         if ( [child isMemberOfClass:[LAHPage class]] ) {
             
-            ope.page = (LAHPage *)child;
-        
+            LAHPage *page = (LAHPage *)child;
+            ope.page = page;
+            
         } else if ( [child isMemberOfClass:[LAHModel class]] ) {
             
-            ope.model = (LAHModel *)child;
+            LAHModel *model = (LAHModel *)child;
+            ope.model = model;
             
         }
 
     }
     
+    [frame.toRefer removeLastObject];
     return ope;
 }
 
@@ -290,7 +297,7 @@
         [frame attribute:name ofEntity:entity expect:@[[LAHStmtMultiple class]] find:value];
         
         NSArray *values = [value evaluate:frame];
-        NSArray *indexes = [[NSArray alloc] initWithArray:[LAHStmtMultiple convertRange:values frame:frame]];
+        NSArray *indexes = [[NSArray alloc] initWithArray:[values dividedRangesWithFrame:frame]];
         tag.indexes = indexes;
         [indexes release];
         
@@ -300,16 +307,10 @@
         
         if ([value isMemberOfClass:[LAHStmtRef class]]) {
             
-            LAHNode *entity = [value evaluate:frame];
+            LAHNode *model = [value evaluate:frame];
+            [frame object:@"_indexOf of LAHTag" accept:@[[LAHModel class]] find:model];
             
-            
-            if ( ![entity isKindOfClass:[LAHModel class]] ) {
-                NSString *message = [NSString stringWithFormat:@"_indexOf of tag can only accept %@ reference, but find %@",
-                                     NSStringFromClass([LAHModel class]),
-                                     NSStringFromClass([entity class])];
-                [frame error:message];
-            }
-            NSSet *indexOf = [[NSSet alloc] initWithObjects:entity, nil];
+            NSSet *indexOf = [[NSSet alloc] initWithObjects:model, nil];
             tag.indexOf = indexOf;
             [indexOf release];
             
@@ -341,32 +342,9 @@
         
     } else {
         
-        LAHAttribute *attribute = [[LAHAttribute alloc] init];
+        LAHAttribute *attribute = [attrStmt evaluate:frame];
         [tag.attributes addObject:attribute];
-        [attribute release];
-        
-        
-        //Attribute Name
-        attribute.name = attrStmt.name;
-        
-        
-        //Attribute method
-        NSString *methodName = nil;
-        if ( (methodName = attrStmt.methodName) ) {
-            attribute.methodName = methodName;
-            attribute.args = [attrStmt.args evaluate:frame];    //Type uncheck
-        }
-
-        
-        //Attribute legal values and getters
-        if ( ![self.class add:attrStmt.value to:attribute frame:frame] ) {
-            
-              [frame attribute:name ofEntity:entity expect:@[[LAHStmtValue class],
-                                                             [LAHStmtRef class],
-                                                             [LAHStmtMultiple class]]
-                          find:attrStmt.value];
-        
-        } 
+        attribute.father = entity;
         
         return YES;
     
@@ -375,63 +353,6 @@
     return NO;
 }
 
-+ (BOOL)add:(LAHStmtValue *)value to:(LAHAttribute *)attribute frame:(LAHFrame *)frame{
-    
-    if ([value isMemberOfClass:[LAHStmtValue class]]) {         //<div class="legalValue">
-        
-        NSString *string = [value evaluate:frame];
-        NSSet *set = [[NSSet alloc] initWithObjects:string, nil];
-        attribute.legalValues = set;
-        [set release];
-
-    } else if ([value isMemberOfClass:[LAHStmtRef class]]) {    //<div class='ref'>
-
-        LAHNode *entity = [value evaluate:frame];
-        if ( ![entity isKindOfClass:[LAHPage class]] && ![entity isKindOfClass:[LAHString class]] ) {
-            NSString *message = [NSString stringWithFormat:@"Html attribute of tag can only accept %@ / %@ reference, but find %@",
-                                 NSStringFromClass([LAHString class]),
-                                 NSStringFromClass([LAHPage class]),
-                                 NSStringFromClass([entity class])];
-            [frame error:message];
-        }
-        NSSet *set = [[NSSet alloc] initWithObjects:entity, nil];
-        attribute.getters = set;
-        [set release];
-
-    } else if ([value isMemberOfClass:[LAHStmtMultiple class]]) {   //<div class={"legalValue", 'ref'}>
-        
-        NSArray *values = [value evaluate:frame];
-        NSMutableSet *legalValues = [[NSMutableSet alloc] init];
-        NSMutableSet *getters = [[NSMutableSet alloc] init];
-        for (id val in values) {
-            
-            if ([val isKindOfClass:[NSString class]]) {
-                
-                [legalValues addObject:val];
-                
-            } else if ([val isMemberOfClass:[LAHString class]] || [val isMemberOfClass:[LAHPage class]]) {
-                
-                [getters addObject:val];
-                
-            }
-            
-        }
-        
-        attribute.legalValues = legalValues;
-        attribute.getters = getters;
-        [legalValues release];
-        [getters release];
-
-        
-    } else {
-        
-        return NO;
-    
-    }
-    
-    return YES;
-
-}
 
 @end
 
@@ -441,22 +362,28 @@
     return [page autorelease];
 }
 
-- (BOOL)attribute:(LAHStmtAttribute *)attr of:(LAHNode *)entity inFrame:(LAHFrame *)frame{
-    if ([super attribute:attr of:entity inFrame:frame]) return YES;
+- (BOOL)attribute:(LAHStmtAttribute *)attrStmt of:(LAHNode *)entity inFrame:(LAHFrame *)frame{
+    if ([super attribute:attrStmt of:entity inFrame:frame]) return YES;
     
-    NSString *name = attr.name;
+    NSString *name = attrStmt.name;
     LAHPage *page  = (LAHPage *)entity;
     
     if ([name isEqualToString:LAHParaLink]) {
         
-        LAHStmtValue *value = attr.value;
+        LAHStmtValue *value = attrStmt.value;
         [frame attribute:name ofEntity:entity expect:@[[LAHStmtValue class]] find:value];
         
         NSString *link = [value evaluate:frame];
         page.link = link;
         
         return YES;
-    } 
+    } else {
+        
+        LAHAttribute *attribute = [attrStmt evaluate:frame];
+        [page.attributes addObject:attribute];
+        attribute.father = page;
+        
+    }
     
     return NO;
 }
@@ -472,24 +399,6 @@
         [frame error:@"Value of LAHStmtValue can not be 'nil'."];
     }
     return self.value;
-    /*
-     NSScanner* scan = [NSScanner scannerWithString:_string]; int val;
-     if ([scan scanInt:&val] && [scan isAtEnd]) {
-     return _string;
-     }
-     char ch = [_string characterAtIndex:0];
-     switch (ch) {
-     case '_':{
-     return _string;
-     }break;
-     case '"':{
-     return quotedString(_string);
-     }break;
-     default:
-     break;
-     }
-     return nil;
-     */
 }
 
 - (void)dealloc{
@@ -538,8 +447,92 @@
 
 @implementation LAHStmtAttribute
 - (id)evaluate:(LAHFrame *)frame{
-    return [_value evaluate:frame];
+    
+    LAHAttribute *attribute = [[LAHAttribute alloc] init];
+    
+    //Attribute Name
+    attribute.name = _name;
+    
+    //Attribute method
+    if ( _methodName ) {
+        attribute.methodName = _methodName;
+        attribute.args = [_args evaluate:frame];    //Type uncheck
+    }
+    
+    //Attribute legal values and getters
+    if ( ![self.class add:_value to:attribute frame:frame] ) {
+        
+        [frame attribute:_name ofEntity:frame.toRefer.lastObject
+                  expect:@[[LAHStmtValue class], [LAHStmtRef class], [LAHStmtMultiple class]]
+                    find:_value];
+
+    }
+    
+    return [attribute autorelease];
 }
+
++ (BOOL)add:(LAHStmtValue *)value to:(LAHAttribute *)attribute frame:(LAHFrame *)frame{
+    
+    if ([value isMemberOfClass:[LAHStmtValue class]]) {         //<div class="legalValue">
+        
+        NSString *string = [value evaluate:frame];
+        NSSet *set = [[NSSet alloc] initWithObjects:string, nil];
+        attribute.legalValues = set;
+        [set release];
+        
+    } else if ([value isMemberOfClass:[LAHStmtRef class]]) {    //<div class='ref'>
+        
+        LAHNode *entity = [value evaluate:frame];
+        [frame object:@"Html attribute of LAHTag" accept:@[[LAHString class], [LAHPage class]] find:entity strict:YES];
+        
+        NSSet *set = [[NSSet alloc] initWithObjects:entity, nil];
+        attribute.getters = set;
+        [set release];
+        
+        if ([entity isKindOfClass:[LAHPage class]]) {
+            entity.father = attribute;
+        }
+        
+    } else if ([value isMemberOfClass:[LAHStmtMultiple class]]) {   //<div class={"legalValue", 'ref'}>
+        
+        NSArray *values = [value evaluate:frame];
+        NSMutableSet *legalValues = [[NSMutableSet alloc] init];
+        NSMutableSet *getters = [[NSMutableSet alloc] init];
+        for (id val in values) {
+            
+            if ([val isKindOfClass:[NSString class]]) {
+                
+                [legalValues addObject:val];
+                
+            } else if ([val isMemberOfClass:[LAHString class]]) {
+                
+                [getters addObject:val];
+                
+            } else if ([val isMemberOfClass:[LAHPage class]]) {
+                
+                LAHPage *page = val;
+                [getters addObject:page];
+                page.father = attribute;
+                
+            }
+            
+        }
+        
+        attribute.legalValues = legalValues;
+        attribute.getters = getters;
+        [legalValues release];
+        [getters release];
+        
+    } else {
+        
+        return NO;
+        
+    }
+    
+    return YES;
+    
+}
+
 
 - (void)dealloc{
     self.name = nil;
@@ -568,39 +561,6 @@
     for (LAHStmtValue *valueStmt in _values) {
         id value = [valueStmt evaluate:frame];
         [collector addObject:value];
-    }
-    
-    return collector;
-}
-
-+ (NSArray *)convertRange:(NSArray *)range frame:(LAHFrame *)frame{
-    if (!range || range.count == 0) return nil;
-    
-    NSInteger index = 0;
-    NSRange cRange = NSMakeRange(0, 0);
-    NSMutableArray *collector = [NSMutableArray arrayWithCapacity:range.count / 2];
-    while (index < range.count) {
-        NSNumber *locNum = range[index ++];
-        [frame object:@"Range" accept:@[[NSNumber class]] find:locNum];
-        NSUInteger loc = locNum.unsignedIntegerValue;
-
-        if (index >= range.count) break;
-        
-        NSNumber *lenNum = range[index ++];
-        [frame object:@"Range" accept:@[[NSNumber class]] find:lenNum];
-        NSUInteger len = lenNum.unsignedIntegerValue;
-        
-        if (len == 0) continue;
-        
-        if (NSEqualRanges(cRange, NSMakeRange(0, 0))) {
-            cRange.location = loc;
-        } else {
-            cRange.location = NSMaxRange(cRange) - 1 + loc;
-        }
-        cRange.length = len;
-        NSValue *rangeValue = [NSValue valueWithRange:cRange];
-        
-        [collector addObject:rangeValue];
     }
     
     return collector;

@@ -6,9 +6,11 @@
 //  Copyright (c) 2013 Coder Dreamer. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "LAHNode.h"
 
-@interface LAHAttribute : NSObject{
+@class LAHTag;
+
+@interface LAHAttribute : LAHNode{
     NSString *_name;
     
     NSSet *_legalValues;
@@ -16,15 +18,28 @@
     
     NSString *_methodName;
     NSArray *_args;
+    
+    NSString *_cache;
+    
 }
 @property(nonatomic, copy)NSString *name;
 
 @property(nonatomic, retain)NSSet *legalValues;
 @property(nonatomic, retain)NSSet *getters;
+@property(nonatomic, copy)NSString *cache;
 
 @property(nonatomic, copy)NSString *methodName;
 @property(nonatomic, retain)NSArray *args;
 
-- (void)handleValue:(NSString *)value;
+@property(nonatomic, assign)LAHTag *tag;
+
+@property(nonatomic, readonly)BOOL isMatched;
+
+- (void)cacheValueWithElement:(LAHEle)element;
+- (void)fetch;
+
 - (NSString *)des;
+
++ (NSDictionary *)methods;
+
 @end
