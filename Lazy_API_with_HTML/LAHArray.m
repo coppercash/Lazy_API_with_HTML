@@ -28,7 +28,7 @@
     [super dealloc];
 }
 
-#pragma mark - recursion
+#pragma mark - Fetch Object
 - (void)recieve:(LAHModel*)object{
     [super recieve:object];
     [self.array addObject:object.data];
@@ -44,34 +44,17 @@
     return _array;
 }
 
+#pragma mark - Data
 - (id)data{
     return _array;
 }
 
+- (void)setData:(id)data{
+    [_array release];
+    _array = [data retain];
+}
+
 #pragma mark - States
-- (void)saveStateForKey:(id)key{
-    NSAssert(_states[key] == nil, @"Will overwrite state for key '%@'", key);
-    
-    NSMutableDictionary *state = [[NSMutableDictionary alloc] initWithCapacity:3];
-    if (_array) state[gKeyContainer] = _array;
-    state[gKeyNeedUpdate] = [NSNumber numberWithBool:_needUpdate];
-    
-    _states[key] = state;
-    [state release];
-    
-    [super saveStateForKey:key];
-}
-
-- (void)restoreStateForKey:(id)key{
-    NSDictionary *state = [_states objectForKey:key];
-    self.array = [state objectForKey:gKeyContainer];
-    self.needUpdate = [state[gKeyNeedUpdate] boolValue];
-    
-    [_states removeObjectForKey:key];
-    
-    [super restoreStateForKey:key];
-}
-
 - (void)refresh{
     self.array = nil;
     [super refresh];

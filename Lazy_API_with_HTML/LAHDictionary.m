@@ -69,11 +69,7 @@
     return copy;
 }
 
-#pragma mark - Getter
-- (id)data{
-    return _dictionary;
-}
-
+#pragma mark - Fetch Object
 - (NSMutableDictionary *)dictionary{
     if (!_dictionary || self.needUpdate) {
         [_dictionary release];
@@ -89,30 +85,17 @@
     [self.dictionary setObject:object.data forKey:object.key];
 }
 
+#pragma mark - Data
+- (id)data{
+    return _dictionary;
+}
+
+- (void)setData:(id)data{
+    [_dictionary release];
+    _dictionary = [data retain];
+}
+
 #pragma mark - States
-- (void)saveStateForKey:(id)key{
-    NSAssert(_states[key] == nil, @"Will overwrite state for key '%@'", key);
-    
-    NSMutableDictionary *state = [[NSMutableDictionary alloc] initWithCapacity:3];
-    if (_dictionary) state[gKeyContainer] = _dictionary;
-    state[gKeyNeedUpdate] = [NSNumber numberWithBool:_needUpdate];
-    
-    _states[key] = state;
-    [state release];
-    
-    [super saveStateForKey:key];
-}
-
-- (void)restoreStateForKey:(id)key{
-    NSDictionary *state = _states[key];
-    self.dictionary = state[gKeyContainer];
-    self.needUpdate = [state[gKeyNeedUpdate] boolValue];
-    
-    [_states removeObjectForKey:key];
-    
-    [super restoreStateForKey:key];
-}
-
 - (void)refresh{
     self.dictionary = nil;
     [super refresh];

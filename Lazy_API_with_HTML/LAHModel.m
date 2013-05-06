@@ -12,11 +12,13 @@
 #import "LAHNote.h"
 
 @interface LAHModel ()
+@property(nonatomic, retain)id data;
 @end
 
 @implementation LAHModel
 @synthesize key = _key, range = _range;
 @synthesize needUpdate = _needUpdate;
+@dynamic data;
 
 - (void)dealloc{
     self.key = nil;
@@ -27,12 +29,31 @@
 
 #pragma mark - States
 - (void)saveStateForKey:(id)key{
+    NSAssert(_states[key] == nil, @"Will overwrite state for key '%@'", key);
+    
+    //New state
+    NSMutableDictionary *state = [[NSMutableDictionary alloc] initWithCapacity:3];
+    _states[key] = state;
+    [state release];
+    
+    //Setup state content
+    if (self.data) state[gKeyContainer] = self.data;
+    state[gKeyNeedUpdate] = [NSNumber numberWithBool:_needUpdate];
+    
+    //Children states
     for (LAHModel *child in _children) {
         [child saveStateForKey:key];
     }
 }
 
 - (void)restoreStateForKey:(id)key{
+    NSDictionary *state = _states[key];
+    self.needUpdate = [state[gKeyNeedUpdate] boolValue];
+    self.data = state[gKeyContainer];
+
+    [_states removeObjectForKey:key];
+    
+    //Children states
     for (LAHModel *child in _children) {
         [child restoreStateForKey:key];
     }

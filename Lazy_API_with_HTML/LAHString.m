@@ -43,6 +43,15 @@
     [super refresh];
 }
 
+- (void)saveStateForKey:(id)key{
+    //Do nothing.
+}
+
+- (void)restoreStateForKey:(id)key{
+    //Do nothing.
+}
+
+#pragma mark - Data
 - (id)data{
     return _string;
 }
