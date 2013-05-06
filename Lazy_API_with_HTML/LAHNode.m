@@ -12,22 +12,14 @@
 @end
 
 @implementation LAHNode
-@synthesize father = _father, children = _children, states = _states;
+@synthesize father = _father, children = _children;
 @dynamic recursiveOperation;
 
 #pragma mark - Life Cycle
-- (id)init{
-    self = [super init];
-    if (self) {
-        [self.states = [[NSMutableDictionary alloc] init] release];
-    }
-    return self;
-}
 
 - (void)dealloc{
     self.father = nil;
     self.children = nil;
-    self.states = nil;
     [super dealloc];
 }
 
@@ -39,10 +31,7 @@
         node.father = copy;
     }
     
-    if (_states) copy.states = [[NSMutableDictionary alloc] initWithDictionary:_states copyItems:YES];
-
     [copy.children release];
-    [copy.states release];
     
     return copy;
 }
@@ -65,7 +54,6 @@
 - (void)saveStateForKey:(id)key{}
 - (void)restoreStateForKey:(id)key{}
 - (void)refresh{
-    [_states removeAllObjects];
     for (LAHNode *c in _children) {
         [c refresh];
     }

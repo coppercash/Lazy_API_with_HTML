@@ -7,13 +7,9 @@
 //
 
 #import "LAHTag.h"
-//#import "LAHConstruct.h"
-//#import "LAHFetcher.h"
-#import "LAHPage.h"
-#import "LAHString.h"
+#import "LAHModel.h"
 #import "LAHAttribute.h"
 #import "LAHCategories.h"
-#import "LAHOperation.h"
 #import "LAHNote.h"
 
 @interface LAHTag ()
@@ -122,18 +118,6 @@
 }
 
 #pragma mark - State
-- (void)saveStateForKey:(id)key{
-    for (LAHModel *model in _children) {
-        [model saveStateForKey:key];
-    }
-}
-
-- (void)restoreStateForKey:(id)key{
-    for (LAHModel *c in _children) {
-        [c restoreStateForKey:key];
-    }
-}
-
 - (void)refresh{
     [super refresh];
 }

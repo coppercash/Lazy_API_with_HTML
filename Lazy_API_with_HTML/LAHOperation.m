@@ -176,7 +176,6 @@
     }
 
     [_model saveStateForKey:key];
-    [_page saveStateForKey:key];
 }
 
 - (void)awakePageForKey:(id)key withElement:(LAHEle)element{
@@ -187,7 +186,6 @@
     for (LAHPage *page in pages) {
         
         [_model restoreStateForKey:key];
-        [_page restoreStateForKey:key];
         
         //Seek the pages, and when they being seeked mark them
 #ifdef LAH_RULES_DEBUG

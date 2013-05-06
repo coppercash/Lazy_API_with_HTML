@@ -15,12 +15,17 @@
     NSArray *_range;
     
     BOOL _needUpdate;
+    
+    NSMutableDictionary *_states;
 }
 @property(nonatomic, copy)NSString *key;
 @property(nonatomic, retain)NSArray *range;
 @property(nonatomic, assign)BOOL needUpdate;
 @property(nonatomic, readonly)id data;
+@property(nonatomic, retain)NSMutableDictionary* states;
 
+- (void)saveStateForKey:(id)key;
+- (void)restoreStateForKey:(id)key;
 - (void)recieve:(LAHModel*)object;
 
 @end

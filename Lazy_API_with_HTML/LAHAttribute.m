@@ -138,7 +138,6 @@
 }
 
 - (void)fetch{
-    //NSAssert(_cache != nil, @"Can't fetch without _cache.");
     if (!_cache) return;
     
     for (LAHNode<LAHFetcher> *fetcher in _getters) {       

@@ -9,20 +9,15 @@
 #import <Foundation/Foundation.h>
 
 @class LAHOperation;
-@protocol LAHHTMLElement, LAHDownloaderDataSource, LAHDownloaderDelegate;
 @interface LAHNode : NSObject <NSCopying> {
     LAHNode *_father;
     NSArray *_children;
-    NSMutableDictionary *_states;
 }
 @property(nonatomic, assign)LAHNode *father;
 @property(nonatomic, retain)NSArray *children;
-@property(nonatomic, retain)NSMutableDictionary* states;
 @property(nonatomic, readonly)LAHOperation *recursiveOperation;
 
 #pragma mark - Status
-- (void)saveStateForKey:(id)key;
-- (void)restoreStateForKey:(id)key;
 - (void)refresh;
 
 #pragma mark - Log

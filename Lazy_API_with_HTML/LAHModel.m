@@ -19,6 +19,7 @@
 @synthesize key = _key, range = _range;
 @synthesize needUpdate = _needUpdate;
 @dynamic data;
+@synthesize states = _states;
 
 - (void)dealloc{
     self.key = nil;
@@ -33,7 +34,7 @@
     
     //New state
     NSMutableDictionary *state = [[NSMutableDictionary alloc] initWithCapacity:3];
-    _states[key] = state;
+    self.states[key] = state;
     [state release];
     
     //Setup state content
@@ -57,6 +58,13 @@
     for (LAHModel *child in _children) {
         [child restoreStateForKey:key];
     }
+}
+
+- (NSMutableDictionary *)states{
+    if (!_states) {
+        _states = [[NSMutableDictionary alloc] init];
+    }
+    return _states;
 }
 
 - (void)refresh{
