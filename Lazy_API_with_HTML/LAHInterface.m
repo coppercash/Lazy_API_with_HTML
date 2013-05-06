@@ -7,9 +7,10 @@
 //
 
 #import "LAHInterface.h"
-#ifdef LAH_RULES_DEBUG
-NSUInteger gRecLogDegree = 0;
-#endif
+
+NSString * const LAHKeyRetURL = @"LKRU";
+NSString * const LAHKeyRetNetOpe = @"LKRNO";
+
 
 NSString * const LAHEntArr      = @"arr";
 NSString * const LAHEntDic      = @"dic";

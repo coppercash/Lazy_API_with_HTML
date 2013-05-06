@@ -74,9 +74,7 @@
 
 #pragma mark - recursion
 - (void)recieve:(LAHModel*)object{
-#ifdef LAH_RULES_DEBUG
-    [LAHNote quickNote:@"%@\tneedUpdate %@\tdata %p", self.des, BOOLStr(_needUpdate), self.data];
-#endif
+    LAHNoteQuick(@"%@\tneedUpdate %@\tdata %p", self.des, BOOLStr(_needUpdate), self.data);
 }
 
 - (BOOL)needUpdate{

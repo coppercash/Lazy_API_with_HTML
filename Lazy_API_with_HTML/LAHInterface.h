@@ -6,12 +6,7 @@
 //  Copyright (c) 2013 Coder Dreamer. All rights reserved.
 //
 
-#define LAH_RULES_DEBUG
 //#define LAH_OPERATION_DEBUG
-
-#ifdef LAH_RULES_DEBUG
-extern NSUInteger gRecLogDegree;
-#endif
 
 @protocol LAHHTMLElement <NSObject>
 - (NSString*)tagName;
@@ -30,12 +25,12 @@ typedef void(^LAHCorrector)(LAHOperation *operation, NSError* error);
 typedef id<LAHHTMLElement> LAHEle;
 
 @protocol LAHDelegate <NSObject>
-- (id)operation:(LAHOperation *)operation needPageAtLink:(NSString *)link;
+extern NSString * const LAHKeyRetURL;
+extern NSString * const LAHKeyRetNetOpe;
+- (NSDictionary *)operation:(LAHOperation *)operation needPageAtLink:(NSString *)link;
 - (void)operation:(LAHOperation *)operation willCancelNetworks:(NSArray *)networks;
 - (NSString *)operationNeedsHostName:(LAHOperation *)operation;
 - (LAHAttrMethod)operation:(LAHOperation *)operation needsMethodNamed:(NSString *)methodName;
-
-- (void)operation:(LAHOperation *)operation didFetch:(id)info;
 @end
 
 @protocol LAHFetcher <NSObject>

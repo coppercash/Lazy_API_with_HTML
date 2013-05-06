@@ -188,16 +188,13 @@
         [_model restoreStateForKey:key];
         
         //Seek the pages, and when they being seeked mark them
-#ifdef LAH_RULES_DEBUG
-        [LAHNote openNote:@"%@", page];
-#endif
+        LAHNoteOpen(@"%@", page);
+        
         [self.seekings addObject:page];
         [page seekWithElement:element];
         [_seekings removeObject:page];
-
-#ifdef LAH_RULES_DEBUG
-        [LAHNote closeNote];
-#endif
+        
+        LAHNoteClose;
     }
     
     [_downloadings removeObjectForKey:key];
@@ -213,8 +210,13 @@
     if (!page.link) return;
     
     if (_delegate && [_delegate respondsToSelector:@selector(operation:needPageAtLink:)]) {
-        id key = [_delegate operation:self needPageAtLink:page.link];
-        [self freezePage:page forKey:key];
+        NSDictionary *returnDic = [_delegate operation:self needPageAtLink:page.link];
+        id netOpe = returnDic[LAHKeyRetNetOpe];
+        NSString *url = returnDic[LAHKeyRetURL];
+        NSAssert(returnDic && netOpe && url, @"Can't download page returnDic:%@ netOpe:%@ url:%@", returnDic, netOpe, url);
+        
+        [self addNetwork:netOpe];
+        [self freezePage:page forKey:url];
     }
 }
 
@@ -231,10 +233,7 @@
 
 #pragma mark - Event
 - (void)start{
-#ifdef LAH_RULES_DEBUG
-    [LAHNote openNote:@"%@", self];
-#endif
-    
+    LAHNoteOpen(@"%@", self);
     [_page fetchValue:nil];
 }
 
@@ -269,9 +268,7 @@
             completion(bSelf);
         }
     
-#ifdef LAH_RULES_DEBUG
-        [LAHNote logWisely];
-#endif
+        LAHNoteLogWisely;
     }
 }
 

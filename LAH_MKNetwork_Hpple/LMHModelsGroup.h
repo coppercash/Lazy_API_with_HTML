@@ -7,15 +7,18 @@
 //
 
 #import "LAHModelsGroup.h"
-#import "MKNetworkOperation.h"
-@class MKNetworkEngine;
+#import "MKNetworkKit.h"
+
 @interface LMHModelsGroup : LAHModelsGroup {
     MKNetworkEngine *_engine;
 }
 - (NSURL *)resourceURLWithOfLink:(NSString *)link;
 @end
 
-@class TFHppleElement;
 @interface MKNetworkOperation (HTML)
 - (LAHEle)htmlWithXPath:(NSString *)xpath;
+@end
+
+@interface MKNetworkEngine (LAH)
+- (MKNetworkOperation *)operationWithLink:(NSString *)link;
 @end

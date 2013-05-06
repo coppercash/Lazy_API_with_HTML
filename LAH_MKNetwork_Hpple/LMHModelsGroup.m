@@ -10,6 +10,7 @@
 #import "LAHPage.h"
 #import "MKNetworkEngine.h"
 #import "Hpple/TFHpple.h"
+#import "LAHInterface.h"
 
 @interface LMHModelsGroup ()
 @property(nonatomic, retain)MKNetworkEngine *engine;
@@ -50,16 +51,9 @@
 }
 
 #pragma mark - LAHDelegate
-- (id)operation:(LAHOperation *)operation needPageAtLink:(NSString *)link{
-    NSURL *url = [[NSURL alloc] initWithString:link];
-    MKNetworkOperation *netOpe = nil;
-    if (url.host) {
-        netOpe = [_engine operationWithURLString:link];
-    } else {
-        netOpe = [_engine operationWithPath:link];
-    }
-    NSAssert(netOpe != nil, @"Can't generate Network Operation");
-    
+- (NSDictionary *)operation:(LAHOperation *)operation needPageAtLink:(NSString *)link{
+    MKNetworkOperation *netOpe = [_engine operationWithLink:link];
+
     __block LAHOperation *lahOpe = operation;
     [netOpe addCompletionHandler:^(MKNetworkOperation *completedOperation) {
 
@@ -74,10 +68,8 @@
     }];
     
     [_engine enqueueOperation:netOpe forceReload:YES];
-    [lahOpe addNetwork:netOpe]; //Should be remove, too verbo
-    [url release];
     
-    return netOpe.url;  //op is a key for dictionary
+    return @{LAHKeyRetNetOpe:netOpe, LAHKeyRetURL:netOpe.url};  //url string is a key for dictionary
 }
 
 - (void)operation:(LAHOperation *)operation willCancelNetworks:(NSArray *)networks{
@@ -100,6 +92,24 @@
     
     [doc release];
     return root;
+}
+
+@end
+
+@implementation MKNetworkEngine (LAH)
+
+- (MKNetworkOperation *)operationWithLink:(NSString *)link{
+    NSURL *url = [[NSURL alloc] initWithString:link];
+    MKNetworkOperation *netOpe = nil;
+    if (url.host) {
+        netOpe = [self operationWithURLString:link];
+    } else {
+        netOpe = [self operationWithPath:link];
+    }
+    [url release];
+    NSAssert(netOpe != nil, @"Can't generate Network Operation");
+    
+    return netOpe;
 }
 
 @end

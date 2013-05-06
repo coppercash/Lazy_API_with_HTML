@@ -44,22 +44,15 @@
 
 #pragma mark - Recursive
 - (BOOL)handleElement:(LAHEle)element atIndex:(NSInteger)index{
-#ifdef LAH_RULES_DEBUG
-    [LAHNote openNote:@"%@", self.des];
-#endif
-    
-    
-    
+    LAHNoteOpen(@"%@", self);
+        
     //Step 0, match the index
     
     BOOL isIndexPass = YES;
     if (_indexes.count != 0) {
         isIndexPass = [_indexes locationInDividedRanges:index];
     }
-
-#ifdef LAH_RULES_DEBUG
-    [LAHNote noteAttr:@"index" d:[NSString stringWithFormat:@"%d", index] s:_indexes.dividedDescription pass:isIndexPass];
-#endif
+    LAHNoteAttr(@"index", ([NSString stringWithFormat:@"%d", index]), _indexes.dividedDescription, isIndexPass);
     if ( !isIndexPass ) return NO;
     
     
@@ -88,7 +81,7 @@
     //Step 3, match the children (is isDemocratic), and let children handle the elements
     //Two iteration in this order, so that the fetcher's fetching sequence depends on the sequence in the HTML.
     
-    BOOL isChildrenPass = (_children.count == 0) ? YES : NO;    //Indicates at least one child can pass the test
+    BOOL isChildrenPass = (!_isDemocratic || (_children.count == 0)) ? YES : NO;    //Indicates at least one child can pass the test
     NSInteger subIndex = 0;
     for (LAHEle subEle in element.children) {
         for (LAHTag *tag in _children) {
@@ -96,11 +89,8 @@
         }
         subIndex ++;
     }
-
-#ifdef LAH_RULES_DEBUG
-    [LAHNote noteAttr:@"isDemocratic" d:BOOLStr(_isDemocratic) s:@"" pass:isChildrenPass];
-#endif
-    if (_isDemocratic && !isChildrenPass) return NO;
+    LAHNoteAttr(@"isDemocratic", BOOLStr(_isDemocratic), @"", isChildrenPass);
+    if (!isChildrenPass) return NO;
 
 
     
@@ -110,10 +100,7 @@
         [attr fetch];
     }
     
-#ifdef LAH_RULES_DEBUG
-    //[LAHNote closeNote];
-    if (isChildrenPass) [LAHNote closeNote];
-#endif
+    LAHNoteClose;
     return YES;
 }
 

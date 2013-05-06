@@ -75,10 +75,10 @@ static NSMutableArray *_rootNotes = nil;
     return log;
 }
 
-+ (void)openNote:(NSString *)format, ...{
++ (void)openNote:(NSString *)desc, ...{
     va_list va;
-    va_start(va, format);
-    [self openNote:format arguments:va];
+    va_start(va, desc);
+    [self openNote:desc arguments:va];
     va_end(va);
 }
 
@@ -110,10 +110,10 @@ static NSMutableArray *_rootNotes = nil;
     _currentNote = (LAHNote *)_currentNote.father;
 }
 
-+ (void)quickNote:(NSString *)format, ...{
++ (void)quickNote:(NSString *)desc, ...{
     va_list va;
-    va_start(va, format);
-    [self openNote:format arguments:va];
+    va_start(va, desc);
+    [self openNote:desc arguments:va];
     va_end(va);
     [self closeNote];
 }

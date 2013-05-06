@@ -30,9 +30,8 @@
 
 #pragma mark - LAHFetcher
 - (void)fetchValue:(NSString *)value{
-#ifdef LAH_RULES_DEBUG
-    [LAHNote quickNote:@"%@\tfetching \"%@\"", self.des, value];
-#endif
+    LAHNoteQuick(@"%@\tfetching \"%@\"", self.des, value);
+    
     self.string = value;
     [(LAHModel *)_father recieve:self];
 }

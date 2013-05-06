@@ -131,9 +131,7 @@
         }
     }
 
-#ifdef LAH_RULES_DEBUG
-    [LAHNote noteAttr:_name d:_cache s:_legalValues.allObjects.lineDes pass:isMatched];
-#endif
+    LAHNoteAttr(_name, _cache, _legalValues.allObjects.lineDes, isMatched);
     return isMatched;
 }
 

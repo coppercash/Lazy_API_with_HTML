@@ -120,7 +120,7 @@
     
     if (_attributes && _attributes.count != 0) {
         for (LAHAttribute *attr in _attributes) {
-            [info appendFormat:@"  %@", attr.description];
+            [info appendFormat:@"  %@", attr];
         }
     }
     
