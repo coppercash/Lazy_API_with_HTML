@@ -131,7 +131,7 @@
         }
     }
 
-    LAHNoteAttr(_name, _cache, _legalValues.allObjects.lineDes, isMatched);
+    LAHNoteAttr(_name, _cache, _legalValues.allObjects.lineDesc, isMatched);
     return isMatched;
 }
 
@@ -144,7 +144,7 @@
 }
 
 #pragma mark - Log
-- (NSString *)des{
+- (NSString *)desc{
     return [super description];
 }
 
@@ -152,17 +152,17 @@
     NSMutableString *info = [NSMutableString stringWithFormat:@"%@", self.name];
     
     if (_methodName) {
-        [info appendFormat:@".%@(%@)", _methodName, _args.lineDes];
+        [info appendFormat:@".%@(%@)", _methodName, _args.lineDesc];
     }
     
     [info appendString:@"={"];
     
     if (_legalValues && _legalValues.count != 0) {
-        [info appendString:_legalValues.allObjects.lineDes];
+        [info appendString:_legalValues.allObjects.lineDesc];
     }
     
     if (_getters && _getters.count != 0) {
-        [info appendString:_getters.allObjects.lineDes];
+        [info appendString:_getters.allObjects.lineDesc];
     }
     
     [info appendString:@"}"];

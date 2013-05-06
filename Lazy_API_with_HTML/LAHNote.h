@@ -17,7 +17,7 @@
 @property(nonatomic, readonly)NSUInteger reverseDegree;
 @property(nonatomic, readonly)NSString *noteDes;
 
-- (NSString *)noteDesBy:(NSUInteger)rDegree on:(NSUInteger)degree;
+- (NSString *)noteDescBy:(NSUInteger)rDegree on:(NSUInteger)degree;
 
 + (void)openNote:(NSString *)desc, ...;
 + (void)closeNote;

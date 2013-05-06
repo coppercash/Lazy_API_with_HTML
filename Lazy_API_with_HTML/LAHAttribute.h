@@ -38,7 +38,7 @@
 - (void)cacheValueWithElement:(LAHEle)element;
 - (void)fetch;
 
-- (NSString *)des;
+- (NSString *)desc;
 
 + (NSDictionary *)methods;
 

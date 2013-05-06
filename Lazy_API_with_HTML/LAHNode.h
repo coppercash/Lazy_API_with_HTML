@@ -18,7 +18,7 @@
 #pragma mark - Log
 @property(nonatomic, readonly)NSUInteger degree;
 @property(nonatomic, readonly)NSString *degreeSpace;
-- (NSString *)des;
+- (NSString *)desc;
 - (NSString *)debugLog:(NSUInteger)degree;
 - (NSString *)tagNameInfo;
 - (NSString *)attributesInfo;

@@ -33,7 +33,7 @@
     return (_children.count == 0) ? 0 : max + 1;
 }
 
-- (NSString *)noteDes{
+- (NSString *)noteDesc{
     
     NSMutableString *log = [NSMutableString stringWithFormat:@"%@%@", self.degreeSpace, _note];
     for (LAHNote *child in _children) {
@@ -43,7 +43,7 @@
     return log;
 }
 
-- (NSString *)noteDesBy:(NSUInteger)rDegree on:(NSUInteger)degree{
+- (NSString *)noteDescBy:(NSUInteger)rDegree on:(NSUInteger)degree{
     //Rewrite
     NSUInteger d = self.degree, r = self.reverseDegree;
     if (d == degree && r < rDegree) return nil;
@@ -51,7 +51,7 @@
     
     NSMutableString *childrenLog = [NSMutableString string];
     for (LAHNote *child in _children) {
-        NSString *childLog = [child noteDesBy:rDegree on:degree];
+        NSString *childLog = [child noteDescBy:rDegree on:degree];
         if (childLog) [childrenLog appendFormat:@"\n%@", childLog];
     }
     
@@ -69,7 +69,7 @@ static NSMutableArray *_rootNotes = nil;
 + (NSString *)logBy:(NSUInteger)rDegree on:(NSUInteger)degree{
     NSMutableString *log = [NSMutableString string];
     for (LAHNote *note in _rootNotes) {
-        [log appendFormat:@"\n%@", [note noteDesBy:rDegree on:degree]];
+        [log appendFormat:@"\n%@", [note noteDescBy:rDegree on:degree]];
     }
     [log appendString:@"\n"];
     return log;

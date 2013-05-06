@@ -66,11 +66,11 @@
 }
 
 - (NSString *)description{
-    NSString *info = [NSString stringWithFormat:@"<%@%@  @%p>", self.tagNameInfo, self.attributesInfo, self.des];
+    NSString *info = [NSString stringWithFormat:@"<%@%@  @%p>", self.tagNameInfo, self.attributesInfo, self.desc];
     return info;
 }
 
-- (NSString *)des{
+- (NSString *)desc{
     return [super description];
 }
 

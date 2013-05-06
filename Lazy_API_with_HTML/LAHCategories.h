@@ -13,8 +13,8 @@
 @interface NSArray (LAHArray)
 - (NSArray *)dividedRangesWithFrame:(LAHFrame *)frame;
 - (BOOL)locationInDividedRanges:(NSUInteger)location;
-- (NSString *)dividedDescription;
-- (NSString *)lineDes;
+- (NSString *)dividedDesc;
+- (NSString *)lineDesc;
 @end
 
 @interface NSString (LAHString)

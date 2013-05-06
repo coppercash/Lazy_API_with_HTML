@@ -308,8 +308,8 @@
 
 - (NSString *)attributesInfo{
     NSMutableString *info = [NSMutableString stringWithString:[super attributesInfo]];
-    if (_model) [info appendFormat:@"  model=%@", _model.des];
-    if (_page) [info appendFormat:@"  page=%@", _page.des];
+    if (_model) [info appendFormat:@"  model=%@", _model.desc];
+    if (_page) [info appendFormat:@"  page=%@", _page.desc];
     return info;
 }
 

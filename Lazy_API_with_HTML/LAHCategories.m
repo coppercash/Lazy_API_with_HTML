@@ -54,7 +54,7 @@
 
 }
 
-- (NSString *)dividedDescription{
+- (NSString *)dividedDesc{
     NSMutableString *message = [NSMutableString stringWithFormat:@"{"];
     for (NSValue *rangeValue in self) {
         NSRange range = rangeValue.rangeValue;
@@ -67,7 +67,7 @@
     return message;
 }
 
-- (NSString *)lineDes{
+- (NSString *)lineDesc{
     NSMutableString *message = [NSMutableString string];
     for (NSObject *object in self) {
         [message appendFormat:@"%@\"%@\"", ([self objectAtIndex:0] == object ? @"" : @", "), object];

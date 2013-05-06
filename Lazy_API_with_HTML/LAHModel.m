@@ -74,7 +74,7 @@
 
 #pragma mark - recursion
 - (void)recieve:(LAHModel*)object{
-    LAHNoteQuick(@"%@\tneedUpdate %@\tdata %p", self.des, BOOLStr(_needUpdate), self.data);
+    LAHNoteQuick(@"%@\tneedUpdate %@\tdata %p", self.desc, BOOLStr(_needUpdate), self.data);
 }
 
 - (BOOL)needUpdate{
@@ -92,7 +92,7 @@
     NSMutableString *info = [NSMutableString stringWithString:[super attributesInfo]];
     if (_key) [info appendFormat:@"  key=\"%@\"", _key];
     if (_range && _range.count != 0) {
-        [info appendFormat:@"  range=%@", _range.dividedDescription];
+        [info appendFormat:@"  range=%@", _range.dividedDesc];
     }
     return info;
 }

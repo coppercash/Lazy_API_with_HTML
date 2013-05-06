@@ -52,7 +52,7 @@
     if (_indexes.count != 0) {
         isIndexPass = [_indexes locationInDividedRanges:index];
     }
-    LAHNoteAttr(@"index", ([NSString stringWithFormat:@"%d", index]), _indexes.dividedDescription, isIndexPass);
+    LAHNoteAttr(@"index", ([NSString stringWithFormat:@"%d", index]), _indexes.dividedDesc, isIndexPass);
     if ( !isIndexPass ) return NO;
     
     
@@ -138,11 +138,11 @@
     }
     
     if (_indexes && _indexes.count != 0) {
-        [info appendFormat:@"  _indexes=%@", _indexes.dividedDescription];
+        [info appendFormat:@"  _indexes=%@", _indexes.dividedDesc];
     }
     
     if (_indexOf && _indexOf.count != 0){
-        [info appendFormat:@"  _indexOf=%@", _indexOf.allObjects.lineDes];
+        [info appendFormat:@"  _indexOf=%@", _indexOf.allObjects.lineDesc];
     }
     
     return info;
