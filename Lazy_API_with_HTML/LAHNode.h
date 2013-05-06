@@ -6,15 +6,10 @@
 //  Copyright (c) 2013 Coder Dreamer. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "CDTreeNode.h"
 
 @class LAHOperation;
-@interface LAHNode : NSObject <NSCopying> {
-    LAHNode *_father;
-    NSArray *_children;
-}
-@property(nonatomic, assign)LAHNode *father;
-@property(nonatomic, retain)NSArray *children;
+@interface LAHNode : CDTreeNode
 @property(nonatomic, readonly)LAHOperation *recursiveOperation;
 
 #pragma mark - Status
@@ -28,7 +23,4 @@
 - (NSString *)tagNameInfo;
 - (NSString *)attributesInfo;
 
-#pragma mark - Init
-- (id)initWithFirstChild:(LAHNode*)firstChild variadicChildren:(va_list)children;
-- (id)initWithChildren:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
 @end
