@@ -10,6 +10,7 @@
 #import "LAHTag.h"
 #import "LAHOperation.h"
 #import "LAHNote.h"
+#import "LAHCategories.h"
 
 @interface LAHModel ()
 @property(nonatomic, retain)id data;
@@ -93,21 +94,7 @@
     NSMutableString *info = [NSMutableString stringWithString:[super attributesInfo]];
     if (_key) [info appendFormat:@"  key=\"%@\"", _key];
     if (_range && _range.count != 0) {
-        [info appendFormat:@"  range=("];
-
-        BOOL isFirst = YES;
-        for (NSNumber *number in _range) {
-            
-            if (isFirst) {
-                isFirst = NO;
-            }else{
-                [info appendFormat:@", "];
-            }
-
-            [info appendFormat:@"%d", number.integerValue];
-        }
-        
-        [info appendFormat:@")"];
+        [info appendFormat:@"  range=%@", _range.dividedDescription];
     }
     return info;
 }

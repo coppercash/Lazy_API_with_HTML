@@ -60,6 +60,20 @@
 #pragma mark - Log
 @dynamic degree;
 @synthesize degreeSpace;
+
+- (NSString *)debugDescription{
+    return [self debugLog:0];
+}
+
+- (NSString *)description{
+    NSString *info = [NSString stringWithFormat:@"<%@%@  @%p>", self.tagNameInfo, self.attributesInfo, self.des];
+    return info;
+}
+
+- (NSString *)des{
+    return [super description];
+}
+
 - (NSUInteger)degree{
     return (_father == nil) ? 0 : kFater.degree + 1;
 }
@@ -73,26 +87,8 @@
     return space;
 }
 
-- (NSString *)des{
-    return [super description];
-}
-
-- (NSString *)description{
-    NSString *info = [NSString stringWithFormat:@"<%@%@  @%p>", self.tagNameInfo, self.attributesInfo, self.des];
-    return info;
-}
-
-- (NSString *)debugDescription{
-    return [self debugLog:0];
-}
-
 - (NSString *)debugLog:(NSUInteger)degree{
-    NSMutableString *info = [NSMutableString stringWithString:@"\n"];
-    
-    NSUInteger counter = degree;
-    while (counter --) [info appendString:@"\t"];
-    
-    [info appendString:self.description];
+    NSMutableString *info = [NSMutableString stringWithFormat:@"\n%@%@", self.degreeSpace, self];
     
     for (LAHNode *child in self.children) {
         [info appendFormat:@"%@", [child debugLog:degree + 1]];

@@ -26,6 +26,9 @@
 
 - (void)testOne{
     LAHOperation *ope = _group.operations[1];
+    
+    NSLog(@"%@", ope.debugDescription);
+    
     ope.page.link = @"http://www.voanews.com/section/usa/2203.html";
     [ope addCompletion:^(LAHOperation *operation) {
         NSLog(@"%@", operation.data);

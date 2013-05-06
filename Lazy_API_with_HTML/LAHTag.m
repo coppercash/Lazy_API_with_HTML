@@ -151,38 +151,11 @@
     }
     
     if (_indexes && _indexes.count != 0) {
-        [info appendFormat:@"  _indexes=("];
-        
-        BOOL isFirst = YES;
-        for (NSValue *value in _indexes) {
-            
-            if (isFirst) {
-                isFirst = NO;
-            }else{
-                [info appendFormat:@", "];
-            }
-            NSRange range = value.rangeValue;
-            [info appendFormat:@"%d...%d", range.location, NSMaxRange(range) - 1];
-        }
-        
-        [info appendFormat:@")"];
+        [info appendFormat:@"  _indexes=%@", _indexes.dividedDescription];
     }
     
     if (_indexOf && _indexOf.count != 0){
-        [info appendFormat:@"  _indexOf={"];
-        
-        BOOL isFirst = YES;
-        for (LAHString *string in _indexOf) {
-            
-            if (isFirst) {
-                isFirst = NO;
-            }else{
-                [info appendFormat:@", "];
-            }
-            [info appendFormat:@"%@", string];
-        }
-        
-        [info appendFormat:@"}"];
+        [info appendFormat:@"  _indexOf=%@", _indexOf.allObjects.lineDes];
     }
     
     return info;
