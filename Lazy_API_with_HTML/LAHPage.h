@@ -20,10 +20,6 @@
 @property(nonatomic, readonly)NSString *hostName;
 @property(nonatomic, readonly)NSString *urlString;
 
-- (void)download;
 - (void)seekWithElement:(LAHEle)element;
-
-#pragma mark - Interpreter
-//- (void)addFetcher:(LAHString *)fetcher;
 
 @end

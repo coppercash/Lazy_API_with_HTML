@@ -20,7 +20,6 @@
 //Delegate & Call back
 @property(nonatomic, retain)NSMutableArray *completions;
 @property(nonatomic, retain)NSMutableArray *correctors;
-- (BOOL)checkUpate:(LAHModel *)object;
 - (void)checkFinishing;
 @end
 
@@ -137,14 +136,6 @@
     return children;
 }
 
-- (LAHAttrMethod)methodWithName:(NSString *)name{
-    if (_delegate && [_delegate respondsToSelector:@selector(operation:needsMethodNamed:)]) {
-        LAHAttrMethod method = [_delegate operation:self needsMethodNamed:name];
-        return method;
-    }
-    return nil;
-}
-
 #pragma mark - Status
 - (void)refresh{
     [self cancelNetwork];
@@ -152,31 +143,11 @@
     [_page refresh];
     [_downloadings removeAllObjects];
     [_seekings removeAllObjects];
-    //[_networks removeAllObjects];
     [_completions removeAllObjects];
     [_correctors removeAllObjects];
 }
 
-#pragma mark - Fake LAHConstruct
-/*
-- (BOOL)checkUpate:(LAHModel *)object{
-    return NO;
-}
-
-- (void)update{
-}
-
-- (void)recieve:(LAHModel*)object{
-}*/
-
-#pragma mark - Recursive
-/*
-- (void)setModel:(LAHModel *)construct{
-    [_model release];
-    _model = [construct retain];
-    construct.father = self;
-}*/
-
+#pragma mark - Fake
 - (LAHOperation *)recursiveOperation{
     return self;
 }
@@ -186,10 +157,8 @@
 }
 
 - (BOOL)needUpdate{
-    
     return NO;
 }
-
 
 #pragma mark - Queue
 - (void)freezePage:(LAHPage *)page forKey:(id)key{
@@ -206,8 +175,6 @@
     
     }
 
-    //Page key is different from key. Key indicates a network object.
-    //NSString *pageKey = page.identifier;
     [_model saveStateForKey:key];
     [_page saveStateForKey:key];
 }
@@ -219,8 +186,6 @@
     
     for (LAHPage *page in pages) {
         
-        //Page key is different from key. Key indicates a network object.
-        //NSString *pageKey = page.identifier;
         [_model restoreStateForKey:key];
         [_page restoreStateForKey:key];
         
@@ -256,28 +221,10 @@
 }
 
 - (void)addNetwork:(id)network{
-
-#ifdef LAH_OPERATION_DEBUG
-    NSUInteger c = _networks.count;
-#endif
-    
     [_networks addObject:network];
-
-#ifdef LAH_OPERATION_DEBUG
-    NSString *info = [NSString stringWithFormat:@"%@\tnetwork ADD %d -> %d",
-                      self, c, _networks.count];
-    printf("\n%s\n", [info cStringUsingEncoding:NSASCIIStringEncoding]);
-#endif
-
 }
 
 - (void)cancelNetwork{
-#ifdef LAH_OPERATION_DEBUG
-    NSString *info = [NSString stringWithFormat:@"%@\tcancel networks:%d",
-                         self, _networks.count];
-    printf("\n%s\n", [info cStringUsingEncoding:NSASCIIStringEncoding]);
-#endif
-    
     if (_delegate && [_delegate respondsToSelector:@selector(operation:willCancelNetworks:)]) {
         [_delegate operation:self willCancelNetworks:_networks];
     }
@@ -291,8 +238,6 @@
 #endif
     
     [_page fetchValue:nil];
-    //[self downloadPage:_page];
-    //[_page download];
 }
 
 - (void)cancel{
@@ -332,7 +277,7 @@
     }
 }
 
-#pragma mark - Info
+#pragma mark - Delegate Info
 - (NSString *)urlStringWith:(NSString *)relativeLink{
     NSString *protocol = @"http://";
     if ([relativeLink hasPrefix:protocol]) {
@@ -353,6 +298,14 @@
     return nil;
 }
 
+- (LAHAttrMethod)methodWithName:(NSString *)name{
+    if (_delegate && [_delegate respondsToSelector:@selector(operation:needsMethodNamed:)]) {
+        LAHAttrMethod method = [_delegate operation:self needsMethodNamed:name];
+        return method;
+    }
+    return nil;
+}
+
 #pragma mark - Log
 - (NSString *)tagNameInfo{
     return @"ope";
@@ -365,20 +318,4 @@
     return info;
 }
 
-/*
-- (NSString *)infoProperties{
-    NSMutableString *info = [NSMutableString string];
-    //if (_link) [info appendFormat:@"path=%@", _link];
-    return info;
-}
-
-- (NSString *)infoChildren:(NSUInteger)degree{
-    NSMutableString *info = [NSMutableString string];
-    
-    [info appendString:[_model info:degree]];
-    //[info appendString:[super infoChildren:degree]];
-    
-    return info;
-}
-*/
 @end

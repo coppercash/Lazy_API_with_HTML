@@ -25,7 +25,6 @@ extern NSUInteger gRecLogDegree;
 @class LAHOperation, LAHPage, LAHTag;
 typedef NSString *(^LAHAttrMethod)(NSString *value, NSArray *args, LAHTag *tag);
 typedef NSString *(^LAHPropertyFetcher)(id<LAHHTMLElement> element);
-typedef BOOL(^LAHRule)(id<LAHHTMLElement> element);
 typedef void(^LAHCompletion)(LAHOperation *operation);
 typedef void(^LAHCorrector)(LAHOperation *operation, NSError* error);
 typedef id<LAHHTMLElement> LAHEle;

@@ -13,38 +13,14 @@
 
 @implementation LAHNode
 @synthesize father = _father, children = _children, states = _states;
-#pragma mark - Life Cycle
+@dynamic recursiveOperation;
 
+#pragma mark - Life Cycle
 - (id)init{
     self = [super init];
     if (self) {
         [self.states = [[NSMutableDictionary alloc] init] release];
     }
-    return self;
-}
-
-- (id)initWithFirstChild:(LAHNode*)firstChild variadicChildren:(va_list)children{
-    self = [self init];
-    if (self) {
-        [self.children = [[NSMutableArray alloc] initWithObjects:firstChild, nil] release];
-        firstChild.father = self;
-
-        LAHNode* child;
-        NSMutableArray *collector = [[NSMutableArray alloc] init];
-        while ((child = va_arg(children, LAHNode*)) != nil){
-            [collector addObject:child];
-            child.father = self;
-        }
-        _children = [[NSArray alloc] initWithArray:collector];
-        [collector release];
-    }
-    return self;
-}
-
-- (id)initWithChildren:(LAHNode*)firstChild, ... {
-    va_list children; va_start(children, firstChild);
-    self = [self initWithFirstChild:firstChild variadicChildren:children];
-    va_end(children);
     return self;
 }
 
@@ -80,19 +56,7 @@
     }
 }
 
-#pragma mark - Recursive
-- (void)handleElement:(LAHEle)element atIndex:(NSUInteger)index{
-    NSArray *fakeChildren = [[NSArray alloc] initWithArray:_children];
-    for (LAHNode *node in fakeChildren) {
-        NSUInteger index = 0;
-        for (LAHEle e in element.children) {
-            [node handleElement:e atIndex:index];
-            index++;
-        }
-    }
-    [fakeChildren release];
-}
-
+#pragma mark - Getter
 - (LAHOperation*)recursiveOperation{
     return _father.recursiveOperation;
 }
@@ -100,21 +64,12 @@
 #pragma mark - States
 - (void)saveStateForKey:(id)key{}
 - (void)restoreStateForKey:(id)key{}
-
 - (void)refresh{
     [_states removeAllObjects];
     for (LAHNode *c in _children) {
         [c refresh];
     }
 }
-/*
-#pragma mark - Interpreter
-- (void)addChild:(LAHNode *)child{
-    if (_children == nil) [self.children = [[NSMutableArray alloc] init] release];
-    [_children addObject:child];
-    child.father = self;
-}
- */
 
 #pragma mark - Log
 @dynamic degree;
@@ -168,45 +123,30 @@
     return @"";
 }
 
-/*
-- (void)log{
-    NSLog(@"%@", [self info:0]);
-}
-
-- (void)logLonely{
-    NSLog(@"%@", self.infoSelf);
-}
-
-- (NSString *)info:(NSUInteger)degree{
-    NSMutableString *info = [NSMutableString stringWithString:@"\n"];
-    
-    for (int i = 0; i < degree; i ++)  [info appendString:@"\t"];
-    
-    [info appendString:self.infoSelf];
-    
-    NSString *chiInfo = [self infoChildren:degree + 1];
-    if (chiInfo && chiInfo.length != 0) [info appendFormat:@":%@", chiInfo];
-    
-    return info;
-}
-
-- (NSString *)infoSelf{
-    NSMutableString *info = [NSMutableString stringWithFormat:@"%@", super.description];
-    NSString *proInfo = self.infoProperties;
-    if (proInfo && proInfo.length != 0) {
-        [info appendFormat:@" ( %@)", proInfo];
+#pragma mark - Init
+- (id)initWithFirstChild:(LAHNode*)firstChild variadicChildren:(va_list)children{
+    self = [self init];
+    if (self) {
+        [self.children = [[NSMutableArray alloc] initWithObjects:firstChild, nil] release];
+        firstChild.father = self;
+        
+        LAHNode* child;
+        NSMutableArray *collector = [[NSMutableArray alloc] init];
+        while ((child = va_arg(children, LAHNode*)) != nil){
+            [collector addObject:child];
+            child.father = self;
+        }
+        _children = [[NSArray alloc] initWithArray:collector];
+        [collector release];
     }
-    return info;
+    return self;
 }
 
-- (NSString *)infoProperties{
-    return nil;
+- (id)initWithChildren:(LAHNode*)firstChild, ... {
+    va_list children; va_start(children, firstChild);
+    self = [self initWithFirstChild:firstChild variadicChildren:children];
+    va_end(children);
+    return self;
 }
-
-- (NSString *)infoChildren:(NSUInteger)degree{
-    NSMutableString *info = [NSMutableString string];
-    for (LAHNode *n in _children) [info appendString:[n info:degree]];
-    return info;
-}*/
 
 @end

@@ -18,10 +18,7 @@
 @property(nonatomic, assign)LAHNode *father;
 @property(nonatomic, retain)NSArray *children;
 @property(nonatomic, retain)NSMutableDictionary* states;
-
-- (id)initWithFirstChild:(LAHNode*)firstChild variadicChildren:(va_list)children;
-- (id)initWithChildren:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
-- (LAHOperation *)recursiveOperation;
+@property(nonatomic, readonly)LAHOperation *recursiveOperation;
 
 #pragma mark - Status
 - (void)saveStateForKey:(id)key;
@@ -36,4 +33,7 @@
 - (NSString *)tagNameInfo;
 - (NSString *)attributesInfo;
 
+#pragma mark - Init
+- (id)initWithFirstChild:(LAHNode*)firstChild variadicChildren:(va_list)children;
+- (id)initWithChildren:(LAHNode*)firstChild, ... NS_REQUIRES_NIL_TERMINATION;
 @end

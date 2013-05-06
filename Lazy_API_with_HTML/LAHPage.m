@@ -35,39 +35,6 @@
     return copy;
 }
 
-/*
-#pragma mark - Seek
-- (void)download{
-    NSAssert(_link != nil, @"Can't get link.");
-    if (!_link) return;
-
-#ifdef LAH_RULES_DEBUG
-    NSMutableString *space = [NSMutableString string];
-    for (int i = 0; i < gRecLogDegree; i ++) [space appendString:@"\t"];
-    //NSMutableString *info = [NSMutableString stringWithFormat:@"%@%@\n%@'symbol'=%@\n'link'=%@",
-                             //space, self,
-                             //space, _symbol, _link];
-    //printf("\n%s\n", [info cStringUsingEncoding:NSASCIIStringEncoding]);
-    
-    gRecLogDegree += 1;
-#endif
-    
-
-#ifdef LAH_RULES_DEBUG
-    gRecLogDegree -= 1;
-#endif
- 
-    
-    [self handleAttributes];
-    
-    if (_children.count == 0) return;   //If do not have tags, no necessary to download.
-    LAHOperation *operation = self.recursiveOperation;
-    NSAssert(operation != nil, @"Can't get recursiveOperation");
-    
-    [operation downloadPage:self];
-    
-}*/
-
 #pragma mark - Events
 - (void)fetchValue:(NSString *)value{
     NSAssert(self.recursiveOperation != nil, @"Can't get recursiveOperation");
@@ -108,11 +75,7 @@
     for (LAHEle subEle in element.children) {
         [self seekWithElement:subEle];
     }
-/*
-#ifdef LAH_RULES_DEBUG
-    gRecLogDegree -= 1;
-#endif
- */
+
 }
 
 #pragma mark - Getter
@@ -145,12 +108,7 @@
     return [NSString stringWithFormat:@"%p%@", self, self.urlString];
 }
 
-#pragma mark - Status
-
-#pragma mark - Interpreter
-
 #pragma mark - Log
-
 - (NSString *)tagNameInfo{
     return @"page";
 }
@@ -168,19 +126,5 @@
     
     return info;
 }
-
-
-/*
-- (NSString *)debugDescription{
-    
-}
-
-- ()
-
-- (NSString *)infoProperties{
-    NSMutableString *info = [NSMutableString string];
-    //if (_symbol) [info appendFormat:@"sym=%@, ", _symbol];
-    return info;
-}*/
 
 @end

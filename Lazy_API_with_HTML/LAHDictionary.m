@@ -18,14 +18,6 @@
 @synthesize dictionary = _dictionary;
 
 #pragma mark - Class Basic
-- (id)init{
-    self = [super init];
-    if (self) {
-        self.type = LAHConstructTypeDictionary;
-    }
-    return self;
-}
-
 - (id)initWithObjectsAndKeys:(LAHModel *)firstObj , ... {
     va_list other; va_start(other, firstObj);
     self = [self initWithFirstObject:firstObj variadicObjectsAndKeys:other];
@@ -34,9 +26,8 @@
 }
 
 - (id)initWithFirstObject:(LAHModel *)firstObj variadicObjectsAndKeys:(va_list)OtherObjsAndKeys{
-    self = [self init];
+    self = [super init];
     if (self) {
-        self.type = LAHConstructTypeDictionary;
         
         [self.children = [[NSMutableArray alloc] initWithObjects:firstObj, nil] release];
         firstObj.father = self;
@@ -59,14 +50,6 @@
         }
         _children = collector;
         [collector release];
-    }
-    return self;
-}
-
-- (id)initWithFirstChild:(LAHNode *)firstChild variadicChildren:(va_list)children{
-    self = [self initWithFirstChild:firstChild variadicChildren:children];
-    if (self) {
-        self.type = LAHConstructTypeDictionary;
     }
     return self;
 }
@@ -106,44 +89,26 @@
     [self.dictionary setObject:object.data forKey:object.key];
 }
 
-#pragma mark - recursion
-/*
-- (void)update{
-    [self.dictionary = [[NSMutableDictionary alloc] init] release];
-    [(LAHModel *)_father recieve:self];
-}*/
-
-
-
-/*
-- (id)data{
-    return _dictionary;
-}*/
-
 #pragma mark - States
 - (void)saveStateForKey:(id)key{
-    NSMutableDictionary *collector = [[NSMutableDictionary alloc] initWithCapacity:3];
-    if (_dictionary) [collector setObject:_dictionary forKey:gKeyContainer];
-    [collector setObject:[NSNumber numberWithBool:_needUpdate] forKey:gKeyNeedUpdate];
-
-    [_states setObject:collector forKey:key];
-    [collector release];
+    NSAssert(_states[key] == nil, @"Will overwrite state for key '%@'", key);
     
-    NSLog(@"save\t%p\tat %@\tforKey %@", collector, self, key);
-
+    NSMutableDictionary *state = [[NSMutableDictionary alloc] initWithCapacity:3];
+    if (_dictionary) state[gKeyContainer] = _dictionary;
+    state[gKeyNeedUpdate] = [NSNumber numberWithBool:_needUpdate];
+    
+    _states[key] = state;
+    [state release];
     
     [super saveStateForKey:key];
 }
 
 - (void)restoreStateForKey:(id)key{
-    NSDictionary *state = [_states objectForKey:key];
-    self.dictionary = [state objectForKey:gKeyContainer];
+    NSDictionary *state = _states[key];
+    self.dictionary = state[gKeyContainer];
     self.needUpdate = [state[gKeyNeedUpdate] boolValue];
     
     [_states removeObjectForKey:key];
-    
-    NSLog(@"restore\t%p\tat %@\tforKey %@", state, self, key);
-
     
     [super restoreStateForKey:key];
 }
