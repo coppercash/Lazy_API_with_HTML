@@ -18,6 +18,7 @@
 @implementation LAHTag
 @synthesize isDemocratic = _isDemocratic, indexes = _indexes;
 @synthesize attributes = _attributes;
+@dynamic singleRange;
 
 #pragma mark - Life Cycle
 - (id)init{
@@ -32,6 +33,20 @@
     self.indexes = nil;
     self.attributes = nil;
     [super dealloc];
+}
+
+#pragma mark - Single Range
+- (void)setSingleRange:(NSRange)singleRange{
+    NSValue *rangeValue = [NSValue valueWithRange:singleRange];
+    self.indexes = @[rangeValue];
+}
+
+- (NSRange)singleRange{
+    if (_indexes && _indexes.count != 0) {
+        NSValue *rangeValue = _indexes[0];
+        return rangeValue.rangeValue;
+    }
+    return NSMakeRange(0, NSUIntegerMax);
 }
 
 #pragma mark - Getter

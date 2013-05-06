@@ -10,7 +10,7 @@
 #import "LAHPage.h"
 #import "MKNetworkEngine.h"
 #import "Hpple/TFHpple.h"
-#import "LAHInterface.h"
+#import "LAHOperation.h"
 
 @interface LMHModelsGroup ()
 @property(nonatomic, retain)MKNetworkEngine *engine;
@@ -22,7 +22,12 @@
 - (id)initWithCommand:(NSString *)string key:(NSString *)key{
     self = [super initWithCommand:string key:key];
     if (self) {
-        LAHOperation *rootOpe = self.operation;
+        
+        for (LAHOperation *ope in _operations) {
+            ope.delegate = self;
+        }
+        
+        LAHOperation *rootOpe = _operations[0];
         
         NSString *link = rootOpe.page.link;
         NSURL *url = [[NSURL alloc] initWithString:rootOpe.page.link];
@@ -39,12 +44,9 @@
 - (NSURL *)resourceURLWithOfLink:(NSString *)link{
     NSURL *url = [[NSURL alloc] initWithString:link];
     if (!url.host) {
-        //NSString *scheme = @"http";
         NSString *host = _engine.readonlyHostName;
         NSString *path = [host stringByAppendingPathComponent:link];
         url = [[NSURL alloc] initWithString:path];
-
-        //url = [[NSURL alloc] initWithScheme:scheme host:host path:link];
     }
     
     return url;
@@ -69,7 +71,8 @@
     
     [_engine enqueueOperation:netOpe forceReload:YES];
     
-    return @{LAHKeyRetNetOpe:netOpe, LAHKeyRetURL:netOpe.url};  //url string is a key for dictionary
+    //LAHKeyRetNetOpe used to cancel ALHOperation, url is a key for awaking the page when request return.
+    return @{LAHKeyRetNetOpe:netOpe, LAHKeyRetURL:netOpe.url};  
 }
 
 - (void)operation:(LAHOperation *)operation willCancelNetworks:(NSArray *)networks{

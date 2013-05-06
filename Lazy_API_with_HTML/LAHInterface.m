@@ -32,6 +32,7 @@ NSString * const LAHParaIndexes = @"_indexes";
 NSString * const LAHParaIndexOf = @"_indexOf";
 NSString * const LAHParaContent = @"_content";
 NSString * const LAHParaIsDemocratic  = @"_isDem";
+NSString * const LAHParaURL = @"url";
 
 NSString * const LAHMethodRE    = @"re";
 NSString * const LAHMethodJoinMethod = @"joinHost";
@@ -40,30 +41,3 @@ NSString * const LAHValYES = @"YES";
 NSString * const LAHValNO = @"NO";
 NSString * const LAHValNone  = @"_none";
 NSString * const LAHValAll   = @"_all";
-
-NSString * const LAHParaId      = @"id";
-NSString * const LAHParaSym     = @"sym";
-NSString * const LAHParaRoot    = @"root";
-NSString * const LAHParaPath    = @"path";
-NSString * const LAHParaClass   = @"class";
-NSString * const LAHParaText    = @"text";
-NSString * const LAHParaIndex   = @"index";
-NSString * const LAHParaIsText  = @"isText";
-NSString * const LAHParaDefault = @"_def";
-
-NSString * const LAHValContent  = @"_content";
-NSString * const LAHValText  = @"_text";
-NSString * const LAHValTag   = @"_tag";
-
-NSString * const LAHValPath   = @"_path";
-NSString * const LAHValURL   = @"_url";
-NSString * const LAHValHost   = @"_host";
-
-NSString * const gLAHImg = @"img";
-NSString * const gLAHSrc = @"src";
-NSString * const gLAHP = @"p";
-NSString * const gLAHA = @"a";
-NSString * const gLAHSpan = @"span";
-NSString * const gLAHDiv = @"div";
-NSString * const gLAHHref = @"href";
-

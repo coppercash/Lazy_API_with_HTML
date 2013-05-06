@@ -22,6 +22,7 @@
 @property(nonatomic, retain)NSArray *indexes;
 @property(nonatomic, retain)NSMutableSet *attributes;
 @property(nonatomic, retain)NSSet *indexOf;
+@property(nonatomic, assign)NSRange singleRange;
 
 - (BOOL)handleElement:(LAHEle)element atIndex:(NSInteger)index;
 

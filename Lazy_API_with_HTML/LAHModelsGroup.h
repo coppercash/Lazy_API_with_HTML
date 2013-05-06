@@ -7,21 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "LAHOperation.h"
 
-@interface LAHModelsGroup : NSObject <LAHDelegate> {
+@class LAHOperation;
+@interface LAHModelsGroup : NSObject{
     NSArray *_operations;
     NSDictionary *_containerCache;
-    NSInteger _currentIndex;
 }
 @property(nonatomic, retain)NSArray *operations;
 @property(nonatomic, readonly)LAHOperation *operation;
 #pragma mark - Class Basic
 - (id)initWithCommand:(NSString *)command key:(NSString *)key;
 #pragma mark - Operations
+- (void)setupOperationWithKey:(NSString *)key;
 - (LAHOperation *)operationAtIndex:(NSInteger)index;
-#pragma mark - Push & Pop
-- (void)pushWithLink:(NSString *)link;
-- (void)popNumberOfDegree:(NSUInteger)number;
-- (void)pop;
 @end

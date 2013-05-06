@@ -12,14 +12,12 @@
 #import "LAHPage.h"
 
 @interface LAHModelsGroup ()
-@property (nonatomic, assign)NSInteger currentIndex;
 @property(nonatomic, retain)NSDictionary *containerCache;
 - (void)cacheContainerWithCommand:(NSString *)command;
-- (void)setupOperationWithKey:(NSString *)key;
 @end
 
 @implementation LAHModelsGroup
-@synthesize operations = _operations, currentIndex = _currentIndex;
+@synthesize operations = _operations;
 @synthesize containerCache = _containerCache;
 @dynamic operation;
 
@@ -36,7 +34,6 @@
         
         if (_operations.count <= 0) return nil;
        
-        self.currentIndex = 0;
     }
     return self;
 }
@@ -74,10 +71,9 @@
     do {
         
         NSString *iteration = [keyWord stringByAppendingFormat:@"%d", collector.count];
-        ope = [_containerCache objectForKey:iteration];
+        ope = _containerCache[iteration];
         
         if (!ope) continue;
-        ope.delegate = self;
         [collector addObject:ope];
         
     } while (ope);
@@ -89,6 +85,7 @@
     [keyWord release];
 }
 
+
 #pragma mark - Operations
 - (LAHOperation *)operationAtIndex:(NSInteger)index{
     NSAssert(NSLocationInRange(index, NSMakeRange(0, _operations.count)), @"Operation at %d out of range.", index);
@@ -97,33 +94,6 @@
     LAHOperation *ope = [_operations objectAtIndex:index];
     [ope refresh];
     return ope;
-}
-
-- (LAHOperation *)operation{
-    LAHOperation *operation = [self operationAtIndex:_currentIndex];
-    return operation;
-}
-
-#pragma mark - Push & Pop
-- (void)pushWithLink:(NSString *)link{
-    NSInteger target = _currentIndex + 1;
-    LAHOperation *ope = [self operationAtIndex:target];
-    if (ope) {
-        self.currentIndex = target;
-        if (link) ope.page.link = link;
-    }
-}
-
-- (void)popNumberOfDegree:(NSUInteger)number{
-    NSInteger target = _currentIndex - number;
-    LAHOperation *ope = [self operationAtIndex:target];
-    if (ope) {
-        self.currentIndex = target;
-    }
-}
-
-- (void)pop{
-    [self popNumberOfDegree:1];
 }
 
 @end

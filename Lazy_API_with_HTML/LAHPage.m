@@ -54,7 +54,7 @@
 - (void)handleAttributes{
     for (LAHAttribute *attr in _attributes) {
         NSString *value = nil;
-        if ([attr.name isEqualToString:LAHValURL]) {
+        if ([attr.name isEqualToString:LAHParaURL]) {
             value = self.urlString;
         }
         attr.cache = value;

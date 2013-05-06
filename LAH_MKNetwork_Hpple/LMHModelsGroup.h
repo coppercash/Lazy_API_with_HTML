@@ -8,8 +8,9 @@
 
 #import "LAHModelsGroup.h"
 #import "MKNetworkKit.h"
+#import "LAHInterface.h"
 
-@interface LMHModelsGroup : LAHModelsGroup {
+@interface LMHModelsGroup : LAHModelsGroup <LAHDelegate> {
     MKNetworkEngine *_engine;
 }
 - (NSURL *)resourceURLWithOfLink:(NSString *)link;

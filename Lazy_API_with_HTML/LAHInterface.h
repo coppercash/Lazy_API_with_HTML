@@ -6,8 +6,6 @@
 //  Copyright (c) 2013 Coder Dreamer. All rights reserved.
 //
 
-//#define LAH_OPERATION_DEBUG
-
 @protocol LAHHTMLElement <NSObject>
 - (NSString*)tagName;
 - (NSString*)text;
@@ -19,7 +17,6 @@
 
 @class LAHOperation, LAHPage, LAHTag;
 typedef NSString *(^LAHAttrMethod)(NSString *value, NSArray *args, LAHTag *tag);
-typedef NSString *(^LAHPropertyFetcher)(id<LAHHTMLElement> element);
 typedef void(^LAHCompletion)(LAHOperation *operation);
 typedef void(^LAHCorrector)(LAHOperation *operation, NSError* error);
 typedef id<LAHHTMLElement> LAHEle;
@@ -30,6 +27,7 @@ extern NSString * const LAHKeyRetNetOpe;
 - (NSDictionary *)operation:(LAHOperation *)operation needPageAtLink:(NSString *)link;
 - (void)operation:(LAHOperation *)operation willCancelNetworks:(NSArray *)networks;
 - (NSString *)operationNeedsHostName:(LAHOperation *)operation;
+@optional
 - (LAHAttrMethod)operation:(LAHOperation *)operation needsMethodNamed:(NSString *)methodName;
 @end
 
@@ -57,6 +55,7 @@ extern NSString * const LAHParaIndexes;
 extern NSString * const LAHParaIndexOf;
 extern NSString * const LAHParaContent;
 extern NSString * const LAHParaIsDemocratic;
+extern NSString * const LAHParaURL;
 
 extern NSString * const LAHMethodRE;
 extern NSString * const LAHMethodJoinMethod;
@@ -65,29 +64,3 @@ extern NSString * const LAHValYES;
 extern NSString * const LAHValNO;
 extern NSString * const LAHValNone;
 extern NSString * const LAHValAll;
-
-extern NSString * const LAHParaId;
-extern NSString * const LAHParaSym;
-extern NSString * const LAHParaRoot;
-extern NSString * const LAHParaPath;
-extern NSString * const LAHParaClass;
-extern NSString * const LAHParaText;
-extern NSString * const LAHParaIndex;
-extern NSString * const LAHParaIsText;
-extern NSString * const LAHParaDefault;
-
-extern NSString * const LAHValContent;
-extern NSString * const LAHValText;
-extern NSString * const LAHValTag;
-
-extern NSString * const LAHValPath;
-extern NSString * const LAHValURL;
-extern NSString * const LAHValHost;
-
-extern NSString * const gLAHImg;
-extern NSString * const gLAHSrc;
-extern NSString * const gLAHP;
-extern NSString * const gLAHA;
-extern NSString * const gLAHSpan;
-extern NSString * const gLAHDiv;
-extern NSString * const gLAHHref;
