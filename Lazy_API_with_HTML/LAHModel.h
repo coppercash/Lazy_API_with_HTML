@@ -8,7 +8,6 @@
 
 #import "LAHNode.h"
 
-@class LAHTag;
 @interface LAHModel : LAHNode {
     
     NSString *_key;
@@ -23,6 +22,7 @@
 @property(nonatomic, assign)BOOL needUpdate;
 @property(nonatomic, readonly)id data;
 @property(nonatomic, retain)NSMutableDictionary* states;
+@property(nonatomic, readonly)NSString *identifier;
 
 - (void)saveStateForKey:(id)key;
 - (void)restoreStateForKey:(id)key;

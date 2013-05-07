@@ -169,6 +169,11 @@ static NSString * const re = @"(?m)^ *(?:#.*)?\n|#.*$|(^ +|\n|\\d+|\\w+|[()\\[\\
 	return (r.location == NSNotFound) ? NSNotFound : lineNumber;
 }
 
+- (void)dealloc{
+    self.source = nil;
+    [super dealloc];
+}
+
 @end
 
 

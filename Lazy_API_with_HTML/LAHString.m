@@ -11,29 +11,47 @@
 #import "LAHPage.h"
 #import "LAHNote.h"
 
+#define kFather (LAHModel *)_father
+
 @interface LAHString ()
 @property(nonatomic, copy)NSString *string;
 @end
 
 @implementation LAHString
-@synthesize string = _string, value = _value;
+@synthesize string = _string, staticString = _staticString;
 @synthesize re = _re;
 #pragma mark - Life Cycle
 
 - (void)dealloc{
     self.string = nil;
-    self.value = nil;
+    self.staticString = nil;
     self.re = nil;
     
     [super dealloc];
 }
+
+#pragma mark - Copy
+- (id)copyVia:(NSMutableDictionary *)table{
+    LAHString *copy = [super copyVia:table];
+    
+    copy.staticString = _staticString;
+    copy.re = _re;
+    
+    return copy;
+}
+
 
 #pragma mark - LAHFetcher
 - (void)fetchValue:(NSString *)value{
     LAHNoteQuick(@"%@\tfetching \"%@\"", self.desc, value);
     
     self.string = value;
-    [(LAHModel *)_father recieve:self];
+    [kFather recieve:self];
+}
+
+- (void)fetchStaticString{
+    if (!_staticString) return;
+    [self fetchValue:_staticString];
 }
 
 #pragma mark - States
@@ -44,6 +62,7 @@
 
 - (void)saveStateForKey:(id)key{
     //Do nothing.
+    LAHNoteQuick(@"%@\tsave %p", self.desc, self.data);
 }
 
 - (void)restoreStateForKey:(id)key{

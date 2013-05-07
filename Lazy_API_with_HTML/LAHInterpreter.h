@@ -8,7 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+@class LAHNode;
 @interface LAHInterpreter : NSObject
++ (LAHNode *)interpretFile:(NSString *)path forKey:(NSString *)key;
 + (void)interpretFile:(NSString *)path intoDictionary:(NSMutableDictionary *)dictionary;
 + (void)interpretString:(NSString *)string intoDictionary:(NSMutableDictionary *)dictionary;
 + (void)interpretIntoDictionary:(NSMutableDictionary *)dictionary fromFiles:(NSString *)firstFile, ... NS_REQUIRES_NIL_TERMINATION;

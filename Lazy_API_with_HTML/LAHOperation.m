@@ -56,23 +56,32 @@
     [super dealloc];
 }
 
-- (id)copyWithZone:(NSZone *)zone{
-    LAHOperation *copy = [super copyWithZone:zone];
+#pragma mark - Copy
+- (id)copy{
+    NSMutableDictionary *table = [[NSMutableDictionary alloc] init];
     
-    copy.model = [_model copy];
-    copy.model.father = copy;
+    LAHOperation *copy = [self copyVia:table];
     
-    if (_downloadings) copy.downloadings = [[NSMutableDictionary alloc] initWithDictionary:_downloadings copyItems:YES];
-    if (_seekings) copy.seekings = [[NSMutableArray alloc] initWithArray:_seekings copyItems:YES];
-    if (_networks) copy.networks = [[NSMutableArray alloc] initWithArray:_networks copyItems:YES];
+    [table release];
+
+    return copy;
+}
+
+- (id)copyVia:(NSMutableDictionary *)table{
+    LAHOperation *copy = [[[self class] alloc] init];
+    
+    copy.model = [_model copyVia:table];
+    [copy.model release];
+    
+    copy.page = [_page copyVia:table];
+    [copy.page release];
     
     copy.delegate = _delegate;
-    if (_completions) copy.completions = [[NSMutableArray alloc] initWithArray:_completions copyItems:YES];
-    if (_correctors) copy.correctors = [[NSMutableArray alloc] initWithArray:_correctors copyItems:YES];
     
-    [copy.model release];
-    [copy.downloadings release];
+    copy.completions = [[NSMutableArray alloc] initWithArray:_completions copyItems:YES];
     [copy.completions release];
+    
+    copy.correctors = [[NSMutableArray alloc] initWithArray:_correctors copyItems:YES];
     [copy.correctors release];
     
     return copy;
@@ -171,8 +180,8 @@
     } else {    //Doesn't exit yet, create a array to keep it
         
         pages = [[NSMutableArray alloc] initWithObjects:page, nil];
-        [self.downloadings setObject:pages forKey:key];
-    
+        self.downloadings[key] = pages;
+        [pages release];
     }
 
     [_model saveStateForKey:key];

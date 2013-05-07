@@ -204,6 +204,15 @@
         string.re = re;
         
         return YES;
+    } else if ([name isEqualToString:LAHParaStatic]) {
+        
+        LAHStmtValue *value = attr.value;
+        [frame attribute:name ofEntity:entity expect:@[[LAHStmtValue class]] find:value];
+
+        NSString *staticString = [value evaluate:frame];
+        string.staticString = staticString;
+        
+        return YES;
     }
     
     return NO;
@@ -235,7 +244,7 @@
             LAHPage *page = (LAHPage *)child;
             ope.page = page;
             
-        } else if ( [child isMemberOfClass:[LAHModel class]] ) {
+        } else if ( [child isKindOfClass:[LAHModel class]] ) {
             
             LAHModel *model = (LAHModel *)child;
             ope.model = model;
@@ -435,12 +444,11 @@
 }
 
 - (NSString *)name{
-    return _value;
+    return self.value;
 }
 
 - (void)setName:(NSString *)name{
-    [_value release];
-    _value = [name copy];
+    self.value = name;
 }
 
 @end
@@ -564,6 +572,11 @@
     }
     
     return collector;
+}
+
+- (void)dealloc{
+    self.values = nil;
+    [super dealloc];
 }
 
 @end

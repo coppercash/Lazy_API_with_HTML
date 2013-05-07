@@ -62,6 +62,11 @@
     return log;
 }
 
+- (void)dealloc{
+    self.note = nil;
+    [super dealloc];
+}
+
 #pragma mark - Static
 static LAHNote *_currentNote = nil;
 static NSMutableArray *_rootNotes = nil;

@@ -28,9 +28,23 @@
     [super dealloc];
 }
 
-- (id)copyWithZone:(NSZone *)zone{
-    LAHPage *copy = [super copyWithZone:zone];
+#pragma mark - Copy
+- (id)copyVia:(NSMutableDictionary *)table{
+    LAHPage *copy = [super copyVia:table];
+    
     copy.link = _link;
+    
+    NSMutableSet *attrClc = [[NSMutableSet alloc] initWithCapacity:_attributes.count];
+    for (LAHAttribute *attr in _attributes) {
+        LAHAttribute *attrCopy = [attr copyVia:table];
+        attrCopy.father = copy;
+        
+        [attrClc addObject:attrCopy];
+        [attrCopy release];
+    }
+    copy.attributes = [[NSMutableSet alloc] initWithSet:attrClc];
+    [copy.attributes release];
+    [attrClc release];
     
     return copy;
 }
@@ -105,7 +119,7 @@
 }
 
 - (NSString *)identifier{
-    return [NSString stringWithFormat:@"%p%@", self, self.urlString];
+    return [NSString stringWithFormat:@"%p", self];
 }
 
 #pragma mark - Log

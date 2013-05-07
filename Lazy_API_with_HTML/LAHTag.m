@@ -35,6 +35,40 @@
     [super dealloc];
 }
 
+#pragma mark - Copy
+- (id)copyVia:(NSMutableDictionary *)table{
+    LAHTag *copy = [super copyVia:table];
+    
+    copy.indexes = [[NSArray alloc] initWithArray:_indexes copyItems:YES];
+    [copy.indexes release];
+    
+    NSMutableSet *attrClc = [[NSMutableSet alloc] initWithCapacity:_attributes.count];
+    for (LAHAttribute *attr in _attributes) {
+        LAHAttribute *attrCopy = [attr copyVia:table];
+        attrCopy.father = copy;
+        
+        [attrClc addObject:attrCopy];
+        [attrCopy release];
+    }
+    copy.attributes = [[NSMutableSet alloc] initWithSet:attrClc];
+    [copy.attributes release];
+    [attrClc release];
+    
+    copy.isDemocratic = _isDemocratic;
+    
+    NSMutableSet *indexOfClc = [[NSMutableSet alloc] initWithCapacity:_indexOf.count];
+    for (LAHModel *model in _indexOf) {
+        
+        LAHModel *modelCopy = table[model.identifier];
+        [indexOfClc addObject:modelCopy];
+    }
+    copy.indexOf = [[NSSet alloc] initWithSet:indexOfClc];
+    [copy.indexOf release];
+    [indexOfClc release];
+    
+    return copy;
+}
+
 #pragma mark - Single Range
 - (void)setSingleRange:(NSRange)singleRange{
     NSValue *rangeValue = [NSValue valueWithRange:singleRange];

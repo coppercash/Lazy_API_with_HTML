@@ -14,13 +14,13 @@
     NSArray *_indexes;
     NSMutableSet *_attributes;
     
-    NSSet *_indexOf;
-    
     BOOL _isDemocratic;
+
+    NSSet *_indexOf;
 }
-@property(nonatomic, assign)BOOL isDemocratic;
 @property(nonatomic, retain)NSArray *indexes;
 @property(nonatomic, retain)NSMutableSet *attributes;
+@property(nonatomic, assign)BOOL isDemocratic;
 @property(nonatomic, retain)NSSet *indexOf;
 @property(nonatomic, assign)NSRange singleRange;
 

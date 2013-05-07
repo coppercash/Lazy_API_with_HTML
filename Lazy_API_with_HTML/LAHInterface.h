@@ -56,6 +56,7 @@ extern NSString * const LAHParaIndexOf;
 extern NSString * const LAHParaContent;
 extern NSString * const LAHParaIsDemocratic;
 extern NSString * const LAHParaURL;
+extern NSString * const LAHParaStatic;
 
 extern NSString * const LAHMethodRE;
 extern NSString * const LAHMethodJoinMethod;

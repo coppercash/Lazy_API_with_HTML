@@ -23,7 +23,7 @@
         <dic _r='imgDic'>
             <str key="imgSrc" _r='img'>
 
-<page _r='page0'>
+<page _r='page0' link="http://www.51voa.com/VOA_Special_English/">
     <div id="leftNav">
         <ul>
             <li _indexes=(0, 17) _indexOf='range0'>

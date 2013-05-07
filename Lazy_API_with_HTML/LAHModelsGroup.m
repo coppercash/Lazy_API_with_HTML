@@ -83,6 +83,7 @@
     self.operations = [[NSArray alloc] initWithArray:collector];
     [self.operations release];
     [keyWord release];
+    [collector release];
 }
 
 

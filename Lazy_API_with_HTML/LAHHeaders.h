@@ -15,3 +15,5 @@
 #import "LAHArray.h"
 #import "LAHDictionary.h"
 #import "LAHString.h"
+
+#import "LAHInterpreter.h"

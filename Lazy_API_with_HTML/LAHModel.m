@@ -29,6 +29,25 @@
     [super dealloc];
 }
 
+#pragma mark - Copy
+@dynamic identifier;
+
+- (NSString *)identifier{
+    return [NSString stringWithFormat:@"%p", self];
+}
+
+- (id)copyVia:(NSMutableDictionary *)table{
+    LAHModel *copy = [super copyVia:table];
+    table[self.identifier] = copy;
+
+    copy.key = _key;
+    
+    copy.range = [[NSArray alloc] initWithArray:_range copyItems:YES];
+    [copy.range release];
+    
+    return copy;
+}
+
 #pragma mark - States
 - (void)saveStateForKey:(id)key{
     NSAssert(_states[key] == nil, @"Will overwrite state for key '%@'", key);

@@ -15,6 +15,9 @@
 #pragma mark - Status
 - (void)refresh;
 
+#pragma mark - Copy
+- (id)copyVia:(NSMutableDictionary *)table;
+
 #pragma mark - Log
 @property(nonatomic, readonly)NSUInteger degree;
 @property(nonatomic, readonly)NSString *degreeSpace;

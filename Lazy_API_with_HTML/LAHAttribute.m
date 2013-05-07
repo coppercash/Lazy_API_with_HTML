@@ -12,6 +12,7 @@
 #import "LAHOperation.h"
 #import "LAHCategories.h"
 #import "LAHNote.h"
+#import "LAHPage.h"
 
 @interface LAHAttribute ()
 @end
@@ -21,7 +22,6 @@
 @synthesize legalValues = _legalValues, getters = _getters;
 @synthesize methodName = _methodName, args = _args;
 @synthesize cache = _cache;
-@synthesize tag = _tag;
 @dynamic isMatched;
 
 #pragma mark - Class Basic
@@ -35,6 +35,44 @@
     self.cache = nil;
     
     [super dealloc];
+}
+
+#pragma mark - Copy
+- (id)copyVia:(NSMutableDictionary *)table{
+    LAHAttribute *copy = [super copyVia:table];
+    
+    copy.name = _name;
+    
+    copy.legalValues = [[NSSet alloc] initWithSet:_legalValues copyItems:YES];
+    [copy.legalValues release];
+    
+    NSMutableSet *gettersClc = [[NSMutableSet alloc] initWithCapacity:_getters.count];
+    for (LAHNode *getter in _getters) {
+        
+        if ([getter isKindOfClass:[LAHPage class]]) {
+            
+            LAHPage *pageCopy = [getter copyVia:table];
+            [gettersClc addObject:pageCopy];
+            [pageCopy release];
+            
+            pageCopy.father = copy;
+            
+        } else if ([getter isKindOfClass:[LAHModel class]]) {
+            
+            LAHModel *modelCopy = table[((LAHModel *)getter).identifier];
+            [gettersClc addObject:modelCopy];
+        }
+    }
+    copy.getters = [[NSSet alloc] initWithSet:gettersClc];
+    [copy.getters release];
+    [gettersClc release];
+    
+    copy.methodName = _methodName;
+    
+    copy.args = [[NSArray alloc] initWithArray:_args copyItems:YES];
+    [copy.args release];
+        
+    return copy;
 }
 
 #pragma mark - Integrated methods

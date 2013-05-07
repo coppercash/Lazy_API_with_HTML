@@ -8,6 +8,7 @@
 
 #import "LAHArray.h"
 #import "LAHTag.h"
+#import "LAHString.h"
 
 @interface LAHArray ()
 @property(nonatomic, retain)NSMutableArray *array;
@@ -36,9 +37,20 @@
 
 - (NSMutableArray *)array{
     if (!_array || self.needUpdate) {
+        
+        //Update data
         [_array release];
         _array = [[NSMutableArray alloc] init];
         self.needUpdate = NO;
+        
+        //Children
+        for (LAHString *str in _children) {
+            if ([str isKindOfClass:[LAHString class]]) {
+                [str fetchStaticString];
+            }
+        }
+        
+        //Father
         [(LAHModel *)_father recieve:self];
     }
     return _array;

@@ -33,6 +33,7 @@ NSString * const LAHParaIndexOf = @"_indexOf";
 NSString * const LAHParaContent = @"_content";
 NSString * const LAHParaIsDemocratic  = @"_isDem";
 NSString * const LAHParaURL = @"url";
+NSString * const LAHParaStatic = @"static";
 
 NSString * const LAHMethodRE    = @"re";
 NSString * const LAHMethodJoinMethod = @"joinHost";

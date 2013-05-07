@@ -40,6 +40,24 @@
 }
 
 
+- (void)testCopy{
+    LAHOperation *ope = _group.operations[1];
+    LAHOperation *opeCopy = ope.copy;
+    [ope release];
+
+    NSLog(@"%@", opeCopy.debugDescription);
+    
+    opeCopy.page.link = @"http://www.voanews.com/section/usa/2203.html";
+    [opeCopy addCompletion:^(LAHOperation *operation) {
+        NSLog(@"%@", operation.data);
+    }];
+    
+    [opeCopy start];
+    [self doNetwork];
+    [self doNetwork];
+    
+}
+
 #pragma mark - Up & Down
 - (void)setUp{
     [super setUp];
@@ -72,6 +90,8 @@
     [_netOpeDummy release];
     [_group release];
     [_networkEngineDummy stopMocking];
+    
+    while (1) ;
     
     [super tearDown];
 }

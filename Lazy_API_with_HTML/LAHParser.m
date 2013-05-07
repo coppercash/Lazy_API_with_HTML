@@ -110,7 +110,8 @@
         attribute.value = [self parseTagName];
 
         [entity.attributes addObject:attribute];
-        
+        [attribute release];
+
     } else if ([self.token.stringValue isEqualToString:@"{"]) {
         
         entity = [[LAHStmtTag alloc] init];
@@ -122,6 +123,7 @@
         attribute.value = tagNames;
         
         [entity.attributes addObject:attribute];
+        [attribute release];
         
     } else {
         

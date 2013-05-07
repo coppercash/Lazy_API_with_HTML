@@ -10,11 +10,12 @@
 
 @interface LAHString : LAHModel <LAHFetcher> {
     NSString *_string;
-    NSString *_value;
+    NSString *_staticString;
     
     NSString *_re;
 }
-@property(nonatomic, copy)NSString *value;
+@property(nonatomic, copy)NSString *staticString;
 @property(nonatomic, copy)NSString *re;
-
+- (void)fetchValue:(NSString *)value;
+- (void)fetchStaticString;
 @end

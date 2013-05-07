@@ -23,6 +23,27 @@
     [super dealloc];
 }
 
+#pragma mark - Copy
+- (id)copyVia:(NSMutableDictionary *)table{
+    LAHNode *copy = [[[self class] alloc] init];
+    
+    NSMutableArray *collector = [[NSMutableArray alloc] initWithCapacity:_children.count];
+    for (LAHNode *child in _children) {
+        
+        LAHNode *childCopy = [child copyVia:table];
+        childCopy.father = copy;
+        
+        [collector addObject:childCopy];
+        [childCopy release];
+    }
+    
+    copy.children = [[NSArray alloc] initWithArray:collector];
+
+    [copy.children release];
+    [collector release];
+    return copy;
+}
+/*
 - (id)copyWithZone:(NSZone *)zone{
     LAHNode *copy = [[[self class] allocWithZone:zone] init];
     
@@ -34,7 +55,7 @@
     [copy.children release];
     
     return copy;
-}
+}*/
 
 #pragma mark - Setter
 - (void)setChildren:(NSArray *)children{
@@ -66,12 +87,13 @@
 }
 
 - (NSString *)description{
-    NSString *info = [NSString stringWithFormat:@"<%@%@  @%p>", self.tagNameInfo, self.attributesInfo, self.desc];
+    NSString *info = [NSString stringWithFormat:@"<%@%@  @%p>", self.tagNameInfo, self.attributesInfo, self];
     return info;
 }
 
 - (NSString *)desc{
-    return [super description];
+    NSString *ret = [NSString stringWithFormat:@"<%@ @%p>", NSStringFromClass(self.class), self];
+    return ret;
 }
 
 - (NSUInteger)degree{

@@ -18,20 +18,18 @@
     
     NSString *_methodName;
     NSArray *_args;
-    
+        
     NSString *_cache;
-    
 }
 @property(nonatomic, copy)NSString *name;
 
 @property(nonatomic, retain)NSSet *legalValues;
 @property(nonatomic, retain)NSSet *getters;
-@property(nonatomic, copy)NSString *cache;
 
 @property(nonatomic, copy)NSString *methodName;
 @property(nonatomic, retain)NSArray *args;
 
-@property(nonatomic, assign)LAHTag *tag;
+@property(nonatomic, copy)NSString *cache;
 
 @property(nonatomic, readonly)BOOL isMatched;
 

@@ -7,10 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-@class LAH51voa, LAHVoaNews;
+@class LAHOperation;
 @interface ViewController : UIViewController{
-    LAH51voa *_51voa;
-    LAHVoaNews *_voaNews;
+    LAHOperation *_ope;
 }
 
 @end

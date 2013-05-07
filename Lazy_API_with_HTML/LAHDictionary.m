@@ -8,7 +8,7 @@
 
 #import "LAHDictionary.h"
 #import "LAHTag.h"
-#import "LAHNote.h"
+#import "LAHString.h"
 
 @interface LAHDictionary ()
 @property(nonatomic, retain)NSMutableDictionary *dictionary;
@@ -59,22 +59,23 @@
     [super dealloc];
 }
 
-- (id)copyWithZone:(NSZone *)zone{
-    LAHDictionary *copy = [super copyWithZone:zone];
-    
-    if (_dictionary) copy.dictionary = [[NSMutableDictionary alloc] initWithDictionary:_dictionary copyItems:YES];
-    
-    [copy.dictionary release];
-    
-    return copy;
-}
-
 #pragma mark - Fetch Object
 - (NSMutableDictionary *)dictionary{
     if (!_dictionary || self.needUpdate) {
+        
+        //Update date
         [_dictionary release];
         _dictionary = [[NSMutableDictionary alloc] init];
         self.needUpdate = NO;
+        
+        //Children
+        for (LAHString *str in _children) {
+            if ([str isKindOfClass:[LAHString class]]) {
+                [str fetchStaticString];
+            }
+        }
+
+        //Father
         [(LAHModel *)_father recieve:self];
     }
     return _dictionary;
