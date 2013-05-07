@@ -12,9 +12,6 @@
 @interface LAHNode : CDTreeNode
 @property(nonatomic, readonly)LAHOperation *recursiveOperation;
 
-#pragma mark - Status
-- (void)refresh;
-
 #pragma mark - Copy
 - (id)copyVia:(NSMutableDictionary *)table;
 

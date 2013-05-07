@@ -17,14 +17,15 @@
 @end
 
 @implementation LAHModel
-@synthesize key = _key, range = _range;
+@synthesize key = _key;
 @synthesize needUpdate = _needUpdate;
+@synthesize index = _index;
 @dynamic data;
 @synthesize states = _states;
 
 - (void)dealloc{
     self.key = nil;
-    self.range = nil;
+    self.states = nil;
     
     [super dealloc];
 }
@@ -42,8 +43,7 @@
 
     copy.key = _key;
     
-    copy.range = [[NSArray alloc] initWithArray:_range copyItems:YES];
-    [copy.range release];
+    copy.index = _index;
     
     return copy;
 }
@@ -60,6 +60,7 @@
     //Setup state content
     if (self.data) state[gKeyContainer] = self.data;
     state[gKeyNeedUpdate] = [NSNumber numberWithBool:_needUpdate];
+    state[gKeyIndex] = [NSNumber numberWithInteger:_index];
     
     //Children states
     for (LAHModel *child in _children) {
@@ -71,7 +72,8 @@
     NSDictionary *state = _states[key];
     self.needUpdate = [state[gKeyNeedUpdate] boolValue];
     self.data = state[gKeyContainer];
-
+    self.index = [state[gKeyIndex] integerValue];
+    
     [_states removeObjectForKey:key];
     
     //Children states
@@ -88,7 +90,8 @@
 }
 
 - (void)refresh{
-    [super refresh];
+    self.needUpdate = NO;
+    self.index = 0;
 }
 
 #pragma mark - recursion
@@ -110,9 +113,6 @@
 - (NSString *)attributesInfo{
     NSMutableString *info = [NSMutableString stringWithString:[super attributesInfo]];
     if (_key) [info appendFormat:@"  key=\"%@\"", _key];
-    if (_range && _range.count != 0) {
-        [info appendFormat:@"  range=%@", _range.dividedDesc];
-    }
     return info;
 }
 
@@ -120,5 +120,6 @@
 
 NSString * const gKeyContainer = @"Con";
 NSString * const gKeyNeedUpdate = @"NUp";
+NSString * const gKeyIndex = @"IDX";
 
 

@@ -9,6 +9,7 @@
 #import "LAHArray.h"
 #import "LAHTag.h"
 #import "LAHString.h"
+#import "LAHCategories.h"
 
 @interface LAHArray ()
 @property(nonatomic, retain)NSMutableArray *array;
@@ -52,6 +53,9 @@
         
         //Father
         [(LAHModel *)_father recieve:self];
+        
+        //Index
+        self.index ++;
     }
     return _array;
 }

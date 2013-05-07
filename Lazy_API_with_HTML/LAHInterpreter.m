@@ -57,37 +57,22 @@
 + (void)interpretString:(NSString *)string intoDictionary:(NSMutableDictionary *)dictionary{
     
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
+    @try {
+        NSArray *tokens = [LAHToken tokenizeString:string];
+        LAHParser *parser = [[LAHParser alloc] initWithTokens:tokens];
+        LAHStmtSuite *suite = [parser parseCommand];
+        LAHFrame *frame = [[LAHFrame alloc] initWithDictionary:dictionary];
+        [suite evaluate:frame];
+
+        [parser release]; [frame release];
+    }
+    @catch (NSException *exception) {
+        NSAssert(exception == nil, @"%@", exception);
+    }
     
-    NSArray *tokens = [LAHToken tokenizeString:string];
-    LAHParser *parser = [[LAHParser alloc] initWithTokens:tokens];
-    LAHStmtSuite *suite = [parser parseCommand];
-    LAHFrame *frame = [[LAHFrame alloc] initWithDictionary:dictionary];
-    [suite evaluate:frame];
-    
-    [parser release]; [frame release];
     [pool release];
 }
-
-
-//+ (void)interpretString:(NSString *)string intoDictionary:(NSMutableDictionary *)dictionary{
-//    
-//    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-//
-//    @try {
-//        NSArray *tokens = [LAHToken tokenizeString:string];
-//        LAHParser *parser = [[LAHParser alloc] initWithTokens:tokens];
-//        LAHStmtSuite *suite = [parser parseCommand];
-//        LAHFrame *frame = [[LAHFrame alloc] initWithDictionary:dictionary];
-//        [suite evaluate:frame];
-//
-//        [parser release]; [frame release];
-//    }
-//    @catch (NSException *exception) {
-//        NSAssert(exception == nil, @"%@", exception);
-//    }
-//    
-//    [pool release];
-//}
 
 + (LAHNode *)interpretFile:(NSString *)path forKey:(NSString *)key{
     NSMutableDictionary *container = [[NSMutableDictionary alloc] init];

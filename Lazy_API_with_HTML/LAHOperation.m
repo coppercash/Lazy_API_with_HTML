@@ -149,7 +149,6 @@
 - (void)refresh{
     [self cancelNetwork];
     [_model refresh];
-    [_page refresh];
     [_downloadings removeAllObjects];
     [_seekings removeAllObjects];
     [_completions removeAllObjects];

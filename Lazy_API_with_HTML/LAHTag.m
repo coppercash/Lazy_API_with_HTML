@@ -32,6 +32,7 @@
 - (void)dealloc{
     self.indexes = nil;
     self.attributes = nil;
+    self.indexOf = nil;
     [super dealloc];
 }
 
@@ -98,6 +99,12 @@
     //Step 0, match the index
     
     BOOL isIndexPass = YES;
+
+    if (_indexOf && _indexOf.count == 1) {
+        LAHModel *indexSrc = _indexOf.allObjects[0];
+        index = indexSrc.index;
+    }
+    
     if (_indexes.count != 0) {
         isIndexPass = [_indexes locationInDividedRanges:index];
     }
@@ -151,11 +158,6 @@
     
     LAHNoteClose;
     return YES;
-}
-
-#pragma mark - State
-- (void)refresh{
-    [super refresh];
 }
 
 #pragma mark - Log

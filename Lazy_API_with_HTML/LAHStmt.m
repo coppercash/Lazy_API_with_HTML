@@ -78,6 +78,7 @@
     }
     entity.children = children;
     
+    [children release];
     [frame.toRefer removeLastObject];
     return entity;
 }
@@ -151,17 +152,6 @@
         
         return YES;
     
-    } else if ( [name isEqualToString:LAHParaRange] ) {
-        
-        LAHStmtMultiple *multiple = (LAHStmtMultiple *)attr.value;
-        [frame attribute:name ofEntity:entity expect:@[[LAHStmtMultiple class]] find:multiple];
-
-        NSArray *values = [multiple evaluate:frame];
-        NSArray *range = [[NSArray alloc] initWithArray:[values dividedRangesWithFrame:frame]];
-        model.range = range;
-        [range release];
-        
-        return YES;
     }
     
     return NO;
@@ -174,6 +164,29 @@
     LAHArray *array = [[LAHArray alloc] init];
     return [array autorelease];
 }
+
+- (BOOL)attribute:(LAHStmtAttribute *)attr of:(LAHNode *)entity inFrame:(LAHFrame *)frame{
+    if ([super attribute:attr of:entity inFrame:frame]) return YES;
+    
+    NSString *name = attr.name;
+    LAHArray *array = (LAHArray *)entity;
+    
+    if ( [name isEqualToString:LAHParaRange] ) {
+        
+        LAHStmtMultiple *multiple = (LAHStmtMultiple *)attr.value;
+        [frame attribute:name ofEntity:entity expect:@[[LAHStmtMultiple class]] find:multiple];
+        
+        NSArray *values = [multiple evaluate:frame];
+        NSArray *range = [[NSArray alloc] initWithArray:[values dividedRangesWithFrame:frame]];
+        array.range = range;
+        [range release];
+        
+        return YES;
+    }
+
+    return NO;
+}
+
 @end
 
 @implementation LAHStmtDictionary
@@ -545,6 +558,8 @@
 - (void)dealloc{
     self.name = nil;
     self.value = nil;
+    self.methodName = nil;
+    self.args = nil;
     [super dealloc];
 }
 

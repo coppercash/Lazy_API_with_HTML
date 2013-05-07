@@ -41,6 +41,7 @@
 - (void)cancel;
 - (void)addCompletion:(LAHCompletion)completion;
 - (void)addCorrector:(LAHCorrector)corrector;
+- (void)refresh;
 
 #pragma mark - Queue
 - (void)freezePage:(LAHPage*)page forKey:(id)key;

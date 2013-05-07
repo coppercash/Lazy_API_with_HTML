@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-@class LAHOperation;
+@class LAHOperation, LMHModelsGroup;
 @interface ViewController : UIViewController{
     LAHOperation *_ope;
+    LMHModelsGroup *_group;
 }
 
 @end

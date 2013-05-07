@@ -11,6 +11,9 @@
 @interface LAHArray : LAHModel {
     NSMutableArray *_array;
 }
+
+@property(nonatomic, retain)NSArray *range;
+
 - (id)initWithObjects:(LAHModel *)firstObj, ... NS_REQUIRES_NIL_TERMINATION;
 @end
 

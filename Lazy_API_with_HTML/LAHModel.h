@@ -11,19 +11,21 @@
 @interface LAHModel : LAHNode {
     
     NSString *_key;
-    NSArray *_range;
     
     BOOL _needUpdate;
+    
+    NSInteger _index;
     
     NSMutableDictionary *_states;
 }
 @property(nonatomic, copy)NSString *key;
-@property(nonatomic, retain)NSArray *range;
 @property(nonatomic, assign)BOOL needUpdate;
+@property(nonatomic, assign)NSInteger index;
 @property(nonatomic, readonly)id data;
 @property(nonatomic, retain)NSMutableDictionary* states;
 @property(nonatomic, readonly)NSString *identifier;
 
+- (void)refresh;
 - (void)saveStateForKey:(id)key;
 - (void)restoreStateForKey:(id)key;
 - (void)recieve:(LAHModel*)object;
@@ -32,4 +34,5 @@
 
 extern NSString * const gKeyContainer;
 extern NSString * const gKeyNeedUpdate;
+extern NSString * const gKeyIndex;
 

@@ -24,16 +24,26 @@
 	// Do any additional setup after loading the view, typically from a nib.
     NSString *path = [[NSBundle mainBundle] pathForResource:@"51VOA" ofType:@"lah"];
     NSString *string = [NSString stringWithContentsOfFile:path encoding:NSASCIIStringEncoding error:nil];
-    LMHModelsGroup *group = [[LMHModelsGroup alloc] initWithCommand:string key:@"ope"];
+    _group = [[LMHModelsGroup alloc] initWithCommand:string key:@"ope"];
     
-    LAHOperation *ope = group.operations[0];
+    LAHOperation *ope = _group.operations[0];
     _ope = ope.copy;
+    
     
     [_ope addCompletion:^(LAHOperation *operation) {
         NSLog(@"%@", operation.data);
     }];
     [_ope start];
     
+    
+    [self performSelector:@selector(clean) withObject:nil afterDelay:7.0];
+}
+
+- (void)clean{
+    [_group release];
+    [_ope release];
+    _ope = nil;
+    _group = nil;
 }
 
 - (void)didReceiveMemoryWarning

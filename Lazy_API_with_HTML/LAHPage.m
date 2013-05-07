@@ -25,6 +25,7 @@
 #pragma mark - Life Cycle
 - (void)dealloc{
     self.link = nil;
+    self.attributes = nil;
     [super dealloc];
 }
 
