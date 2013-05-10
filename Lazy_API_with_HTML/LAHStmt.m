@@ -93,13 +93,12 @@
     LAHStmtValue *value = attrStmt.value;
     if ([name isEqualToString:LAHParaRef]) {
         
-        [frame attribute:name ofEntity:entity expect:@[[LAHStmtRef class]] find:value];
+        LAHStmtRef *ref = (LAHStmtRef *)value;
         
-        //[frame.toRefer addObject:entity];
+        [frame attribute:name ofEntity:entity expect:@[[LAHStmtRef class]] find:ref];
         
-        [attrStmt.value evaluate:frame];
-        
-        //[frame.toRefer removeLastObject];
+        ref.isRefer = YES;
+        [ref evaluate:frame];
         
         return YES;
     }
@@ -434,25 +433,25 @@
 @implementation LAHStmtRef
 @dynamic name;
 - (id)evaluate:(LAHFrame *)frame{
-    LAHNode *entity = [frame objectForKey:self.name];
+    LAHNode *entity = nil;
     
-    if ( !entity ) {    //Can't get the entity
+    if (_isRefer) {
         
         NSMutableArray *entitiesQueue = frame.toRefer;
         if (entitiesQueue.count == 0) {
-            
             NSString *message = [NSString stringWithFormat:@"Can not refer or get entity named '%@'", self.name];
             [frame error:message];
-        
-        } else {
-            
-            //Refer an entity
-            entity = [entitiesQueue lastObject];
-            [frame referObject:entity toKey:self.name];
-        
         }
+        
+        entity = entitiesQueue.lastObject;
+        [frame referObject:entity toKey:self.name];
+
+    } else {
+        
+        entity = [frame objectForKey:self.name];
+        
     }
-    
+        
     return entity;
 }
 

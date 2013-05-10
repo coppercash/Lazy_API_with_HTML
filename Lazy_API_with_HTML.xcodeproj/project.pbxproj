@@ -41,9 +41,7 @@
 		BE9C96CF16CE79A8000BC31F /* LAHModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BE9C96CE16CE79A8000BC31F /* LAHModel.m */; };
 		BE9E221616C528D9004EF814 /* libMKNetworkKit-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BE9E221516C528D9004EF814 /* libMKNetworkKit-iOS.a */; };
 		BE9F6A4A16EABBD6007C7EBB /* LAHToken.m in Sources */ = {isa = PBXBuildFile; fileRef = BE9F6A4216EABBD6007C7EBB /* LAHToken.m */; };
-		BEA03C0D1737ED440081D097 /* LAHCopyTest.m in Sources */ = {isa = PBXBuildFile; fileRef = BEA03C0C1737ED440081D097 /* LAHCopyTest.m */; };
 		BEA0533F16E9CD7F000A7958 /* LAHInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = BEA0533E16E9CD7F000A7958 /* LAHInterface.m */; };
-		BEA0C6C21736C2B200FF221A /* LAHCaseTest.m in Sources */ = {isa = PBXBuildFile; fileRef = BEA862401733B0C40079774E /* LAHCaseTest.m */; };
 		BEA3B0981735415E00141B64 /* LAHNote.m in Sources */ = {isa = PBXBuildFile; fileRef = BEA3B0971735415E00141B64 /* LAHNote.m */; };
 		BEA459C2173736C3008B2528 /* CDTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = BEA459C1173736C2008B2528 /* CDTreeNode.m */; };
 		BEA862441733B1710079774E /* 2203.html in Resources */ = {isa = PBXBuildFile; fileRef = BEA862431733B1710079774E /* 2203.html */; };
@@ -58,6 +56,10 @@
 		BEAB825C17388C7800DF373C /* CopyTest.lah in Resources */ = {isa = PBXBuildFile; fileRef = BEAB825B17388C7800DF373C /* CopyTest.lah */; };
 		BEAB825E17389FEE00DF373C /* 51VOA.lah in Resources */ = {isa = PBXBuildFile; fileRef = BEAB825D17389FEE00DF373C /* 51VOA.lah */; };
 		BEAD47E5172B5D7A006ACC0E /* LAHAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAD47E4172B5D7A006ACC0E /* LAHAttribute.m */; };
+		BEAF905D1739F0C900DAF8B8 /* LAHStatementsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BED8D00016BFAE5A001D819C /* LAHStatementsTests.m */; };
+		BEAF905E1739F0C900DAF8B8 /* LAHParserTest.m in Sources */ = {isa = PBXBuildFile; fileRef = BEB7210C172CAA1500521323 /* LAHParserTest.m */; };
+		BEAF905F1739F0C900DAF8B8 /* LAHTokenTest.m in Sources */ = {isa = PBXBuildFile; fileRef = BEA39914172EBAFD004184E3 /* LAHTokenTest.m */; };
+		BEAF90601739F0C900DAF8B8 /* LAHInterpreterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7AEC261730C50600CB51C0 /* LAHInterpreterTest.m */; };
 		BEB0617A16C50908003AA16F /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE93F0FE16C5074C008C3B3F /* CFNetwork.framework */; };
 		BEB0617B16C5090D003AA16F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE93F11716C507B9008C3B3F /* Security.framework */; };
 		BEB0617C16C50912003AA16F /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE93F10116C50764008C3B3F /* SystemConfiguration.framework */; };
@@ -760,8 +762,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BEA0C6C21736C2B200FF221A /* LAHCaseTest.m in Sources */,
-				BEA03C0D1737ED440081D097 /* LAHCopyTest.m in Sources */,
+				BEAF905D1739F0C900DAF8B8 /* LAHStatementsTests.m in Sources */,
+				BEAF905E1739F0C900DAF8B8 /* LAHParserTest.m in Sources */,
+				BEAF905F1739F0C900DAF8B8 /* LAHTokenTest.m in Sources */,
+				BEAF90601739F0C900DAF8B8 /* LAHInterpreterTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

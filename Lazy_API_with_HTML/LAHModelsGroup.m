@@ -12,14 +12,11 @@
 #import "LAHPage.h"
 
 @interface LAHModelsGroup ()
-@property(nonatomic, retain)NSDictionary *containerCache;
-- (void)cacheContainerWithCommand:(NSString *)command;
 @end
 
 @implementation LAHModelsGroup
 @synthesize operations = _operations;
 @synthesize containerCache = _containerCache;
-@dynamic operation;
 
 #pragma mark - Class Basic
 - (id)initWithCommand:(NSString *)command key:(NSString *)key{
@@ -88,13 +85,16 @@
 
 
 #pragma mark - Operations
+
 - (LAHOperation *)operationAtIndex:(NSInteger)index{
     NSAssert(NSLocationInRange(index, NSMakeRange(0, _operations.count)), @"Operation at %d out of range.", index);
     if ( !NSLocationInRange(index, NSMakeRange(0, _operations.count)) ) return nil;
 
     LAHOperation *ope = [_operations objectAtIndex:index];
-    [ope refresh];
-    return ope;
+    
+    LAHOperation *copied = ope.copy;
+    
+    return [copied autorelease];
 }
 
 @end

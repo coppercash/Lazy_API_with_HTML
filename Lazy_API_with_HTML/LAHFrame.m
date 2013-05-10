@@ -81,6 +81,11 @@
         object = [_father objectForKey:key];
     }
     
+    if (!object) {
+        NSString *message = [NSString stringWithFormat:@"Can' derefer entity for key: %@", key];
+        [self error:message];
+    }
+    
     return object;
 }
 

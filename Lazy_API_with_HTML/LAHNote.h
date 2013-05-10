@@ -30,6 +30,8 @@
 
 #define BOOLStr(b) ((b) ? @"YES" : @"NO")
 #define TestStr(b) ((b) ? @"PASS" : @"FAIL")
+#define NumberStr(n) ([NSString stringWithFormat:@"%d", (n)])
+
 @interface LAHNote (NoteAttribute)
 + (void)noteAttr:(NSString *)name d:(NSString *)destination s:(NSString *)source pass:(BOOL)pass;
 + (void)logWisely;

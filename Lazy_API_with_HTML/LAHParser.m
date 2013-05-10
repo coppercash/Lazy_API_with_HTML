@@ -65,6 +65,8 @@
         LAHStmtEntity *entity = nil;
         if ( (entity = [self parseEntity]) ) {
             [suite.statements addObject:entity];
+        } else {
+            [self expect:@"LAH Entity."];
         }
 	}
     

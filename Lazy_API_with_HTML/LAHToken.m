@@ -14,7 +14,7 @@
 static NSString * const re = @"(?m)^ *(?:#.*)?\n|#.*$|(^ +|\n|\\d+|\\w+|[()\\[\\]{}:.,;]|[+\\-*/%<>=]=?|!=|'(?:\\\\[n'\"\\\\]|[^'])*'|\"(?:\\\\[n'\"\\\\]|[^\"])*\")";
 
 @interface LAHToken ()
-@property(nonatomic, copy)NSString *source;
+@property(nonatomic, retain)NSString *source;
 @property(nonatomic, assign)NSRange range;
 @end
 

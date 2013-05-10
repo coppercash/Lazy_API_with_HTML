@@ -79,7 +79,7 @@
         [(LAHModel *)_father recieve:self];
         
         //Index
-        self.index ++;
+        //self.index ++;
     }
     return _dictionary;
 }

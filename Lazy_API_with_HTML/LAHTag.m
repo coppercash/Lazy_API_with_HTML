@@ -95,17 +95,14 @@
 #pragma mark - Recursive
 - (BOOL)handleElement:(LAHEle)element atIndex:(NSInteger)index{
     LAHNoteOpen(@"%@", self);
-        
+    
+    BOOL globalIndex = _indexOf && _indexOf.count == 1;
+    
     //Step 0, match the index
     
     BOOL isIndexPass = YES;
-
-    if (_indexOf && _indexOf.count == 1) {
-        LAHModel *indexSrc = _indexOf.allObjects[0];
-        index = indexSrc.index;
-    }
     
-    if (_indexes.count != 0) {
+    if (!globalIndex && _indexes.count != 0) {  //count != 0 indicates no limit, the isIndexPass ahould be YES.
         isIndexPass = [_indexes locationInDividedRanges:index];
     }
     LAHNoteAttr(@"index", ([NSString stringWithFormat:@"%d", index]), _indexes.dividedDesc, isIndexPass);
@@ -124,7 +121,7 @@
         if ( !isAttrPass ) return NO;
     }
 
-    
+
     
     //Step 2, notification LAHMode in _indexOf to update
     
@@ -133,8 +130,19 @@
     }
 
     
+    //Step 3, fetch
+    BOOL isRangePass = YES;
+    if (globalIndex && _indexes.count != 0) {   //count != 0 indicates no limit, the isIndexPass ahould be YES.
+        LAHModel *indexSrc = _indexOf.allObjects[0];
+        index = indexSrc.index ++;
+        isRangePass = [_indexes locationInDividedRanges:index];
+    }
+    LAHNoteAttr(@"globalIndex", NumberStr(index), _indexes.dividedDesc, isRangePass);
+    if (!isRangePass) return NO;
     
-    //Step 3, match the children (is isDemocratic), and let children handle the elements
+    
+    
+    //Step 4, match the children (is isDemocratic), and let children handle the elements
     //Two iteration in this order, so that the fetcher's fetching sequence depends on the sequence in the HTML.
     
     BOOL isChildrenPass = (!_isDemocratic || (_children.count == 0)) ? YES : NO;    //Indicates at least one child can pass the test
@@ -150,7 +158,7 @@
 
 
     
-    //Step 4, fetch
+    //Step 5, fetch
     
     for (LAHAttribute *attr in _attributes) {
         [attr fetch];

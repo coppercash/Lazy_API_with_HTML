@@ -14,10 +14,12 @@
 
 @interface LMHModelsGroup ()
 @property(nonatomic, retain)MKNetworkEngine *engine;
+@property(nonatomic, retain)NSMutableArray *copiedOpes;
 @end
 
 @implementation LMHModelsGroup
 @synthesize engine = _engine;
+@synthesize copiedOpes;
 
 - (id)initWithCommand:(NSString *)string key:(NSString *)key{
     self = [super initWithCommand:string key:key];
@@ -41,6 +43,11 @@
     return self;
 }
 
+- (void)dealloc{
+    
+    [super dealloc];
+}
+
 - (NSURL *)resourceURLWithOfLink:(NSString *)link{
     NSURL *url = [[NSURL alloc] initWithString:link];
     if (!url.host) {
@@ -50,6 +57,21 @@
     }
     
     return url;
+}
+
+- (NSMutableArray *)copiedOpes{
+    if (!_copiedOpes) {
+        _copiedOpes = [[NSMutableArray alloc] init];
+    }
+    return _copiedOpes;
+}
+
+- (LAHOperation *)operationAtIndex:(NSInteger)index{
+    LAHOperation *copied = [super operationAtIndex:index];
+    
+    [self.copiedOpes addObject:copied];
+    
+    return copied;
 }
 
 #pragma mark - LAHDelegate
@@ -65,8 +87,8 @@
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
         
         [lahOpe handleError:error withKey:completedOperation.url];
+        NSLog(@"%@", error.userInfo);
         
-        NSAssert(error == nil, @"%@", error.userInfo);
     }];
     
     [_engine enqueueOperation:netOpe forceReload:YES];
@@ -81,6 +103,10 @@
 
 - (NSString *)operationNeedsHostName:(LAHOperation *)operation{
     return _engine.readonlyHostName;
+}
+
+- (void)operationFinished:(LAHOperation *)operation{
+    [self.copiedOpes removeObject:operation];
 }
 
 @end

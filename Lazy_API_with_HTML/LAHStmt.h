@@ -88,5 +88,6 @@
 @class LAHNode;
 @interface LAHStmtRef : LAHStmtValue
 @property(nonatomic, copy)NSString *name;
+@property(nonatomic, assign)BOOL isRefer;
 @end
 

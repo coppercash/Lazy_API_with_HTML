@@ -29,6 +29,7 @@ extern NSString * const LAHKeyRetNetOpe;
 - (NSString *)operationNeedsHostName:(LAHOperation *)operation;
 @optional
 - (LAHAttrMethod)operation:(LAHOperation *)operation needsMethodNamed:(NSString *)methodName;
+- (void)operationFinished:(LAHOperation *)operation;
 @end
 
 @protocol LAHFetcher <NSObject>

@@ -14,7 +14,10 @@
     NSDictionary *_containerCache;
 }
 @property(nonatomic, retain)NSArray *operations;
-@property(nonatomic, readonly)LAHOperation *operation;
+#pragma mark - Cache
+@property(nonatomic, retain)NSDictionary *containerCache;
+- (void)cacheContainerWithCommand:(NSString *)command;
+
 #pragma mark - Class Basic
 - (id)initWithCommand:(NSString *)command key:(NSString *)key;
 #pragma mark - Operations

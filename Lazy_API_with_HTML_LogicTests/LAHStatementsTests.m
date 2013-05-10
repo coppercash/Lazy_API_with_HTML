@@ -113,6 +113,7 @@
     [frame.toRefer addObject:entity1];
     LAHStmtRef *ref1 = [[[LAHStmtRef alloc] init] autorelease];
     ref1.name = @"entity1";
+    ref1.isRefer = YES;
     [ref1 evaluate:frame];
     LAHNode *entity2 = [frame objectForKey:@"entity1"];
     STAssertEquals(entity1, entity2,
@@ -204,9 +205,6 @@
     STAssertEqualObjects(model.key, @"a key",
                          @"Get key");
     
-    STAssertEqualObjects(model.range, _aRangeAns,
-                         @"Get range");
-
 }
 
 - (void)testLAHStmtArray{

@@ -271,12 +271,17 @@
 
 - (void)checkFinishing{
     if (_downloadings.count + _seekings.count == 0) {
+        LAHNoteLogWisely;
+        //LAHNoteLogAllAndClean;
+        
         __block LAHOperation *bSelf = self;
         for (LAHCompletion completion in _completions) {
             completion(bSelf);
         }
-    
-        LAHNoteLogWisely;
+        
+        if (_delegate && [_delegate respondsToSelector:@selector(operationFinished:)]) {
+            [_delegate operationFinished:self];
+        }
     }
 }
 

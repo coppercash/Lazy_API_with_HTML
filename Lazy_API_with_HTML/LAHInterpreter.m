@@ -68,7 +68,9 @@
         [parser release]; [frame release];
     }
     @catch (NSException *exception) {
-        NSAssert(exception == nil, @"%@", exception);
+        
+        NSLog(@"%@", exception);
+        //NSAssert(exception == nil, @"%@", exception);
     }
     
     [pool release];
