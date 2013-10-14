@@ -7,7 +7,8 @@
 //
 
 #import "LAHDictionary.h"
-#import "LAHRecognizer.h"
+#import "LAHTag.h"
+#import "LAHString.h"
 
 @interface LAHDictionary ()
 @property(nonatomic, retain)NSMutableDictionary *dictionary;
@@ -16,36 +17,29 @@
 @implementation LAHDictionary
 @synthesize dictionary = _dictionary;
 
-- (id)init{
-    self = [super init];
-    if (self) {
-        self.type = LAHConstructTypeDictionary;
-    }
-    return self;
-}
-
-- (id)initWithObjectsAndKeys:(LAHConstruct *)firstObj , ... NS_REQUIRES_NIL_TERMINATION{
+#pragma mark - Class Basic
+- (id)initWithObjectsAndKeys:(LAHModel *)firstObj , ... {
     va_list other; va_start(other, firstObj);
     self = [self initWithFirstObject:firstObj variadicObjectsAndKeys:other];
     va_end(other);
     return self;
 }
 
-- (id)initWithFirstObject:(LAHConstruct *)firstObj variadicObjectsAndKeys:(va_list)OtherObjsAndKeys{
-    self = [self init];
+- (id)initWithFirstObject:(LAHModel *)firstObj variadicObjectsAndKeys:(va_list)OtherObjsAndKeys{
+    self = [super init];
     if (self) {
-        self.type = LAHConstructTypeDictionary;
         
         [self.children = [[NSMutableArray alloc] initWithObjects:firstObj, nil] release];
         firstObj.father = self;
         
-        LAHConstruct *child = firstObj;
+        LAHModel *child = firstObj;
+        NSMutableArray *collector = [[NSMutableArray alloc] init];
         BOOL isObj = NO;
         id objOrKey;
         while ((objOrKey = va_arg(OtherObjsAndKeys, id)) != nil){
             if (isObj) {
-                child = (LAHConstruct *)objOrKey;
-                [_children addObject:child];
+                child = (LAHModel *)objOrKey;
+                [collector addObject:child];
                 child.father = self;
                 isObj = NO;
             }else{
@@ -54,14 +48,8 @@
                 isObj = YES;
             }
         }
-    }
-    return self;
-}
-
-- (id)initWithFirstChild:(LAHNode *)firstChild variadicChildren:(va_list)children{
-    self = [self initWithFirstChild:firstChild variadicChildren:children];
-    if (self) {
-        self.type = LAHConstructTypeDictionary;
+        _children = collector;
+        [collector release];
     }
     return self;
 }
@@ -71,56 +59,55 @@
     [super dealloc];
 }
 
-- (id)copyWithZone:(NSZone *)zone{
-    LAHDictionary *copy = [super copyWithZone:zone];
-    
-    if (_dictionary) copy.dictionary = [[NSMutableDictionary alloc] initWithDictionary:_dictionary copyItems:YES];
-    
-    [copy.dictionary release];
-    
-    return copy;
-}
+#pragma mark - Fetch Object
+- (NSMutableDictionary *)dictionary{
+    if (!_dictionary || self.needUpdate) {
+        
+        //Update date
+        [_dictionary release];
+        _dictionary = [[NSMutableDictionary alloc] init];
+        self.needUpdate = NO;
+        
+        //Children
+        for (LAHString *str in _children) {
+            if ([str isKindOfClass:[LAHString class]]) {
+                [str fetchStaticString];
+            }
+        }
 
-#pragma mark - recursion
-- (void)update{
-    [self.dictionary = [[NSMutableDictionary alloc] init] release];
-    [(LAHConstruct *)_father recieve:self];
-}
-
-- (void)recieve:(LAHConstruct*)object{
-    [_dictionary setObject:object.container forKey:object.key];
-}
-
-- (id)container{
+        //Father
+        [(LAHModel *)_father recieve:self];
+        
+        //Index
+        //self.index ++;
+    }
     return _dictionary;
 }
 
+- (void)recieve:(LAHModel*)object{
+    [super recieve:object];
+    [self.dictionary setObject:object.data forKey:object.key];
+}
+
+#pragma mark - Data
+- (id)data{
+    return _dictionary;
+}
+
+- (void)setData:(id)data{
+    [_dictionary release];
+    _dictionary = [data retain];
+}
+
 #pragma mark - States
-- (void)saveStateForKey:(id)key{
-    NSMutableDictionary *collector = [[NSMutableDictionary alloc] initWithCapacity:3];
-    if (_lastFatherContainer) [collector setObject:_lastFatherContainer forKey:gKeyLastFatherContainer];
-    if (_lastIdentifierElement) [collector setObject:_lastIdentifierElement forKey:gKeyLastIdentifierElement];
-    if (_dictionary) [collector setObject:_dictionary forKey:gKeyContainer];
-    
-    [_states setObject:collector forKey:key];
-    [collector release];
-    
-    [super saveStateForKey:key];
-}
-
-- (void)restoreStateForKey:(id)key{
-    NSDictionary *state = [_states objectForKey:key];
-    _lastFatherContainer = [state objectForKey:gKeyLastFatherContainer];
-    _lastIdentifierElement = [state objectForKey:gKeyLastIdentifierElement];
-    self.dictionary = [state objectForKey:gKeyContainer];
-    [_states removeObjectForKey:key];
-    
-    [super restoreStateForKey:key];
-}
-
 - (void)refresh{
     self.dictionary = nil;
     [super refresh];
+}
+
+#pragma mark - Log
+- (NSString *)tagNameInfo{
+    return @"dic";
 }
 
 @end

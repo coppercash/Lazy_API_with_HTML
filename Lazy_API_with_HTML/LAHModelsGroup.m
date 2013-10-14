@@ -9,30 +9,37 @@
 #import "LAHModelsGroup.h"
 #import "LAHInterpreter.h"
 #import "LAHOperation.h"
+#import "LAHPage.h"
 
 @interface LAHModelsGroup ()
-@property (nonatomic, assign)NSInteger currentIndex;
-- (void)setupOperationWithString:(NSString *)string key:(NSString *)key;
 @end
 
 @implementation LAHModelsGroup
-@synthesize operations = _operations, currentIndex = _currentIndex;
-@dynamic operation;
+@synthesize operations = _operations;
+@synthesize containerCache = _containerCache;
 
 #pragma mark - Class Basic
-- (id)initWithCommand:(NSString *)string key:(NSString *)key{
-    NSAssert(string != nil && key != nil, @"%@ can't work without LAHString or key.", NSStringFromClass(self.class));
-    if (!string || !key) return nil;
+- (id)initWithCommand:(NSString *)command key:(NSString *)key{
+    NSAssert(command != nil && key != nil, @"%@ can't work without LAHString or key.", NSStringFromClass(self.class));
+    if (!command || !key) return nil;
     
     self = [super init];
     if (self) {
-        [self setupOperationWithString:string key:key];
+        [self cacheContainerWithCommand:command];
+        [self setupOperationWithKey:key];
+        self.containerCache = nil;
         
         if (_operations.count <= 0) return nil;
        
-        self.currentIndex = 0;
     }
     return self;
+}
+
+- (void)dealloc{
+    self.containerCache = nil;
+    self.operations = nil;
+    
+    [super dealloc];
 }
 
 - (NSString *)description{
@@ -45,21 +52,25 @@
     return description;
 }
 
-#pragma mark - Operations
-- (void)setupOperationWithString:(NSString *)string key:(NSString *)key{
+#pragma mark - Interpret
+- (void)cacheContainerWithCommand:(NSString *)command{
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    [LAHInterpreter interpretString:string intoDictionary:dictionary];
-    NSMutableArray *collector = [[NSMutableArray alloc] initWithCapacity:dictionary.count];
-    
+    [LAHInterpreter interpretString:command intoDictionary:dictionary];
+    self.containerCache = dictionary;
+    [dictionary release];
+}
+
+- (void)setupOperationWithKey:(NSString *)key{
+    NSMutableArray *collector = [[NSMutableArray alloc] initWithCapacity:_containerCache.count];
+
     NSString *keyWord = key.copy;
     LAHOperation *ope = nil;
     do {
         
         NSString *iteration = [keyWord stringByAppendingFormat:@"%d", collector.count];
-        ope = [dictionary objectForKey:iteration];
+        ope = _containerCache[iteration];
+        
         if (!ope) continue;
-
-        ope.delegate = self;
         [collector addObject:ope];
         
     } while (ope);
@@ -67,46 +78,23 @@
     NSAssert(collector.count > 0, @"%@ needs at least 1 %@", NSStringFromClass(self.class), key);
     
     self.operations = [[NSArray alloc] initWithArray:collector];
-    
     [self.operations release];
     [keyWord release];
-    [dictionary release];
+    [collector release];
 }
+
+
+#pragma mark - Operations
 
 - (LAHOperation *)operationAtIndex:(NSInteger)index{
     NSAssert(NSLocationInRange(index, NSMakeRange(0, _operations.count)), @"Operation at %d out of range.", index);
     if ( !NSLocationInRange(index, NSMakeRange(0, _operations.count)) ) return nil;
 
     LAHOperation *ope = [_operations objectAtIndex:index];
-    [ope refresh];
-    return ope;
-}
-
-- (LAHOperation *)operation{
-    LAHOperation *operation = [self operationAtIndex:_currentIndex];
-    return operation;
-}
-
-#pragma mark - Push & Pop
-- (void)pushWithLink:(NSString *)link{
-    NSInteger target = _currentIndex + 1;
-    LAHOperation *ope = [self operationAtIndex:target];
-    if (ope) {
-        self.currentIndex = target;
-        if (link) ope.link = link;
-    }
-}
-
-- (void)popNumberOfDegree:(NSUInteger)number{
-    NSInteger target = _currentIndex - number;
-    LAHOperation *ope = [self operationAtIndex:target];
-    if (ope) {
-        self.currentIndex = target;
-    }
-}
-
-- (void)pop{
-    [self popNumberOfDegree:1];
+    
+    LAHOperation *copied = ope.copy;
+    
+    return [copied autorelease];
 }
 
 @end

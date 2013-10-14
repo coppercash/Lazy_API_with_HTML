@@ -1,0 +1,19 @@
+<arr key="key value">
+
+<dic range=(1, 3, 5, 7)>
+
+<str re="some regular expression">
+
+<ope page='a page' model='a model'>
+
+<page link="some link">
+    <a>
+        <div>
+    <a>
+        'a ref'
+        
+<_tag _r='a ref name'>
+
+<div class={"class", 'gain'}>
+
+<text _content.re("regular expression")='gain'>

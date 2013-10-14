@@ -10,6 +10,11 @@
 #import "LAHParser.h"
 #import "LAHToken.h"
 #import "LAHStmt.h"
+#import "LAHFrame.h"
+
+@interface LAHInterpreter ()
++ (void)interpretIntoDictionary:(NSMutableDictionary *)dictionary fromFirstFile:(NSString *)firstFile otherFiles:(va_list)otherFiles;
+@end
 
 @implementation LAHInterpreter
 + (void)interpretFile:(NSString *)path intoDictionary:(NSMutableDictionary *)dictionary{
@@ -19,7 +24,7 @@
                                                     error:&fileError];
     NSAssert(fileError == nil, @"LAHInterpreter can't read file at '%@'.%@", path, fileError.userInfo);
     
-    [LAHInterpreter interpretString:string intoDictionary:dictionary];
+    [self interpretString:string intoDictionary:dictionary];
 }
 
 + (void)interpretIntoDictionary:(NSMutableDictionary *)dictionary fromFirstFile:(NSString *)firstFile otherFiles:(va_list)otherFiles{
@@ -37,7 +42,7 @@
         NSAssert(fileError == nil, @"LAHInterpreter can't read file at '%@'.%@", file, fileError.userInfo);
     }
     
-    [LAHInterpreter interpretString:collector intoDictionary:dictionary];
+    [self interpretString:collector intoDictionary:dictionary];
     
     [collector release];
 
@@ -50,17 +55,39 @@
 }
 
 + (void)interpretString:(NSString *)string intoDictionary:(NSMutableDictionary *)dictionary{
+    
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
-    NSArray *tokens = [LAHToken tokenizeString:string];
-    LAHParser *parser = [[LAHParser alloc] initWithTokens:tokens];
-    LAHStmtSuite *suite = [parser parse];
-    LAHFrame *frame = [[LAHFrame alloc] initWithDictionary:dictionary];
-    [suite evaluate:frame];
-    [frame doGain];
+    @try {
+        NSArray *tokens = [LAHToken tokenizeString:string];
+        LAHParser *parser = [[LAHParser alloc] initWithTokens:tokens];
+        LAHStmtSuite *suite = [parser parseCommand];
+        LAHFrame *frame = [[LAHFrame alloc] initWithDictionary:dictionary];
+        [suite evaluate:frame];
+
+        [parser release]; [frame release];
+    }
+    @catch (NSException *exception) {
+        
+        NSLog(@"%@", exception);
+        //NSAssert(exception == nil, @"%@", exception);
+    }
     
-    [parser release]; [frame release];
     [pool release];
 }
+
++ (LAHNode *)interpretFile:(NSString *)path forKey:(NSString *)key{
+    NSMutableDictionary *container = [[NSMutableDictionary alloc] init];
+    
+    [self interpretFile:path intoDictionary:container];
+    LAHNode *ret = container[key];
+    [ret retain];
+    [ret autorelease];
+    
+    [container release];
+    
+    return ret;
+}
+
 
 @end

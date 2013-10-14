@@ -7,23 +7,34 @@
 //
 
 #import "LMHModelsGroup.h"
+#import "LAHPage.h"
 #import "MKNetworkEngine.h"
 #import "Hpple/TFHpple.h"
+#import "LAHOperation.h"
 
 @interface LMHModelsGroup ()
 @property(nonatomic, retain)MKNetworkEngine *engine;
+@property(nonatomic, retain)NSMutableArray *copiedOpes;
 @end
 
 @implementation LMHModelsGroup
 @synthesize engine = _engine;
+@synthesize copiedOpes;
 
 - (id)initWithCommand:(NSString *)string key:(NSString *)key{
     self = [super initWithCommand:string key:key];
     if (self) {
-        LAHOperation *rootOpe = self.operation;
         
-        NSURL *url = [[NSURL alloc] initWithString:rootOpe.link];
-        NSString *hostName = url.host;
+        for (LAHOperation *ope in _operations) {
+            ope.delegate = self;
+        }
+        
+        LAHOperation *rootOpe = _operations[0];
+        
+        NSString *link = rootOpe.page.link;
+        NSURL *url = [[NSURL alloc] initWithString:rootOpe.page.link];
+        NSString *hostStr = url.host;
+        NSString *hostName = hostStr ? hostStr : link;
         
         [self.engine = [[MKNetworkEngine alloc] initWithHostName:hostName] release];
         
@@ -32,49 +43,58 @@
     return self;
 }
 
+- (void)dealloc{
+    
+    [super dealloc];
+}
+
 - (NSURL *)resourceURLWithOfLink:(NSString *)link{
     NSURL *url = [[NSURL alloc] initWithString:link];
     if (!url.host) {
-        //NSString *scheme = @"http";
         NSString *host = _engine.readonlyHostName;
         NSString *path = [host stringByAppendingPathComponent:link];
         url = [[NSURL alloc] initWithString:path];
-
-        //url = [[NSURL alloc] initWithScheme:scheme host:host path:link];
     }
     
     return url;
 }
 
-#pragma mark - LAHDelegate
-- (id)downloader:(LAHDownloader* )operation needFileAtPath:(NSString*)path{
-    
-    NSURL *url = [[NSURL alloc] initWithString:path];
-    __block MKNetworkOperation *netOpe = nil;
-    if (url.host) {
-        netOpe = [_engine operationWithURLString:url.absoluteString];
-    } else {
-        netOpe = [_engine operationWithPath:url.relativePath];
+- (NSMutableArray *)copiedOpes{
+    if (!_copiedOpes) {
+        _copiedOpes = [[NSMutableArray alloc] init];
     }
-    __block LAHOperation *lahOpe = operation.recursiveOperation;
+    return _copiedOpes;
+}
 
+- (LAHOperation *)operationAtIndex:(NSInteger)index{
+    LAHOperation *copied = [super operationAtIndex:index];
+    
+    [self.copiedOpes addObject:copied];
+    
+    return copied;
+}
+
+#pragma mark - LAHDelegate
+- (NSDictionary *)operation:(LAHOperation *)operation needPageAtLink:(NSString *)link{
+    MKNetworkOperation *netOpe = [_engine operationWithLink:link];
+
+    __block LAHOperation *lahOpe = operation;
     [netOpe addCompletionHandler:^(MKNetworkOperation *completedOperation) {
 
         LAHEle root = [completedOperation htmlWithXPath:@"/html/body"];
-        [lahOpe awakeDownloaderForKey:completedOperation.url withElement:root];
+        [lahOpe awakePageForKey:completedOperation.url withElement:root];
         
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
         
         [lahOpe handleError:error withKey:completedOperation.url];
+        NSLog(@"%@", error.userInfo);
         
-        NSAssert(error == nil, @"%@", error.userInfo);
     }];
     
     [_engine enqueueOperation:netOpe forceReload:YES];
-    [lahOpe addNetwork:netOpe];
-    [url release];
     
-    return netOpe.url;  //op is a key for dictionary
+    //LAHKeyRetNetOpe used to cancel ALHOperation, url is a key for awaking the page when request return.
+    return @{LAHKeyRetNetOpe:netOpe, LAHKeyRetURL:netOpe.url};  
 }
 
 - (void)operation:(LAHOperation *)operation willCancelNetworks:(NSArray *)networks{
@@ -83,6 +103,10 @@
 
 - (NSString *)operationNeedsHostName:(LAHOperation *)operation{
     return _engine.readonlyHostName;
+}
+
+- (void)operationFinished:(LAHOperation *)operation{
+    [self.copiedOpes removeObject:operation];
 }
 
 @end
@@ -97,6 +121,24 @@
     
     [doc release];
     return root;
+}
+
+@end
+
+@implementation MKNetworkEngine (LAH)
+
+- (MKNetworkOperation *)operationWithLink:(NSString *)link{
+    NSURL *url = [[NSURL alloc] initWithString:link];
+    MKNetworkOperation *netOpe = nil;
+    if (url.host) {
+        netOpe = [self operationWithURLString:link];
+    } else {
+        netOpe = [self operationWithPath:link];
+    }
+    [url release];
+    NSAssert(netOpe != nil, @"Can't generate Network Operation");
+    
+    return netOpe;
 }
 
 @end

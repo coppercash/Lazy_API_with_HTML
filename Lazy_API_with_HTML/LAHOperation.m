@@ -7,89 +7,97 @@
 //
 
 #import "LAHOperation.h"
-#import "LAHDownloader.h"
-#import "LAHConstruct.h"
-#import "LAHFetcher.h"
+#import "LAHPage.h"
+#import "LAHModel.h"
+#import "LAHCategories.h"
+#import "LAHNote.h"
 
 @interface LAHOperation ()
+//Pages in States
 @property(nonatomic, retain)NSMutableDictionary *downloadings;
 @property(nonatomic, retain)NSMutableArray *seekings;
 @property(nonatomic, retain)NSMutableArray *networks;
+//Delegate & Call back
 @property(nonatomic, retain)NSMutableArray *completions;
 @property(nonatomic, retain)NSMutableArray *correctors;
-- (BOOL)checkUpate:(LAHConstruct *)object;
 - (void)checkFinishing;
 @end
 
 @implementation LAHOperation
-@synthesize construct = _construct;
+@synthesize model = _model, page = _page;
 @synthesize downloadings = _downloadings, seekings = _seekings, networks = _networks;
-@synthesize completions = _completions, correctors = _correctors;
-@synthesize delegate = _delegate;
+@synthesize delegate = _delegate, completions = _completions, correctors = _correctors;
+@dynamic data;
+@dynamic hostName;
 
-
-- (id)init{
+#pragma mark - Class Basic
+- (id)initWithModel:(LAHModel *)model page:(LAHPage *)page{
     self = [super init];
     if (self) {
-        self.link = @"";
+        self.model = model;
+        self.page = page;
     }
-    return self;
-}
-
-- (id)initWithPath:(NSString*)path construct:(LAHConstruct*)rootContainer firstChild:(LAHRecognizer*)firstChild variadicChildren:(va_list)children{
-    self = [super initWithFirstChild:firstChild variadicChildren:children];
-    if (self) {
-        self.link = path;
-        self.construct = rootContainer;
-    }
-    return self;
-}
-
-- (id)initWithPath:(NSString*)path construct:(LAHConstruct*)rootContainer children:(LAHRecognizer*)firstChild, ... {
-    va_list children;
-    va_start(children, firstChild);
-    
-    self = [self initWithPath:path construct:rootContainer firstChild:firstChild variadicChildren:children];
-    
-    va_end(children);
     return self;
 }
 
 - (void)dealloc{
+    
+    self.model = nil;
+    self.page = nil;
+    
     self.downloadings = nil;
     self.seekings = nil;
     self.networks = nil;
     
+    self.delegate = nil;
     self.completions = nil;
     self.correctors = nil;
-    
-    self.construct = nil;
-    
-    self.delegate = nil;
     
     [super dealloc];
 }
 
-- (id)copyWithZone:(NSZone *)zone{
-    LAHOperation *copy = [super copyWithZone:zone];
+#pragma mark - Copy
+- (id)copy{
+    NSMutableDictionary *table = [[NSMutableDictionary alloc] init];
     
-    copy.construct = [_construct copy];
-    copy.construct.father = copy;
+    LAHOperation *copy = [self copyVia:table];
     
-    if (_downloadings) copy.downloadings = [[NSMutableDictionary alloc] initWithDictionary:_downloadings copyItems:YES];
-    if (_seekings) copy.seekings = [[NSMutableArray alloc] initWithArray:_seekings copyItems:YES];
-    if (_networks) copy.networks = [[NSMutableArray alloc] initWithArray:_networks copyItems:YES];
+    [table release];
+
+    return copy;
+}
+
+- (id)copyVia:(NSMutableDictionary *)table{
+    LAHOperation *copy = [[[self class] alloc] init];
+    
+    copy.model = [_model copyVia:table];
+    [copy.model release];
+    
+    copy.page = [_page copyVia:table];
+    [copy.page release];
     
     copy.delegate = _delegate;
-    if (_completions) copy.completions = [[NSMutableArray alloc] initWithArray:_completions copyItems:YES];
-    if (_correctors) copy.correctors = [[NSMutableArray alloc] initWithArray:_correctors copyItems:YES];
     
-    [copy.construct release];
-    [copy.downloadings release];
+    copy.completions = [[NSMutableArray alloc] initWithArray:_completions copyItems:YES];
     [copy.completions release];
+    
+    copy.correctors = [[NSMutableArray alloc] initWithArray:_correctors copyItems:YES];
     [copy.correctors release];
     
     return copy;
+}
+
+#pragma mark = Setters
+- (void)setPage:(LAHPage *)page{
+    [_page release];
+    _page = [page retain];
+    page.father = self;
+}
+
+- (void)setModel:(LAHModel *)model{
+    [_model release];
+    _model = [model retain];
+    model.father = self;
 }
 
 #pragma mark - Getters
@@ -128,78 +136,73 @@
     return _correctors;
 }
 
+- (id)data{
+    return _model.data;
+}
+
+- (NSArray *)children{
+    NSArray *children = [NSArray arrayWithObjects:_model, _page, nil];
+    return children;
+}
+
 #pragma mark - Status
 - (void)refresh{
-    [self cancel];
-    [_construct refresh];
+    [self cancelNetwork];
+    [_model refresh];
     [_downloadings removeAllObjects];
     [_seekings removeAllObjects];
     [_completions removeAllObjects];
     [_correctors removeAllObjects];
-    [super refresh];
 }
 
-#pragma mark - Fake LAHConstruct
-- (BOOL)checkUpate:(LAHConstruct *)object{
-    return NO;
-}
-
-- (void)update{
-}
-
-- (void)recieve:(LAHConstruct*)object{
-}
-
-#pragma mark - Recursive
-- (void)setConstruct:(LAHConstruct *)construct{
-    [_construct release];
-    _construct = [construct retain];
-    construct.father = self;
-}
-
-- (LAHOperation*)recursiveOperation{
+#pragma mark - Fake
+- (LAHOperation *)recursiveOperation{
     return self;
 }
 
-#pragma mark - Queue
-- (void)saveDownloader:(LAHDownloader *)downloader forKey:(id)key{
+- (void)recieve:(LAHModel *)model{
     
-    NSMutableArray *pages = [_downloadings objectForKey:key];
-    if (pages) {
-        
-        [pages addObject:downloader];
-    
-    } else {
-        
-        pages = [[NSMutableArray alloc] initWithObjects:downloader, nil];
-        [self.downloadings setObject:pages forKey:key];
-    
-    }
-
-    NSString *pageKey = downloader.identifier;
-    [_construct saveStateForKey:pageKey];
-    for (LAHConstruct *c in _children) {
-        [c saveStateForKey:pageKey];
-    }
 }
 
-- (void)awakeDownloaderForKey:(id)key withElement:(LAHEle)element{
+- (BOOL)needUpdate{
+    return NO;
+}
+
+#pragma mark - Queue
+- (void)freezePage:(LAHPage *)page forKey:(id)key{
+    
+    NSMutableArray *pages = [_downloadings objectForKey:key];
+    if (pages) {    //If pages with same key exits, they will be dowloaded only once
+        
+        [pages addObject:page];
+    
+    } else {    //Doesn't exit yet, create a array to keep it
+        
+        pages = [[NSMutableArray alloc] initWithObjects:page, nil];
+        self.downloadings[key] = pages;
+        [pages release];
+    }
+
+    [_model saveStateForKey:key];
+}
+
+- (void)awakePageForKey:(id)key withElement:(LAHEle)element{
     
     NSArray *pages = [_downloadings objectForKey:key];
+    NSAssert(pages != nil, @"Can't get pages for key:%@", key);
     
-    for (LAHDownloader *p in pages) {
+    for (LAHPage *page in pages) {
         
-        NSString *pageKey = p.identifier;
-        [_construct restoreStateForKey:pageKey];
-        for (LAHConstruct *c in _children) {
-            [c restoreStateForKey:pageKey];
-        }
+        [_model restoreStateForKey:key];
         
-        [self.seekings addObject:p];
+        //Seek the pages, and when they being seeked mark them
+        LAHNoteOpen(@"%@", page);
         
-        [p seekWithRoot:element];
-
-        [_seekings removeObject:p];
+        [self.seekings addObject:page];
+        [page seekWithElement:element];
+        [_seekings removeObject:page];
+        
+        LAHNoteClose;
     }
     
     [_downloadings removeObjectForKey:key];
@@ -209,25 +212,27 @@
 }
 
 #pragma mark - Network
-- (void)addNetwork:(id)network{
-#ifdef LAH_OPERATION_DEBUG
-    NSUInteger c = _networks.count;
-#endif
-    [_networks addObject:network];
-#ifdef LAH_OPERATION_DEBUG
-    NSString *info = [NSString stringWithFormat:@"%@\tnetwork ADD %d -> %d",
-                      self, c, _networks.count];
-    printf("\n%s\n", [info cStringUsingEncoding:NSASCIIStringEncoding]);
-#endif
+- (void)downloadPage:(LAHPage *)page{
+    NSAssert(_delegate != nil, @"Can't download without download delegate.");
+    NSAssert(page.link != nil, @"Can't download without LAHPage or link of it.");
+    if (!page.link) return;
+    
+    if (_delegate && [_delegate respondsToSelector:@selector(operation:needPageAtLink:)]) {
+        NSDictionary *returnDic = [_delegate operation:self needPageAtLink:page.link];
+        id netOpe = returnDic[LAHKeyRetNetOpe];
+        NSString *url = returnDic[LAHKeyRetURL];
+        NSAssert(returnDic && netOpe && url, @"Can't download page returnDic:%@ netOpe:%@ url:%@", returnDic, netOpe, url);
+        
+        [self addNetwork:netOpe];
+        [self freezePage:page forKey:url];
+    }
 }
 
-- (void)cancel{
-#ifdef LAH_OPERATION_DEBUG
-    NSString *info = [NSString stringWithFormat:@"%@\tcancel networks:%d",
-                         self, _networks.count];
-    printf("\n%s\n", [info cStringUsingEncoding:NSASCIIStringEncoding]);
-#endif
-    
+- (void)addNetwork:(id)network{
+    [_networks addObject:network];
+}
+
+- (void)cancelNetwork{
     if (_delegate && [_delegate respondsToSelector:@selector(operation:willCancelNetworks:)]) {
         [_delegate operation:self willCancelNetworks:_networks];
     }
@@ -236,28 +241,29 @@
 
 #pragma mark - Event
 - (void)start{
-    [self download:nil];
+    LAHNoteOpen(@"%@", self);
+    [_page fetchValue:nil];
+}
+
+- (void)cancel{
+    [self cancelNetwork];
 }
 
 - (void)addCompletion:(LAHCompletion)completion{
-    if (completion == nil) return;
     LAHCompletion copy = [completion copy];
     [self.completions addObject:copy];
     [copy release];
 }
 
 - (void)addCorrector:(LAHCorrector)corrector{
-    if (corrector == nil) return;
     LAHCompletion copy = [corrector copy];
     [self.correctors addObject:copy];
     [copy release];
 }
 
 - (void)handleError:(NSError*)error withKey:(id)key{
-    [self cancel];
-    if (_delegate && [_delegate respondsToSelector:@selector(operation:didFetch:)]) {
-        [_delegate operation:self didFetch:_construct.container];
-    }
+    [self cancelNetwork];
+
     for (LAHCorrector c in _correctors) {
         c(self, error);
     }
@@ -265,28 +271,28 @@
 
 - (void)checkFinishing{
     if (_downloadings.count + _seekings.count == 0) {
+        LAHNoteLogWisely;
+        //LAHNoteLogAllAndClean;
+        
         __block LAHOperation *bSelf = self;
         for (LAHCompletion completion in _completions) {
             completion(bSelf);
         }
-        if (_delegate && [_delegate respondsToSelector:@selector(operation:didFetch:)]) {
-            [_delegate operation:self didFetch:_construct.container];
+        
+        if (_delegate && [_delegate respondsToSelector:@selector(operationFinished:)]) {
+            [_delegate operationFinished:self];
         }
     }
 }
 
-#pragma mark - Getter
-- (id)container{
-    return _construct.container;
-}
-
-- (NSString *)absolutePathWith:(NSString *)subpath{
+#pragma mark - Delegate Info
+- (NSString *)urlStringWith:(NSString *)relativeLink{
     NSString *protocol = @"http://";
-    if ([subpath hasPrefix:protocol]) {
-        return subpath;
+    if ([relativeLink hasPrefix:protocol]) {
+        return relativeLink;
     }else{
         NSString *host = self.hostName;
-        NSString *path = [protocol stringByAppendingString:[host stringByAppendingPathComponent:subpath]];
+        NSString *path = [protocol stringByAppendingString:[host stringByAppendingPathComponent:relativeLink]];
         return path;
     }
     return nil;
@@ -300,19 +306,23 @@
     return nil;
 }
 
-#pragma mark - Log
-- (NSString *)infoProperties{
-    NSMutableString *info = [NSMutableString string];
-    if (_link) [info appendFormat:@"path=%@", _link];
-    return info;
+- (LAHAttrMethod)methodWithName:(NSString *)name{
+    if (_delegate && [_delegate respondsToSelector:@selector(operation:needsMethodNamed:)]) {
+        LAHAttrMethod method = [_delegate operation:self needsMethodNamed:name];
+        return method;
+    }
+    return nil;
 }
 
-- (NSString *)infoChildren:(NSUInteger)degree{
-    NSMutableString *info = [NSMutableString string];
-    
-    [info appendString:[_construct info:degree]];
-    [info appendString:[super infoChildren:degree]];
-    
+#pragma mark - Log
+- (NSString *)tagNameInfo{
+    return @"ope";
+}
+
+- (NSString *)attributesInfo{
+    NSMutableString *info = [NSMutableString stringWithString:[super attributesInfo]];
+    if (_model) [info appendFormat:@"  model=%@", _model.desc];
+    if (_page) [info appendFormat:@"  page=%@", _page.desc];
     return info;
 }
 

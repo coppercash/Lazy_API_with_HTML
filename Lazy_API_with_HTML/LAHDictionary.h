@@ -6,12 +6,12 @@
 //  Copyright (c) 2013 Coder Dreamer. All rights reserved.
 //
 
-#import "LAHConstruct.h"
+#import "LAHModel.h"
 
-@interface LAHDictionary : LAHConstruct {
+@interface LAHDictionary : LAHModel {
     NSMutableDictionary *_dictionary;
 }
-- (id)initWithObjectsAndKeys:(LAHConstruct *)firstObj , ... NS_REQUIRES_NIL_TERMINATION;
-- (id)initWithFirstObject:(LAHConstruct *)firstObj variadicObjectsAndKeys:(va_list)OtherObjsAndKeys;
+- (id)initWithObjectsAndKeys:(LAHModel *)firstObj , ... NS_REQUIRES_NIL_TERMINATION;
+- (id)initWithFirstObject:(LAHModel *)firstObj variadicObjectsAndKeys:(va_list)OtherObjsAndKeys;
 @end
 

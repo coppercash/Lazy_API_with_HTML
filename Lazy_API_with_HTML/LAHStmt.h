@@ -7,80 +7,87 @@
 //
 
 #import <Foundation/Foundation.h>
-@class LAHNode, LAHConstruct;
 
-@interface LAHFrame : NSObject
-@property(nonatomic, retain)NSMutableDictionary *generates;
-@property(nonatomic, retain)NSMutableSet *gains;
-- (id)initWithDictionary:(NSMutableDictionary *)container;
-- (void)doGain;
-@end
+@class LAHFrame;
+@class LAHNode;
+@class LAHStmtValue, LAHStmtAttribute, LAHAttribute, LAHStmtMultiple;
 
 @interface LAHStmt : NSObject
 - (id)evaluate:(LAHFrame *)frame;
 @end
 
+
 @interface LAHStmtSuite : LAHStmt
-@property(nonatomic, retain)NSArray *statements;
+@property(nonatomic, retain)NSMutableArray *statements;
 @end
+
 
 @interface LAHStmtEntity : LAHStmt
-@property(nonatomic, copy)NSString *generate;
-@property(nonatomic, retain)NSArray *properties;
-@property(nonatomic, retain)NSArray *children;
-- (void)generate:(LAHNode *)object inFrame:(LAHFrame *)frame;
-- (void)propertiesOfObject:(LAHNode *)object inFrame:(LAHFrame *)frame;
-- (void)childrenOfObject:(LAHNode *)object inFrame:(LAHFrame *)frame;
+@property(nonatomic, retain)NSMutableArray *attributes;
+@property(nonatomic, retain)NSMutableArray *children;
+
+- (LAHNode *)entity;
+- (BOOL)attribute:(LAHStmtAttribute *)attrStmt of:(LAHNode *)entity inFrame:(LAHFrame *)frame;
+
 @end
 
-@interface LAHStmtConstruct : LAHStmtEntity
+
+@interface LAHStmtModel : LAHStmtEntity
 @end
 
-@interface LAHStmtArray : LAHStmtConstruct
+
+@interface LAHStmtArray : LAHStmtModel
 @end
 
-@interface LAHStmtDictionary : LAHStmtConstruct
+
+@interface LAHStmtDictionary : LAHStmtModel
 @end
 
-@interface LAHStmtFetcher : LAHStmtConstruct
+
+@interface LAHStmtString : LAHStmtModel
 @end
+
 
 @interface LAHStmtOperation : LAHStmtEntity
 @end
 
-@interface LAHStmtRecgnizer : LAHStmtEntity
+
+@interface LAHStmtTag : LAHStmtEntity
 @end
 
-@interface LAHStmtDownloader : LAHStmtEntity
+
+@interface LAHStmtPage : LAHStmtEntity
 @end
 
-@class LAHStmtValue;
-@interface LAHStmtProperty : LAHStmt
+
+@interface LAHStmtAttribute : LAHStmt
 @property(nonatomic, copy)NSString *name;
 @property(nonatomic, retain)LAHStmtValue *value;
-- (NSString *)propertyName;
+@property(nonatomic, copy)NSString *methodName;
+@property(nonatomic, retain)LAHStmtMultiple *args;
++ (BOOL)add:(LAHStmtValue *)value to:(LAHAttribute *)attribute frame:(LAHFrame *)frame;
 @end
 
-@interface LAHStmtValue : LAHStmt
-@property(nonatomic, copy)NSString *string;
+
+@interface LAHStmtValue : LAHStmt {
+    NSString *_value;
+}
+@property(nonatomic, copy)NSString *value;
 @end
 
-@interface LAHStmtTuple : LAHStmtValue
-- (id)evaluate:(LAHFrame *)frame gainTarget:(LAHNode *)target;
+
+@interface LAHStmtNumber : LAHStmtValue
+@end
+
+
+@interface LAHStmtMultiple : LAHStmtValue
 @property(nonatomic, retain)NSArray *values;
 @end
 
-@interface LAHStmtSet : LAHStmtValue
-- (id)evaluate:(LAHFrame *)frame gainTarget:(LAHNode *)target;
-@property(nonatomic, retain)NSArray *values;
-@end
 
 @class LAHNode;
-@interface LAHStmtGain : LAHStmtValue
+@interface LAHStmtRef : LAHStmtValue
 @property(nonatomic, copy)NSString *name;
-@property(nonatomic, assign)LAHNode *target;
-@property(nonatomic, assign)SEL method;
-- (id)evaluate:(LAHFrame *)frame target:(id)target method:(SEL)method;
+@property(nonatomic, assign)BOOL isRefer;
 @end
 
-NSString *quotedString(NSString *string);

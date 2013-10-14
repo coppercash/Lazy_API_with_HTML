@@ -10,8 +10,8 @@
 
 
 @interface LAHToken : NSObject {
-	NSString *source;
-	NSRange range;
+	NSString *_source;
+	NSRange _range;
 }
 
 + (NSArray *)tokenizeString:(NSString *)string;
@@ -28,3 +28,13 @@
 - (NSUInteger)lineNumber;
 
 @end
+
+extern NSString * const gIndent;
+extern NSString * const gDedent;
+extern NSString * const gEof;
+extern NSString * const gNextLine;
+
+extern NSString * const gHtmlEX;
+extern NSString * const gNumberEX;
+
+bool isByRegularExpression(NSString *string, NSString *re);

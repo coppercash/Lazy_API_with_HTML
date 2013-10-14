@@ -7,51 +7,43 @@
 //
 
 #import "LAHNode.h"
+#define kFater ((LAHNode *)_father)
 
 @interface LAHNode ()
 @end
 
 @implementation LAHNode
-@synthesize father = _father, children = _children, states = _states;
+@dynamic recursiveOperation;
+
 #pragma mark - Life Cycle
-
-- (id)init{
-    self = [super init];
-    if (self) {
-        [self.states = [[NSMutableDictionary alloc] init] release];
-    }
-    return self;
-}
-
-- (id)initWithFirstChild:(LAHNode*)firstChild variadicChildren:(va_list)children{
-    self = [self init];
-    if (self) {
-        [self.children = [[NSMutableArray alloc] initWithObjects:firstChild, nil] release];
-        firstChild.father = self;
-
-        LAHNode* child;
-        while ((child = va_arg(children, LAHNode*)) != nil){
-            [_children addObject:child];
-            child.father = self;
-        }
-    }
-    return self;
-}
-
-- (id)initWithChildren:(LAHNode*)firstChild, ... {
-    va_list children; va_start(children, firstChild);
-    self = [self initWithFirstChild:firstChild variadicChildren:children];
-    va_end(children);
-    return self;
-}
 
 - (void)dealloc{
     self.father = nil;
     self.children = nil;
-    self.states = nil;
     [super dealloc];
 }
 
+#pragma mark - Copy
+- (id)copyVia:(NSMutableDictionary *)table{
+    LAHNode *copy = [[[self class] alloc] init];
+    
+    NSMutableArray *collector = [[NSMutableArray alloc] initWithCapacity:_children.count];
+    for (LAHNode *child in _children) {
+        
+        LAHNode *childCopy = [child copyVia:table];
+        childCopy.father = copy;
+        
+        [collector addObject:childCopy];
+        [childCopy release];
+    }
+    
+    copy.children = [[NSArray alloc] initWithArray:collector];
+
+    [copy.children release];
+    [collector release];
+    return copy;
+}
+/*
 - (id)copyWithZone:(NSZone *)zone{
     LAHNode *copy = [[[self class] allocWithZone:zone] init];
     
@@ -60,16 +52,13 @@
         node.father = copy;
     }
     
-    if (_states) copy.states = [[NSMutableDictionary alloc] initWithDictionary:_states copyItems:YES];
-
     [copy.children release];
-    [copy.states release];
     
     return copy;
-}
+}*/
 
 #pragma mark - Setter
-- (void)setChildren:(NSMutableArray *)children{
+- (void)setChildren:(NSArray *)children{
     [_children release];
     _children = [children retain];
     for (LAHNode* node in _children) {
@@ -77,93 +66,66 @@
     }
 }
 
-#pragma mark - Recursive
-- (void)handleElement:(LAHEle)element atIndex:(NSUInteger)index{
-    NSArray *fakeChildren = [[NSArray alloc] initWithArray:_children];
-    for (LAHNode *node in fakeChildren) {
-        NSUInteger index = 0;
-        for (LAHEle e in element.children) {
-            [node handleElement:e atIndex:index];
-            index++;
-        }
-    }
-    [fakeChildren release];
-}
-
+#pragma mark - Getter
 - (LAHOperation*)recursiveOperation{
-    return _father.recursiveOperation;
-}
-
-- (void)releaseChild:(LAHNode*)child{
-    [_children removeObject:child];
-    child.father = nil;
-    if (_children.count == 0) {
-        [_children release]; _children = nil;
-        [_father releaseChild:self];
-    }
+    return kFater.recursiveOperation;
 }
 
 #pragma mark - States
-- (void)saveStateForKey:(id)key{}
-- (void)restoreStateForKey:(id)key{}
-
 - (void)refresh{
-    [_states removeAllObjects];
     for (LAHNode *c in _children) {
         [c refresh];
     }
 }
 
-#pragma mark - Interpreter
-- (void)addChild:(LAHNode *)child{
-    if (_children == nil) [self.children = [[NSMutableArray alloc] init] release];
-    [_children addObject:child];
-    child.father = self;
-}
-
 #pragma mark - Log
+@dynamic degree;
+@synthesize degreeSpace;
+
 - (NSString *)debugDescription{
-    return [self info:0];
+    return [self debugLog:0];
 }
 
-- (void)log{
-    NSLog(@"%@", [self info:0]);
-}
-
-- (void)logLonely{
-    NSLog(@"%@", self.infoSelf);
-}
-
-- (NSString *)info:(NSUInteger)degree{
-    NSMutableString *info = [NSMutableString stringWithString:@"\n"];
-    
-    for (int i = 0; i < degree; i ++)  [info appendString:@"\t"];
-    
-    [info appendString:self.infoSelf];
-    
-    NSString *chiInfo = [self infoChildren:degree + 1];
-    if (chiInfo && chiInfo.length != 0) [info appendFormat:@":%@", chiInfo];
-    
+- (NSString *)description{
+    NSString *info = [NSString stringWithFormat:@"<%@%@  @%p>", self.tagNameInfo, self.attributesInfo, self];
     return info;
 }
 
-- (NSString *)infoSelf{
-    NSMutableString *info = [NSMutableString stringWithFormat:@"%@", super.description];
-    NSString *proInfo = self.infoProperties;
-    if (proInfo && proInfo.length != 0) {
-        [info appendFormat:@" ( %@)", proInfo];
+- (NSString *)desc{
+    NSString *ret = [NSString stringWithFormat:@"<%@ @%p>", NSStringFromClass(self.class), self];
+    return ret;
+}
+
+- (NSUInteger)degree{
+    return (_father == nil) ? 0 : kFater.degree + 1;
+}
+
+- (NSString *)degreeSpace{
+    NSUInteger degree = self.degree;
+    NSMutableString *space = [NSMutableString string];
+    while (degree --) {
+        [space appendString:@"\t"];
     }
+    return space;
+}
+
+- (NSString *)debugLog:(NSUInteger)degree{
+    NSMutableString *info = [NSMutableString stringWithFormat:@"\n%@%@", self.degreeSpace, self];
+    
+    for (LAHNode *child in self.children) {
+        [info appendFormat:@"%@", [child debugLog:degree + 1]];
+    }
+    
     return info;
 }
 
-- (NSString *)infoProperties{
-    return nil;
+- (NSString *)tagNameInfo{
+    return @"node";
 }
 
-- (NSString *)infoChildren:(NSUInteger)degree{
-    NSMutableString *info = [NSMutableString string];
-    for (LAHNode *n in _children) [info appendString:[n info:degree]];
-    return info;
+- (NSString *)attributesInfo{
+    return @"";
 }
+
 
 @end

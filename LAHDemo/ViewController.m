@@ -8,8 +8,6 @@
 
 #import "ViewController.h"
 #import "LAHOperation.h"
-#import "LAH51voa.h"
-#import "LAHVoaNews.h"
 #import "LMHModelsGroup.h"
 
 #import "LAHInterpreter.h"
@@ -26,56 +24,26 @@
 	// Do any additional setup after loading the view, typically from a nib.
     NSString *path = [[NSBundle mainBundle] pathForResource:@"51VOA" ofType:@"lah"];
     NSString *string = [NSString stringWithContentsOfFile:path encoding:NSASCIIStringEncoding error:nil];
-    LMHModelsGroup *group = [[LMHModelsGroup alloc] initWithCommand:string key:@"ope"];
-    NSLog(@"%@", group);
-}
-
-
-- (void)test0{
-    _51voa = [[LAH51voa alloc] init];
+    _group = [[LMHModelsGroup alloc] initWithCommand:string key:@"ope"];
     
-    __block LAH51voa * b51voa = _51voa;
-    /*
-     LAHOperation *homePage = [_51voa homePage];
-     [homePage addCompletion:^(LAHOperation *operation) {
-     NSLog(@"\n51voa\n%@", operation.container);
-     
-     NSArray *items = (NSArray *)operation.container;
-     for (NSDictionary *item in items) {
-     NSString *link = [item objectForKey:@"link"];
-     LAHOperation *itemOp = [b51voa itemAtPath:link];
-     [itemOp addCompletion:^(LAHOperation *operation) {
-     NSLog(@"\n51voa\n%@", operation.container);
-     }];
-     [itemOp start];
-     }
-     }];
-     [homePage start];
-     */
+    LAHOperation *ope = _group.operations[0];
+    _ope = ope.copy;
     
-    LAHOperation *itemOp = [b51voa itemAtPath:@"/VOA_Special_English/It-Will-Not-Wash-48965.html"];
-    [itemOp addCompletion:^(LAHOperation *operation) {
-        NSLog(@"%@", operation.absolutePath);
-        NSLog(@"\n51voa\n%@", operation.container);
+    
+    [_ope addCompletion:^(LAHOperation *operation) {
+        NSLog(@"%@", operation.data);
     }];
-    [itemOp start];
+    [_ope start];
     
-    /*
-     _voaNews = [[LAHVoaNews alloc] init];
-     LAHOperation *voaHome = [_voaNews homePage];
-     [voaHome addCompletion:^(LAHOperation *operation) {
-     NSLog(@"\nvoanews\n%@", operation.container);
-     }];
-     [voaHome start];
-     */
     
-    //[self performSelector:@selector(clean) withObject:nil afterDelay:10.0f];
+    [self performSelector:@selector(clean) withObject:nil afterDelay:7.0];
 }
 
 - (void)clean{
-    [_51voa release]; _51voa= nil;
-    [_voaNews release]; _voaNews = nil;
-    NSLog(@"Finish cleaning.");
+    [_group release];
+    [_ope release];
+    _ope = nil;
+    _group = nil;
 }
 
 - (void)didReceiveMemoryWarning

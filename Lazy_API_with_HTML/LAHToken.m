@@ -8,15 +8,18 @@
 
 #import "LAHToken.h"
 
-#define RE @"(?m)^ *(?:#.*)?\n|#.*$|(^ +|\n|\\d+|\\w+|[()\\[\\]{}:.,;]|[+\\-*/%<>=]=?|!=|'(?:\\\\[n'\"\\\\]|[^'])*'|\"(?:\\\\[n'\"\\\\]|[^\"])*\")"
+//#define RE @"(?m)^ *(?:#.*)?\n|#.*$|(^ +|\n|\\d+|\\w+|[()\\[\\]{}:.,;]|[+\\-*/%<>=]=?|!=|'(?:\\\\[n'\"\\\\]|[^'])*'|\"(?:\\\\[n'\"\\\\]|[^\"])*\")"
 
 
-static NSString * const gIndent = @"!INDENT";
-static NSString * const gDedent = @"!DEDENT";
-static NSString * const gEof = @"!EOF";
+static NSString * const re = @"(?m)^ *(?:#.*)?\n|#.*$|(^ +|\n|\\d+|\\w+|[()\\[\\]{}:.,;]|[+\\-*/%<>=]=?|!=|'(?:\\\\[n'\"\\\\]|[^'])*'|\"(?:\\\\[n'\"\\\\]|[^\"])*\")";
 
+@interface LAHToken ()
+@property(nonatomic, retain)NSString *source;
+@property(nonatomic, assign)NSRange range;
+@end
 
 @implementation LAHToken
+@synthesize source = _source, range = _range;
 
 + (NSArray *)tokenizeString:(NSString *)source {
 	NSMutableArray *tokens = [NSMutableArray array];
@@ -32,7 +35,7 @@ static NSString * const gEof = @"!EOF";
 	source = [source stringByAppendingString:@"\n"];
 	
 	// compile the regular expression to tokenize the source
-	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:RE options:0 error:nil];
+	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:re options:0 error:nil];
 	
 	// process matches from source when applying the regular expression
 	[regex enumerateMatchesInString:source 
@@ -94,10 +97,10 @@ static NSString * const gEof = @"!EOF";
     return [self initWithSource:gEof range:NSMakeRange(0, 4)];
 }
 
-- (id)initWithSource:(NSString *)source_ range:(NSRange)range_ {
+- (id)initWithSource:(NSString *)source range:(NSRange)range {
     if ((self = [super init])) {
-        self->source = source_;
-        self->range = range_;
+        self.source = source;
+        self.range = range;
     }
 	return self;
 }
@@ -119,12 +122,13 @@ static NSString * const gEof = @"!EOF";
 }
 
 - (NSString *)stringValue {
-	return [source substringWithRange:range];
+    NSString *ret = [_source substringWithRange:_range];
+	return ret;
 }
 
 - (NSString *)stringByUnescapingStringValue {
-    NSUInteger length = range.length - 2;
-    NSString *string = [source substringWithRange:NSMakeRange(range.location + 1, length)];
+    NSUInteger length = _range.length - 2;
+    NSString *string = [_source substringWithRange:NSMakeRange(_range.location + 1, length)];
     NSMutableString *buffer = [NSMutableString stringWithCapacity:length];
     for (NSUInteger i = 0; i < length; i++) {
         unichar c = [string characterAtIndex:i];
@@ -140,23 +144,53 @@ static NSString * const gEof = @"!EOF";
 }
 
 - (unichar)firstCharacter {
-    return [source characterAtIndex:range.location];
+    return [_source characterAtIndex:_range.location];
 }
 
 - (NSUInteger)lineNumber {
 	NSUInteger lineNumber = 1;
 	NSUInteger start = 0;
 	NSRange r;
-	while ((r = [source rangeOfString:@"\n" 
+	while ((r = [_source rangeOfString:@"\n" 
 							  options:0 
-								range:NSMakeRange(start, [source length] - start)]).location != NSNotFound) {
-		start = r.location + r.length;
-		if (range.location < start) {
+								range:NSMakeRange(start, [_source length] - start)]).location
+           != NSNotFound) {
+        
+		//start = r.location + r.length;
+        //The reson why not to use NSLocationInRange, is that if so the lineNumber can not be 1 ever.
+        start = NSMaxRange(r); 
+		if (_range.location < start) {
 			return lineNumber;
 		}
+        
 		lineNumber += 1;
-	}
-	return lineNumber;
+	
+    }
+	return (r.location == NSNotFound) ? NSNotFound : lineNumber;
+}
+
+- (void)dealloc{
+    self.source = nil;
+    [super dealloc];
 }
 
 @end
+
+
+NSString * const gIndent = @"!INDENT";
+NSString * const gDedent = @"!DEDENT";
+NSString * const gEof = @"!EOF";
+NSString * const gNextLine = @"\n";
+
+NSString * const gHtmlEX = @"^[a-zA-Z0-9_]+$";
+NSString * const gNumberEX = @"^[0-9]+$";
+
+bool isByRegularExpression(NSString *string, NSString *re){
+    
+    NSError *regError = nil;
+    NSRegularExpression *regExp = [[NSRegularExpression alloc] initWithPattern:re options:0 error:&regError];
+    NSUInteger numberOfMatches = [regExp numberOfMatchesInString:string options:0 range:NSMakeRange(0, [string length])];
+    
+    [regExp release];
+    return numberOfMatches != 0;
+}

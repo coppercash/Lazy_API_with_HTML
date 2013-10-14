@@ -1,100 +1,85 @@
-arr'con0':
-    dic(id='id0'):
-        fet'title0'(_text, key="title")
-        fet'link0'("href", key="link")
-        
-ope'ope0'('con0', path="/VOA_Special_English/"):
-    rec("div", "id"="leftNav"):
-        rec("ul"):
-            rec'id0'("li", range=(0, 17)):
-                rec'a'("a"):
-                    'title0'
-                    'link0'
-
-
-arr'con1':
-    dic(id='id1'):
-        fet'title1'(_text, key="title")
-        fet'link1'("href", key="link")
-        fet'url1'(_url, key="url")
-        
-ope'ope1'('con1'):
-    rec("span", "id"={"blist", "list"}):
-        rec("ul"):
-            rec'id1'("li"):
-                rec'a'("a", text=_all):
-                    dow("href"):
-                        'url1'
-                    'title1'
-                    'link1'
-
-
-dic'con2':
-    fet'title2'(_text, key="title")
-    fet'url2'(_url, key="url")
-    fet'audio'("href", key="audio")
-    fet'lrc'("href", key="lrc")
-    arr(key="content"):
-        fet'text'(_content)
-        dic(id={'id2_0', 'id2_1'}):
-            fet'imgSrc'("src", key="imgSrc")
-    
-ope'ope2'('con2'):
-    'url2'
-    rec("div", "id"="rightContainer"):
-        rec("div", "id"="title"):
-            'title2'
-        rec("div", "id"="content"):
-            rec("div", "id"="menubar"):
-                rec("a", isDem="YES"):
-                    rec("img", "src"="/images/icon/mp3.gif")
-                    'audio'
-                rec("a", isDem="YES"):
-                    rec("img", "src"="/images/icon/lrc.gif")
-                    'lrc'
+<dic _r='model0'>
+    <arr key="items">
+        <dic _r='range0'>
+            <str key="title"_r='title0'>
+            <str key="link" _r='link0'>
             
-            rec'id2_0'("div", "boxout"):
-                rec("img"):
-                    'imgSrc'
-            rec'id2_1'("div", "contentImage"):
-                rec("img"):
-                    'imgSrc'
-
-            rec("span", "byline"):
-                rec(isText="YES"):
-                    'text'
-            rec("span", "datetime"):
-                rec(isText="YES"):
-                    'text'
             
-            rec("a", "href"="_all"):
-                rec(isText="YES"):
-                    'text'
+<dic _r='model1'>
+    <arr key="items">
+        <dic _r='range1'>
+            <str key="title" _r='title1'>
+            <str key="link" _r='link1'>
+            <str key="url" _r='url1'>
             
-            rec("p"):
-                rec(isText="YES"):
-                    'text'
-                rec("strong"):
-                    rec(isText="YES"):
-                        'text'
-                rec("font"):
-                    rec(isText="YES"):
-                        'text'
             
-            rec(isText="YES"):
-                'text'
-            rec("strong", "id"=_none):
-                rec(isText="YES"):
-                    'text'
-            rec("div", "id"=_none):
-                rec(isText="YES"):
-                    'text'
+<dic _r='model2'>
+    <str key="title" _r='title2'>
+    <str key="url" _r='url2'>
+    <str key="audio" _r='audio'>
+    <str key="lrc" _r='lrc'>
+    <arr key="content">
+        <str _r='text'>
+        <dic _r='imgDic'>
+            <str key="imgSrc" _r='img'>
 
-            rec("div", "articleBody"):
-                rec("p"):
-                    rec(isText="YES"):
-                        'text'
-                     rec("font"):
-                        rec(isText="YES"):
-                            'text'
+<page _r='page0' link="http://www.51voa.com/VOA_Special_English/">
+    <div id="leftNav">
+        <ul>
+            <li _indexes=(0, 17) _indexOf='range0'>
+                <a href='link0'>
+                    <text _content='title0'>
 
+<page _r='page1'>
+    <span id={"blist", "list"}>
+        <ul>
+            <li _indexOf='range1'>
+                <a href='link1' href.joinHost()='url1' _isDem="YES">
+                    <text content={"_all", 'title1'}>
+                
+
+<ope model='model0' page='page0' _r='ope0'>
+<ope model='model1' page='page1' _r='ope1'>
+<ope model='model2' _r='ope2'>
+    <page url='url2'>
+        <div id={"title", 'title2'}>
+            <div id="content">
+                <div id="menubar">
+                    <a id="mp3" href='audio'>
+                    <a id="lrc" href='lrc'>
+                    <a _isDem="YES">
+                        <img src="/images/icon/mp3.gif" href='audio'>
+                    <a _isDem="YES">
+                        <img src="/images/icon/lrc.gif" href='lrc'>
+                        
+                    <div class="boxout" _indexOf='imgDic'>
+                        <img src='img'>
+                    <div class="contentImage" _indexOf='imgDic'>
+                        <img src='img'>
+                        
+                    <span class="byline">
+                        <text _content='text'>
+                    <span class="datetime">
+                        <text _content='text'>
+
+                    <a href="_all">
+                        <text _content='text'>
+                        
+                    <p>
+                        <text _content='text'>
+                        <strong id="_none">
+                            <text _content='text'>
+                        <font>
+                            <text _content='text'>
+
+                    <text _content='text'>
+                        <strong id="_none">
+                            <text _content='text'>
+                        <div id="_none">
+                            <text _content='text'>
+
+                    <div class="articleBody">
+                        <p>
+                            <text _content='text'>
+                            <font>
+                                <text _content='text'>
