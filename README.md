@@ -2,7 +2,7 @@ Lazy_API_with_HTML
 ==================
 Lazy API with HTML (LAH) provides function to get data out of HTMLs, and shape them into structures like dictionary or array. It consists of xml liked script and the interpreter to interpret.
 
-LAH script is designed to be directly perceived through the senses. For instance, type '<a href=some_struct_declare_before>'
+LAH script is designed to be directly perceived through the senses. For instance, type `<a href=some_struct_declare_before>`
 then you can get the value of attribute href later.
 
 Other two features may make LAH easier to be used:
